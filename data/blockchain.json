@@ -1,0 +1,27 @@
+[
+    {
+        "index": 0,
+        "timestamp": "2026-01-31 00:23:48",
+        "data": {
+            "message": "انتخابِلاک - Genesis Block",
+            "system": "Entekhablock Voting Platform",
+            "version": "1.0.0"
+        },
+        "previous_hash": "0",
+        "nonce": 0,
+        "hash": "5b66168d3f991504f7457f5a47c0d0c67d34fb12e6ee290b377d1e7140849724"
+    },
+    {
+        "index": 1,
+        "timestamp": "2026-01-31 00:24:18",
+        "data": {
+            "voter_hash": "0faafded51bf505159bb6ebdaf71bf3d4b569adfd365b5ad802f8b359023b656",
+            "poll_id": "poll_2_1769802796",
+            "choice": "گزینه ۱",
+            "timestamp": "2026-01-31 00:24:18"
+        },
+        "previous_hash": "5b66168d3f991504f7457f5a47c0d0c67d34fb12e6ee290b377d1e7140849724",
+        "nonce": 0,
+        "hash": "4109bb9806767af1e0cc6e05a2f4ca37344bdaaf6d146eda2df9490e6f573661"
+    }
+]

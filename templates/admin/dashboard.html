@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}پنل مدیریت - انتخابِلاک{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="admin-logo">
+            <span class="logo-icon">🛠️</span>
+            <span class="logo-text">مدیریت</span>
+        </div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-link active">
+                📊 داشبورد
+            </a>
+            <a href="{{ url_for('admin_create_poll') }}" class="nav-link">
+                ➕ ایجاد نظرسنجی
+            </a>
+            <a href="{{ url_for('view_blockchain') }}" class="nav-link">
+                ⛓️ بلاکچین
+            </a>
+            <a href="{{ url_for('public_results') }}" class="nav-link">
+                📈 نتایج عمومی
+            </a>
+            <div style="margin-top: auto; padding-top: 32px;">
+                <a href="{{ url_for('admin_logout') }}" class="nav-link" style="color: var(--m3-error);">
+                    🚪 خروج
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <header class="admin-header">
+            <div>
+                <h1>پنل مدیریت</h1>
+                <p>خوش آمدید، شما به عنوان مدیر وارد شده‌اید</p>
+            </div>
+            <div class="admin-actions">
+                <a href="{{ url_for('admin_create_poll') }}" class="btn btn-filled">
+                    ➕ نظرسنجی جدید
+                </a>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">کل نظرسنجی‌ها</div>
+                <div class="stat-value">{{ total_polls }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">آرای ثبت شده</div>
+                <div class="stat-value">{{ total_votes }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">رأی‌دهندگان فعال</div>
+                <div class="stat-value">{{ total_voters }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">وضعیت بلاکچین</div>
+                <div class="stat-value" style="font-size: 18px; color: var(--m3-success);">
+                    {{ "✓ معتبر" if blockchain_valid else "✗ نامعتبر" }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Polls Management -->
+        <section class="data-table-container">
+            <div
+                style="padding: 24px; border-bottom: 1px solid var(--m3-outline-variant); display: flex; justify-content: space-between; align-items: center;">
+                <h3 class="title-large">مدیریت نظرسنجی‌ها</h3>
+                <div style="display: flex; gap: 12px;">
+                    <select class="form-select" style="padding: 8px 12px; width: auto; font-size: 13px;">
+                        <option>همه وضعیت‌ها</option>
+                        <option>فعال</option>
+                        <option>پایان یافته</option>
+                    </select>
+                </div>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>عنوان نظرسنجی</th>
+                        <th>وضعیت</th>
+                        <th>تعداد آرا</th>
+                        <th>تاریخ پایان</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if polls %}
+                    {% for poll in polls %}
+                    <tr>
+                        <td style="font-weight: 600;">{{ poll.title }}</td>
+                        <td>
+                            <span
+                                class="badge {% if poll.status == 'active' %}badge-active{% else %}badge-ended{% endif %}">
+                                {{ "فعال" if poll.status == 'active' else "پایان یافته" }}
+                            </span>
+                        </td>
+                        <td>{{ poll.total_votes }} رأی</td>
+                        <td>{{ poll.end_time | jalali }}</td>
+                        <td>
+                            <div style="display: flex; gap: 8px;">
+                                <a href="{{ url_for('view_results', poll_id=poll.id) }}" class="btn btn-text"
+                                    style="padding: 4px 8px; font-size: 12px;">📊 نتایج</a>
+                                <button class="btn btn-text" onclick="adminDashboard.confirmDeletePoll('{{ poll.id }}')"
+                                    style="padding: 4px 8px; font-size: 12px; color: var(--m3-error);">🗑️ حذف</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 48px; color: var(--m3-on-surface-variant);">
+                            هیچ نظرسنجی‌ای یافت نشد.
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

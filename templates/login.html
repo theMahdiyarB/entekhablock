@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}ورود به سیستم - انتخابِلاک{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="step-indicator">مرحله ۱ از ۳</div>
+            <h2>احراز هویت</h2>
+        </div>
+
+        <div class="auth-body">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="national_code" name="national_code" maxlength="10" pattern="[0-9]{10}" placeholder=" " required>
+                    <span class="underline"></span>
+                    <label for="national_code">کد ملی</label>
+                    <div class="form-hint">۱۰ رقم</div>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="birth_date" name="birth_date" placeholder=" " pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required>
+                    <span class="underline"></span>
+                    <label for="birth_date">تاریخ تولد (1370-05-15)</label>
+                    <div class="form-hint">فرمت: سال-ماه-روز</div>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="serial_number" name="serial_number" placeholder=" " required>
+                    <span class="underline"></span>
+                    <label for="serial_number">شماره شناسنامه</label>
+                    <div class="form-hint">فرمت: xxx-xxxxxx-x</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">ادامه</button>
+            </form>
+
+            <div class="test-credentials">
+                <h4>اطلاعات تست</h4>
+                <div class="credential-item"><strong>کد ملی:</strong> <code>0012345678</code></div>
+                <div class="credential-item"><strong>تاریخ تولد:</strong> <code>1370-05-15</code></div>
+                <div class="credential-item"><strong>شماره شناسنامه:</strong> <code>123-456789-1</code></div>
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            <a href="{{ url_for('index') }}" class="link">بازگشت به صفحه اصلی</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

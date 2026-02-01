@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}انتخابِلاک{% endblock %}</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/motion.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav-rail.css') }}">
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <!-- Main Layout Wrapper -->
+    <div class="layout-wrapper">
+
+        <!-- M3 Navigation Rail (Right Side for RTL) -->
+        <aside class="navigation-rail">
+            <!-- Header: Logo/Menu -->
+            <div class="rail-header">
+                <!-- FAB: Optional Primary Action -->
+                <a href="{{ url_for('dashboard') if current_user.is_authenticated else url_for('voter_authenticate') }}"
+                    class="rail-fab" title="شروع رأی‌گیری">
+                    🗳️
+                </a>
+            </div>
+
+            <!-- Destinations -->
+            <div class="rail-items">
+                <a href="{{ url_for('index') }}"
+                    class="rail-item {% if request.endpoint == 'index' %}active{% endif %}">
+                    <div class="rail-item-icon">🏠</div>
+                    <span class="rail-item-label">خانه</span>
+                </a>
+
+                <a href="{{ url_for('view_blockchain') }}"
+                    class="rail-item {% if request.endpoint == 'view_blockchain' %}active{% endif %}">
+                    <div class="rail-item-icon">⛓️</div>
+                    <span class="rail-item-label">بلاک‌‌چین</span>
+                </a>
+
+                <a href="{{ url_for('public_results') }}"
+                    class="rail-item {% if request.endpoint == 'public_results' %}active{% endif %}">
+                    <div class="rail-item-icon">📊</div>
+                    <span class="rail-item-label">نتایج</span>
+                </a>
+
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('admin_dashboard') if current_user.is_admin else url_for('dashboard') }}"
+                    class="rail-item {% if request.endpoint in ['dashboard', 'admin_dashboard'] %}active{% endif %}">
+                    <div class="rail-item-icon">👤</div>
+                    <span class="rail-item-label">داشبورد</span>
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Footer: User Profile / Logout -->
+            <div class="rail-footer">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('admin_logout' if current_user.is_admin else 'logout') }}" class="rail-item"
+                    title="خروج">
+                    <div class="profile-avatar">
+                        {% if current_user.is_admin %}A{% else %}V{% endif %}
+                    </div>
+                    <span class="rail-item-label">خروج</span>
+                </a>
+                {% else %}
+                <a href="{{ url_for('voter_authenticate') }}"
+                    class="rail-item {% if request.endpoint == 'voter_authenticate' %}active{% endif %}" title="ورود">
+                    <div class="rail-item-icon">🔑</div>
+                    <span class="rail-item-label">ورود</span>
+                </a>
+                {% endif %}
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-content-wrapper">
+            <main>
+                {% block content %}{% endblock %}
+            </main>
+
+            <!-- Unified M3 Expressive Footer -->
+            <footer class="footer">
+                <div class="container">
+                    <p style="margin: 0; text-align: center; font-size: 13px; color: var(--m3-on-surface-variant);">
+                        &copy; 2026 انتخابِلاک | دموکراسی دیجیتال شفاف و امن
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- M3 Bottom Navigation Bar (Mobile Only) -->
+    <nav class="bottom-navigation-bar">
+        <a href="{{ url_for('index') }}" class="bottom-nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+            <div class="bottom-nav-icon">🏠</div>
+            <span class="bottom-nav-label">خانه</span>
+        </a>
+
+        <a href="{{ url_for('view_blockchain') }}"
+            class="bottom-nav-item {% if request.endpoint == 'view_blockchain' %}active{% endif %}">
+            <div class="bottom-nav-icon">⛓️</div>
+            <span class="bottom-nav-label">بلاک‌‌چین</span>
+        </a>
+
+        <a href="{{ url_for('dashboard') if current_user.is_authenticated else url_for('voter_authenticate') }}"
+            class="bottom-nav-item rail-fab-mobile" title="شروع">
+            🗳️
+        </a>
+
+        <a href="{{ url_for('public_results') }}"
+            class="bottom-nav-item {% if request.endpoint == 'public_results' %}active{% endif %}">
+            <div class="bottom-nav-icon">📊</div>
+            <span class="bottom-nav-label">نتایج</span>
+        </a>
+
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('admin_dashboard') if current_user.is_admin else url_for('dashboard') }}"
+            class="bottom-nav-item {% if request.endpoint in ['dashboard', 'admin_dashboard'] %}active{% endif %}">
+            <div class="bottom-nav-icon">👤</div>
+            <span class="bottom-nav-label">داشبورد</span>
+        </a>
+        {% else %}
+        <a href="{{ url_for('voter_authenticate') }}"
+            class="bottom-nav-item {% if request.endpoint == 'voter_authenticate' %}active{% endif %}">
+            <div class="bottom-nav-icon">🔑</div>
+            <span class="bottom-nav-label">ورود</span>
+        </a>
+        {% endif %}
+    </nav>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

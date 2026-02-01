@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}صفحه یافت نشد - انتخابِلاک{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/404.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="error-container">
+    <div class="error-content">
+        <div class="error-code">404</div>
+        <div class="error-illustration">🔍</div>
+        <h1 class="error-title">صفحه مورد نظر یافت نشد</h1>
+        <p class="error-message">
+            متأسفیم، اما صفحه‌ای که به دنبال آن بودید ممکن است حذف شده باشد یا آدرس آن را اشتباه وارد کرده باشید.
+        </p>
+        <div class="error-actions">
+            <a href="{{ url_for('index') }}" class="btn btn-filled">
+                بازگشت به خانه
+            </a>
+            <a href="javascript:history.back()" class="btn btn-outlined">
+                صفحه قبل
+            </a>
+        </div>
+    </div>
+</main>
+{% endblock %}

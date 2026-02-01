@@ -1,0 +1,1527 @@
+{% extends "base.html" %}
+
+{% block title %}مستندات فنی جامع - انتخابِلاک{% endblock %}
+
+{% block head %}
+<!-- Devicon for tech icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css">
+<!-- Fira Code Font for Code Blocks -->
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --tech-primary: #6750A4;
+        --tech-secondary: #625B71;
+        --tech-accent: #7D5260;
+        --tech-surface: var(--m3-surface-container-low);
+        --tech-bg-gradient: linear-gradient(135deg, rgba(103, 80, 164, 0.05) 0%, rgba(125, 82, 96, 0.05) 100%);
+        --tech-code-bg: #1e1e1e;
+        --tech-border: rgba(120, 120, 120, 0.2);
+        --tech-success: #2e7d32;
+        --tech-warning: #ed6c02;
+        --tech-info: #0288d1;
+    }
+
+    .tech-page-wrapper {
+        background: var(--tech-bg-gradient);
+        min-height: 100vh;
+        padding-bottom: 120px;
+    }
+
+    .tech-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--m3-spacing-24);
+    }
+
+    /* =========================================
+       HERO SECTION
+       ========================================= */
+    .tech-hero {
+        text-align: center;
+        padding: 120px 20px 100px;
+        background: var(--m3-surface-container);
+        border-bottom-left-radius: 80px;
+        border-bottom-right-radius: 80px;
+        margin-bottom: 80px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tech-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(103, 80, 164, 0.08) 0%, transparent 60%);
+        animation: rotate 80s linear infinite;
+        z-index: 0;
+    }
+
+    .tech-hero::after {
+        content: '';
+        position: absolute;
+        bottom: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(125, 82, 96, 0.08) 0%, transparent 60%);
+        animation: rotate-rev 80s linear infinite;
+        z-index: 0;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes rotate-rev {
+        from {
+            transform: rotate(360deg);
+        }
+
+        to {
+            transform: rotate(0deg);
+        }
+    }
+
+    .tech-hero-content {
+        position: relative;
+        z-index: 1;
+        animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .tech-hero h1 {
+        font-size: 4rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--tech-primary), var(--tech-accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 24px;
+        letter-spacing: -1px;
+        line-height: 1.2;
+    }
+
+    .tech-hero p {
+        font-size: 1.4rem;
+        color: var(--m3-on-surface-variant);
+        max-width: 800px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    .tech-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(103, 80, 164, 0.1);
+        color: var(--tech-primary);
+        padding: 8px 16px;
+        border-radius: 30px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-top: 32px;
+        border: 1px solid rgba(103, 80, 164, 0.2);
+    }
+
+    /* =========================================
+       COMPONENT STYLES
+       ========================================= */
+    .tech-card {
+        background-color: var(--m3-surface-container-low);
+        border-radius: 32px;
+        padding: 48px;
+        margin-bottom: 64px;
+        border: 1px solid var(--tech-border);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        transition: transform var(--motion-duration-short) var(--motion-easing-standard),
+            box-shadow var(--motion-duration-short) var(--motion-easing-standard);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .tech-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        border-color: var(--tech-primary);
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 48px;
+        border-bottom: 2px solid var(--m3-surface-container-high);
+        padding-bottom: 24px;
+    }
+
+    .section-icon {
+        width: 64px;
+        height: 64px;
+        background: var(--m3-primary-container);
+        color: var(--m3-on-primary-container);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-header h2 {
+        font-size: 2.2rem;
+        margin: 0;
+        color: var(--m3-on-surface);
+        font-weight: 700;
+    }
+
+    /* 1. Tech Grid */
+    .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 24px;
+    }
+
+    .tech-item {
+        padding: 32px;
+        background: var(--m3-surface);
+        border-radius: 24px;
+        border: 1px solid var(--m3-outline-variant);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        transition: all 0.3s;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tech-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--m3-surface-container-highest);
+        transition: background 0.3s;
+    }
+
+    .tech-item:hover {
+        transform: translateY(-4px);
+        background: var(--m3-surface-container-high);
+        border-color: var(--tech-primary);
+    }
+
+    .tech-item:hover::before {
+        background: var(--tech-primary);
+    }
+
+    .tech-item-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .tech-icon {
+        font-size: 48px;
+        color: var(--tech-primary);
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+
+    .tech-item h4 {
+        margin: 0;
+        font-size: 1.25rem;
+    }
+
+    .tech-item p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: var(--m3-on-surface-variant);
+        line-height: 1.6;
+    }
+
+    /* 2. Architecture Visualizer */
+    .arch-visualizer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        padding: 20px 0;
+        direction: ltr;
+    }
+
+    .arch-layer {
+        width: 100%;
+        max-width: 900px;
+        border-radius: 24px;
+        padding: 32px;
+        position: relative;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        background: var(--m3-surface);
+        border: 1px solid var(--m3-outline-variant);
+        transition: transform 0.3s;
+    }
+
+    .arch-layer:hover {
+        transform: scale(1.02);
+        z-index: 10;
+    }
+
+    .arch-layer h4 {
+        margin: 0 0 24px 0;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-size: 0.9rem;
+        color: var(--m3-on-surface-variant);
+        border-bottom: 1px solid var(--m3-outline-variant);
+        padding-bottom: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .arch-layer h4::after {
+        content: attr(data-layer);
+        background: var(--m3-primary);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        text-transform: none;
+    }
+
+    .layer-components {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .comp-tag {
+        background: var(--m3-surface-container-high);
+        padding: 10px 20px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 14px;
+        border: 1px solid var(--m3-outline-variant);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--m3-on-surface);
+    }
+
+    .comp-tag i {
+        color: var(--tech-primary);
+    }
+
+    .arch-arrow {
+        height: 60px;
+        width: 2px;
+        background: linear-gradient(to bottom, var(--m3-outline-variant) 50%, var(--m3-primary) 100%);
+        position: relative;
+    }
+
+    .arch-arrow::after {
+        content: '▼';
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: var(--m3-primary);
+    }
+
+    /* 3. Vote Lifecycle Stepper */
+    .lifecycle-wrapper {
+        position: relative;
+        padding: 40px 0;
+    }
+
+    .step-item {
+        display: flex;
+        gap: 32px;
+        margin-bottom: 48px;
+        position: relative;
+    }
+
+    .step-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .step-item::before {
+        content: '';
+        position: absolute;
+        top: 60px;
+        right: 29px;
+        /* RTL Axis */
+        bottom: -50px;
+        width: 2px;
+        background: var(--m3-outline-variant);
+        z-index: 0;
+    }
+
+    .step-item:last-child::before {
+        display: none;
+    }
+
+    .step-number {
+        width: 60px;
+        height: 60px;
+        background: var(--m3-primary);
+        color: var(--m3-on-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 1.5rem;
+        z-index: 1;
+        flex-shrink: 0;
+        box-shadow: 0 8px 20px rgba(103, 80, 164, 0.4);
+        border: 4px solid var(--m3-surface-container-low);
+    }
+
+    .step-content {
+        background: var(--m3-surface-container-high);
+        padding: 32px;
+        border-radius: 24px;
+        flex-grow: 1;
+        border: 1px solid var(--m3-outline-variant);
+        position: relative;
+    }
+
+    .step-content::after {
+        content: '';
+        position: absolute;
+        top: 24px;
+        right: -10px;
+        width: 20px;
+        height: 20px;
+        background: var(--m3-surface-container-high);
+        transform: rotate(45deg);
+        border-right: 1px solid var(--m3-outline-variant);
+        border-top: 1px solid var(--m3-outline-variant);
+    }
+
+    .step-content h4 {
+        margin: 0 0 12px 0;
+        color: var(--m3-primary);
+        font-size: 1.3rem;
+    }
+
+    .step-content p {
+        margin: 0;
+        line-height: 1.7;
+    }
+
+    /* 4. Directory Tree */
+    .tree-view {
+        font-family: 'Fira Code', monospace;
+        color: var(--m3-on-surface);
+        background: var(--tech-surface-high);
+        padding: 40px;
+        border-radius: 24px;
+        direction: ltr;
+        border: 1px solid var(--m3-outline-variant);
+        overflow-x: auto;
+        /* Added for mobile containment */
+        white-space: nowrap;
+        /* Prevent wrapping but allow scrolling */
+    }
+
+    .tree-item {
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: background 0.1s;
+        border-radius: 8px;
+    }
+
+    .tree-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tree-indent {
+        width: 24px;
+        display: inline-block;
+        border-left: 1px solid var(--m3-outline-variant);
+        height: 24px;
+        margin-left: 12px;
+    }
+
+    .folder-icon {
+        color: #E8C346;
+        font-size: 1.2rem;
+    }
+
+    .file-icon {
+        color: #569CD6;
+        font-size: 1.1rem;
+    }
+
+    .tree-comment {
+        color: #6A9955;
+        margin-left: 20px;
+        font-size: 0.9em;
+        font-style: italic;
+        opacity: 0.8;
+    }
+
+    /* 5. Data Models (JSON) */
+    .data-model-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 32px;
+    }
+
+    .json-card {
+        background: var(--tech-code-bg);
+        border-radius: 20px;
+        padding: 32px;
+        color: #d4d4d4;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+        border: 1px solid #444;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        direction: ltr;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .json-card-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #252526;
+        padding: 8px 20px;
+        font-size: 0.8rem;
+        color: #ccc;
+        border-bottom: 1px solid #333;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .json-content {
+        margin-top: 24px;
+        white-space: pre;
+        overflow-x: auto;
+    }
+
+    .j-key {
+        color: #9CDCFE;
+    }
+
+    .j-str {
+        color: #CE9178;
+    }
+
+    .j-num {
+        color: #B5CEA8;
+    }
+
+    .j-bool {
+        color: #569CD6;
+    }
+
+    /* 6. Blockchain 3D Model */
+    .blockchain-3d-wrapper {
+        background: #0f0f0f;
+        border-radius: 24px;
+        padding: 60px 20px;
+        overflow-x: auto;
+        border: 1px solid #333;
+    }
+
+    .block-model {
+        display: flex;
+        gap: 80px;
+        /* Space for links */
+        justify-content: center;
+        min-width: 800px;
+        padding: 20px;
+    }
+
+    .block-cube {
+        width: 300px;
+        background: #1e1e1e;
+        border-radius: 16px;
+        padding: 0;
+        /* Padding inside content */
+        position: relative;
+        box-shadow: 0 0 0 1px #333, 0 20px 50px rgba(0, 0, 0, 0.5);
+        transition: transform 0.3s;
+    }
+
+    .block-cube:hover {
+        transform: translateY(-10px) rotateX(2deg);
+        z-index: 5;
+        box-shadow: 0 0 0 1px var(--tech-primary), 0 30px 60px rgba(103, 80, 164, 0.2);
+    }
+
+    .block-header {
+        background: #252526;
+        padding: 16px 20px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        border-bottom: 1px solid #333;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .block-title {
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .block-hash-preview {
+        font-family: monospace;
+        color: #6a9955;
+        font-size: 0.8rem;
+    }
+
+    .block-body {
+        padding: 20px;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.85rem;
+        color: #cccccc;
+        direction: ltr;
+    }
+
+    .block-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        padding-bottom: 4px;
+        border-bottom: 1px dashed #333;
+    }
+
+    .block-row:last-child {
+        border: none;
+        margin: 0;
+    }
+
+    .b-label {
+        color: #569cd6;
+    }
+
+    .b-val {
+        color: #ce9178;
+    }
+
+    /* Chain Link Visual */
+    .block-cube:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: -80px;
+        /* Linking to right */
+        width: 80px;
+        height: 6px;
+        background: #333;
+        z-index: 0;
+    }
+
+    .block-cube:not(:last-child)::before {
+        content: 'CHAIN HASH';
+        position: absolute;
+        top: 40%;
+        right: -70px;
+        font-size: 0.6rem;
+        color: #666;
+        background: #0f0f0f;
+        padding: 2px 4px;
+    }
+
+    /* 7. Code Blocks (VS Code Style) */
+    .code-container {
+        background: #1e1e1e;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #333;
+        margin-top: 24px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .code-header {
+        background: #252526;
+        padding: 12px 20px;
+        display: flex;
+        gap: 8px;
+        border-bottom: 1px solid #333;
+    }
+
+    .win-btn {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+    }
+
+    .win-close {
+        background: #ff5f56;
+    }
+
+    .win-min {
+        background: #ffbd2e;
+    }
+
+    .win-max {
+        background: #27c93f;
+    }
+
+    .code-content {
+        padding: 24px;
+        font-family: 'Fira Code', monospace;
+        font-size: 14px;
+        color: #d4d4d4;
+        direction: ltr;
+        overflow-x: auto;
+        line-height: 1.6;
+    }
+
+    .py-kw {
+        color: #c586c0;
+        font-weight: bold;
+    }
+
+    /* keyword */
+    .py-def {
+        color: #dcdcaa;
+    }
+
+    /* function */
+    .py-str {
+        color: #ce9178;
+    }
+
+    /* string */
+    .py-num {
+        color: #b5cea8;
+    }
+
+    /* number */
+    .py-cls {
+        color: #4ec9b0;
+    }
+
+    /* class */
+    .py-com {
+        color: #6a9955;
+        font-style: italic;
+    }
+
+    /* comment */
+    .py-dec {
+        color: #569cd6;
+    }
+
+    /* decorator */
+
+    /* 8. Comparison Table */
+    .modern-table-wrapper {
+        overflow-x: auto;
+        border-radius: 20px;
+        border: 1px solid var(--m3-outline-variant);
+        background: var(--m3-surface);
+    }
+
+    .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+    }
+
+    .modern-table th {
+        background: var(--m3-primary-container);
+        color: var(--m3-on-primary-container);
+        padding: 20px;
+        text-align: right;
+        font-size: 1.1rem;
+    }
+
+    .modern-table td {
+        padding: 20px;
+        border-bottom: 1px solid var(--m3-outline-variant);
+        color: var(--m3-on-surface);
+    }
+
+    .modern-table tr:hover {
+        background: var(--m3-surface-container-high);
+    }
+
+    .check {
+        color: var(--tech-success);
+        font-weight: 800;
+        font-size: 1.2rem;
+    }
+
+    .cross {
+        color: var(--m3-error);
+        font-weight: 800;
+        font-size: 1.2rem;
+    }
+
+    /* 9. API Reference */
+    .api-endpoint {
+        background: var(--m3-surface-container-high);
+        border-radius: 16px;
+        border: 1px solid var(--m3-outline-variant);
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+
+    .api-header {
+        padding: 16px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--m3-surface-container-highest);
+        border-bottom: 1px solid var(--m3-outline-variant);
+    }
+
+    .method-badge {
+        padding: 4px 12px;
+        border-radius: 8px;
+        font-weight: bold;
+        font-size: 0.8rem;
+        font-family: monospace;
+    }
+
+    .m-get {
+        background: rgba(2, 136, 209, 0.2);
+        color: #0288d1;
+        border: 1px solid #0288d1;
+    }
+
+    .m-post {
+        background: rgba(46, 125, 50, 0.2);
+        color: #2e7d32;
+        border: 1px solid #2e7d32;
+    }
+
+    .endpoint-url {
+        font-family: monospace;
+        font-size: 1rem;
+        direction: ltr;
+        margin-left: 16px;
+    }
+
+    .api-body {
+        padding: 20px 24px;
+    }
+
+    .api-desc {
+        margin-bottom: 16px;
+        color: var(--m3-on-surface);
+    }
+
+    .api-params h5 {
+        margin: 0 0 8px 0;
+        color: var(--m3-on-surface-variant);
+        font-size: 0.9rem;
+    }
+
+    .param-tag {
+        display: inline-block;
+        background: var(--m3-surface);
+        border: 1px solid var(--m3-outline-variant);
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-family: monospace;
+        font-size: 0.85rem;
+        margin-left: 8px;
+        margin-bottom: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .tech-container {
+            padding: 0 var(--m3-spacing-16);
+        }
+
+        .tech-hero {
+            padding: 80px 16px 60px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 40px;
+        }
+
+        .tech-hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .tech-hero p {
+            font-size: 1.1rem;
+        }
+
+        .tech-card {
+            padding: 24px 16px;
+            margin-bottom: 32px;
+            border-radius: 24px;
+        }
+
+        .section-header {
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 24px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .data-model-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .step-item {
+            flex-direction: column;
+            gap: 16px;
+            padding-right: 0;
+        }
+
+        .step-item::before {
+            display: none;
+        }
+
+        .step-number {
+            width: 44px;
+            height: 44px;
+            font-size: 1.1rem;
+        }
+
+        .step-content {
+            padding: 20px;
+        }
+
+        .step-content::after {
+            display: none;
+        }
+
+        .block-model {
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            min-width: unset;
+        }
+
+        .block-cube {
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .block-cube:not(:last-child)::after {
+            top: auto;
+            bottom: -40px;
+            right: 50%;
+            transform: translateX(50%);
+            width: 6px;
+            height: 40px;
+        }
+
+        .block-cube:not(:last-child)::before {
+            top: auto;
+            bottom: -30px;
+            right: 50%;
+            transform: translateX(50%);
+            z-index: 2;
+        }
+
+        .arch-layer {
+            padding: 20px;
+        }
+
+        .layer-components {
+            gap: 8px;
+        }
+
+        .comp-tag {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .tree-view {
+            padding: 20px;
+        }
+
+        .json-card {
+            padding: 20px;
+            font-size: 0.8rem;
+        }
+
+        .api-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .endpoint-url {
+            margin-left: 0;
+            font-size: 0.9rem;
+        }
+
+        .modern-table th,
+        .modern-table td {
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="tech-page-wrapper">
+    <!-- HERO -->
+    <div class="tech-hero">
+        <div class="tech-container tech-hero-content">
+            <h1>مستندات فنی</h1>
+            <p>بررسی عمیق معماری سیستم، زیرساخت‌های امنیتی، مدل‌های داده و الگوریتم‌های رمزنگاری در سامانهٔ پیشرفتهٔ
+                رأی‌گیری مبتنی بر بلاک‌چین.</p>
+            <div class="tech-badge">
+                <span>⚡ Powered by Python 3.10 & Flask 3.0</span>
+            </div>
+        </div>
+    </div>
+
+    <main class="tech-container">
+
+        <!-- 1. TECH STACK -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">🛠️</div>
+                <h2>پشته تکنولوژی (Technology Stack)</h2>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-item-header">
+                        <i class="devicon-python-plain tech-icon"></i>
+                        <h4>Python 3.10 Core</h4>
+                    </div>
+                    <p>انتخاب شده برای کارایی بالا در محاسبات کریپتوگرافی و مدیریت همزمان درخواست‌ها. هسته اصلی بلاک‌چین
+                        و ماینینگ با پایتون خالص پیاده‌سازی شده است.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-item-header">
+                        <i class="devicon-flask-original tech-icon"></i>
+                        <h4>Flask 3.0 Framework</h4>
+                    </div>
+                    <p>میکرو فریمورک سبک و ماژولار که امکان توسعه سریع API و مدیریت نشست‌های امن (Secure Sessions) را
+                        فراهم می‌کند.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-item-header">
+                        <i class="devicon-javascript-plain tech-icon"></i>
+                        <h4>Chart.js + ES6</h4>
+                    </div>
+                    <p>رندر سمت کلاینت نمودارهای تعاملی برای کاهش بار سرور و ارائه تجربه کاربری روان و واکنش‌گرا.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-item-header">
+                        <i class="devicon-html5-plain tech-icon"></i>
+                        <h4>Material 3 Design</h4>
+                    </div>
+                    <p>زبان طراحی مدرن گوگل با تمرکز بر دسترس‌پذیری، رنگ‌های پویا و انیمیشن‌های معنی‌دار.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-item-header">
+                        <i class="devicon-git-plain tech-icon"></i>
+                        <h4>JSON Persistence</h4>
+                    </div>
+                    <p>سیستم ذخیره‌سازی فایل‌محور برای پایداری بلاک‌چین، بدون وابستگی به دیتابیس‌های SQL متمرکز.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-item-header">
+                        <i class="devicon-bash-plain tech-icon"></i>
+                        <h4>Security Ops</h4>
+                    </div>
+                    <p>استفاده از کتابخانه‌های hashlib و secrets برای تولید اعداد تصادفی امن و هش‌های غیرقابل بازگشت.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. HIGH-LEVEL ARCHITECTURE -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">🏗️</div>
+                <h2>معماری سطح بالا (System Architecture)</h2>
+            </div>
+            <p style="margin-bottom: 32px; font-size: 1.1rem; line-height: 1.8;">
+                معماری سیستم انتخاب‌بلاک به صورت ۴ لایه مجزا طراحی شده است تا امنیت، مقیاس‌پذیری و نگهداری آسان را تضمین
+                کند.
+            </p>
+
+            <div class="arch-visualizer">
+                <!-- Layer 1 -->
+                <div class="arch-layer" data-layer="Layer 1">
+                    <h4>Presentation Layer (Client Side)</h4>
+                    <div class="layer-components">
+                        <span class="comp-tag"><i class="devicon-html5-plain"></i> HTML5 Templates</span>
+                        <span class="comp-tag"><i class="devicon-css3-plain"></i> Material 3 CSS</span>
+                        <span class="comp-tag"><i class="devicon-javascript-plain"></i> Interactive JS</span>
+                    </div>
+                </div>
+
+                <div class="arch-arrow"></div>
+
+                <!-- Layer 2 -->
+                <div class="arch-layer" data-layer="Layer 2">
+                    <h4>Application Layer (Server Logic)</h4>
+                    <div class="layer-components">
+                        <span class="comp-tag">🔒 Auth Manager</span>
+                        <span class="comp-tag">📂 Route Handlers</span>
+                        <span class="comp-tag">🎫 Session Logic</span>
+                    </div>
+                </div>
+
+                <div class="arch-arrow"></div>
+
+                <!-- Layer 3 -->
+                <div class="arch-layer" data-layer="Layer 3">
+                    <h4>Core Engine (Blockchain Logic)</h4>
+                    <div class="layer-components">
+                        <span class="comp-tag">⛏️ PoW Miner</span>
+                        <span class="comp-tag">🔗 Chain Validator</span>
+                        <span class="comp-tag">📝 Transaction Pool</span>
+                    </div>
+                </div>
+
+                <div class="arch-arrow"></div>
+
+                <!-- Layer 4 -->
+                <div class="arch-layer" data-layer="Layer 4">
+                    <h4>Persistence Layer (Data Storage)</h4>
+                    <div class="layer-components">
+                        <span class="comp-tag">📄 blockchain.json</span>
+                        <span class="comp-tag">📄 polls.json</span>
+                        <span class="comp-tag">📊 voters.csv</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. VOTE LIFECYCLE (STEPPER) -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">🗳️</div>
+                <h2>چرخه حیات یک رأی (Vote Lifecycle)</h2>
+            </div>
+            <p style="margin-bottom: 40px;">سفر داده‌ها از لحظه کلیک کاربر تا ثبت ابدی در بلاک‌چین:</p>
+
+            <div class="lifecycle-wrapper">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>شروع تراکنش (Transaction Initiation)</h4>
+                        <p>کاربر پس از احراز هویت بیومتریک، گزینه مورد نظر را انتخاب و دکمه ثبت را فشار می‌دهد. یک
+                            پِیلود (Payload) JSON شامل شناسه نظرسنجی و رأی هش‌شده ایجاد می‌شود.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>اعتبارسنجی اولیه (Pre-Validation)</h4>
+                        <p>سرور درخواست را دریافت کرده و بررسی می‌کند: ۱. آیا کاربر قبلاً رأی داده است؟ ۲. آیا امضای
+                            دیجیتال نشست (Session Signature) معتبر است؟</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>ساخت بلاک کاندید (Candidate Block)</h4>
+                        <p>در صورت تأیید، یک "بلاک کاندید" ایجاد می‌شود که شامل: هش آخرین بلاک ثبت شده، زمان دقیق
+                            (Timestamp) و داده‌های رأی است.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>اثبات کار (Proof of Work)</h4>
+                        <p>موتور ماینینگ شروع به کار می‌کند. الگوریتم باید عددی تصادفی (Nonce) را بیابد که وقتی با
+                            محتوای بلاک ترکیب شود، هش خروجی با ۴ صفر شروع شود (Difficulty Target).</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>الحاق به زنجیره (Chain Append)</h4>
+                        <p>پس از یافتن Nonce، بلاک "معدن‌کاوی" شده و به زنجیره رسمی اضافه می‌شود. فایل
+                            <code>blockchain.json</code> بلافاصله به‌روزرسانی می‌گردد.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. BLOCKCHAIN DEEP DIVE (3D MODEL) -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">⛓️</div>
+                <h2>مدل داده بلاک‌چین (Data Structure)</h2>
+            </div>
+            <p style="margin-bottom: 32px;">نمایش بصری ارتباط بین بلاک‌ها. هر بلاک حاوی "اثر انگشت" (Hash) بلاک قبلی است
+                که زنجیره را غیرقابل تغییر می‌کند.</p>
+
+            <div class="blockchain-3d-wrapper">
+                <div class="block-model">
+                    <!-- Block 0 -->
+                    <div class="block-cube">
+                        <div class="block-header">
+                            <span class="block-title">Genesis Block #0</span>
+                            <span class="block-hash-preview">0000a1...</span>
+                        </div>
+                        <div class="block-body">
+                            <div class="block-row"><span class="b-label">prev_hash</span><span class="b-val">"0"</span>
+                            </div>
+                            <div class="block-row"><span class="b-label">timestamp</span><span
+                                    class="b-val">170664...</span></div>
+                            <div class="block-row"><span class="b-label">nonce</span><span class="b-val">100</span>
+                            </div>
+                            <div class="block-row"><span class="b-label">data</span><span class="b-val">"Genesis"</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Block 1 -->
+                    <div class="block-cube">
+                        <div class="block-header">
+                            <span class="block-title">Vote Block #1</span>
+                            <span class="block-hash-preview">00008f...</span>
+                        </div>
+                        <div class="block-body">
+                            <div class="block-row"><span class="b-label">prev_hash</span><span
+                                    class="b-val">"0000a1..."</span></div>
+                            <div class="block-row"><span class="b-label">timestamp</span><span
+                                    class="b-val">170665...</span></div>
+                            <div class="block-row"><span class="b-label">nonce</span><span class="b-val">5291</span>
+                            </div>
+                            <div class="block-row"><span class="b-label">vote</span><span
+                                    class="b-val">{"op":"A"}</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Block 2 -->
+                    <div class="block-cube">
+                        <div class="block-header">
+                            <span class="block-title">Vote Block #2</span>
+                            <span class="block-hash-preview">0000c4...</span>
+                        </div>
+                        <div class="block-body">
+                            <div class="block-row"><span class="b-label">prev_hash</span><span
+                                    class="b-val">"00008f..."</span></div>
+                            <div class="block-row"><span class="b-label">timestamp</span><span
+                                    class="b-val">170666...</span></div>
+                            <div class="block-row"><span class="b-label">nonce</span><span class="b-val">8812</span>
+                            </div>
+                            <div class="block-row"><span class="b-label">vote</span><span
+                                    class="b-val">{"op":"B"}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SECURITY & ALGORITHMS (CODE) -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">🔒</div>
+                <h2>الگوریتم‌های امنیتی (Security Algorithms)</h2>
+            </div>
+            <p>در قلب سیستم انتخاب‌بلاک، توابع ریاضی قرار دارند که امنیت شبکه را تضمین می‌کنند. در زیر پیاده‌سازی واقعی
+                تابع اعتبارسنجی زنجیره (Chain Validation) را مشاهده می‌کنید.</p>
+
+            <div class="code-container">
+                <div class="code-header">
+                    <div class="win-btn win-close"></div>
+                    <div class="win-btn win-min"></div>
+                    <div class="win-btn win-max"></div>
+                    <span style="margin-left:auto; color:#999; font-size:12px;">blockchain.py</span>
+                </div>
+                <div class="code-content">
+                    <span class="py-cls">class</span> <span class="py-def">Blockchain</span>:
+                    <span class="py-com"># ... (Other methods)</span>
+
+                    <span class="py-kw">def</span> <span class="py-def">is_chain_valid</span>(self, chain):
+                    <span class="py-str">"""
+                        Iterates through the entire blockchain to validate two key properties:
+                        1. Correct Hash Link: block[i].prev_hash == block[i-1].hash
+                        2. Proof of Work: hash(block) must start with '0000'
+                        """</span>
+                    previous_block = chain[<span class="py-num">0</span>]
+                    block_index = <span class="py-num">1</span>
+
+                    <span class="py-kw">while</span> block_index < <span class="py-def">len</span>(chain):
+                        block = chain[block_index]
+
+                        <span class="py-com"># Check 1: Verify hash linkage</span>
+                        <span class="py-kw">if</span> block[<span class="py-str">'previous_hash'</span>] != self.<span
+                            class="py-def">hash</span>(previous_block):
+                        <span class="py-kw">return</span> <span class="py-kw">False</span>
+
+                        <span class="py-com"># Check 2: Verify Proof of Work (Mining effort)</span>
+                        <span class="py-kw">if</span> <span class="py-kw">not</span> self.<span
+                            class="py-def">valid_proof</span>(previous_block[<span class="py-str">'proof'</span>],
+                        block[<span class="py-str">'proof'</span>]):
+                        <span class="py-kw">return</span> <span class="py-kw">False</span>
+
+                        previous_block = block
+                        block_index += <span class="py-num">1</span>
+
+                        <span class="py-kw">return</span> <span class="py-kw">True</span>
+                </div>
+            </div>
+
+            <h3 style="margin-top:40px; margin-bottom:16px;">🔐 مکانیزم Salting برای رأی‌دهندگان</h3>
+            <p>برای حفظ حریم خصوصی رأی‌دهندگان، کد ملی آن‌ها هرگز به صورت خام ذخیره نمی‌شود. سیستم از تکنیک
+                <strong>Salted Hashing</strong> استفاده می‌کند:
+            </p>
+            <div class="code-container" style="min-height: auto;">
+                <div class="code-content" style="padding: 16px;">
+                    <span class="py-kw">def</span> <span class="py-def">hash_identity</span>(national_code):
+                    <span class="py-com"># A secret salt constant prevents Rainbow Table attacks</span>
+                    SALT = <span class="py-str">"entekhablock-super-secret-v1-2026"</span>
+                    payload = <span class="py-str">f"{national_code}{SALT}"</span>.<span
+                        class="py-def">encode</span>(<span class="py-str">'utf-8'</span>)
+                    <span class="py-kw">return</span> hashlib.<span class="py-def">sha256</span>(payload).<span
+                        class="py-def">hexdigest</span>()
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. DATA MODELS (JSON) -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">💾</div>
+                <h2>شمای داده‌ها (Data Schemas)</h2>
+            </div>
+            <div class="data-model-grid">
+                <div class="json-card">
+                    <div class="json-card-header">📄 polls.json (Poll Schema)</div>
+                    <div class="json-content">
+                        {
+                        <span class="j-key">"poll_id"</span>: <span class="j-str">"poll_1769802"</span>,
+                        <span class="j-key">"title"</span>: <span class="j-str">"انتخابات هیئت مدیره ۱۴۰۴"</span>,
+                        <span class="j-key">"description"</span>: <span class="j-str">"انتخاب اعضای جدید..."</span>,
+                        <span class="j-key">"options"</span>: [
+                        <span class="j-str">"نامزد الف"</span>,
+                        <span class="j-str">"نامزد ب"</span>,
+                        <span class="j-str">"نامزد ج"</span>,
+                        <span class="j-str">"نامزد د"</span>
+                        ],
+                        <span class="j-key">"start_time"</span>: <span class="j-str">"2026-01-30T10:00:00"</span>,
+                        <span class="j-key">"end_time"</span>: <span class="j-str">"2026-02-05T20:00:00"</span>,
+                        <span class="j-key">"is_active"</span>: <span class="j-bool">true</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="json-card">
+                    <div class="json-card-header">👥 voters.csv (Voter Record)</div>
+                    <div class="json-content" style="font-family: inherit; color: #ccc;">
+                        NationalID, BirthDate, SerialNum, HasVoted
+                        <span class="j-num">0012345678</span>, <span class="j-str">1370-05-15</span>, <span
+                            class="j-num">123456</span>, <span class="j-bool">False</span>
+                        <span class="j-num">0098765432</span>, <span class="j-str">1365-11-20</span>, <span
+                            class="j-num">987654</span>, <span class="j-bool">True</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. API REFERENCE -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">🔌</div>
+                <h2>مرجع API و Endpoints</h2>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header">
+                    <div>
+                        <span class="method-badge m-post">POST</span>
+                        <span class="endpoint-url">/api/voter/auth/stage1</span>
+                    </div>
+                    <span>احراز هویت اولیه</span>
+                </div>
+                <div class="api-body">
+                    <p class="api-desc">تأیید اطلاعات هویتی پایه کاربر (کد ملی، تولد، سریال) قبل از ارسال OTP.</p>
+                    <div class="api-params">
+                        <h5>Parameters (JSON):</h5>
+                        <div>
+                            <span class="param-tag">national_code</span>
+                            <span class="param-tag">birth_date</span>
+                            <span class="param-tag">serial_number</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header">
+                    <div>
+                        <span class="method-badge m-post">POST</span>
+                        <span class="endpoint-url">/vote/&lt;poll_id&gt;</span>
+                    </div>
+                    <span>ثبت رأی</span>
+                </div>
+                <div class="api-body">
+                    <p class="api-desc">دریافت رأی کاربر و شروع فرآیند ماینینگ برای ثبت در بلاک‌چین. نیاز به نشست معتبر
+                        دارد.</p>
+                    <div class="api-params">
+                        <h5>Form Data:</h5>
+                        <div>
+                            <span class="param-tag">selected_option</span>
+                            <span class="param-tag">csrf_token</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="api-endpoint">
+                <div class="api-header">
+                    <div>
+                        <span class="method-badge m-get">GET</span>
+                        <span class="endpoint-url">/api/blockchain/validate</span>
+                    </div>
+                    <span>اعتبارسنجی زنجیره</span>
+                </div>
+                <div class="api-body">
+                    <p class="api-desc">بررسی لحظه‌ای سلامت زنجیره. اگر حتی یک بایت در فایل بلاک‌چین تغییر کرده باشد،
+                        این اندپوینت خطا برمی‌گرداند.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. PROJECT TREE -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">📂</div>
+                <h2>ساختار فایل‌ها (Directory Structure)</h2>
+            </div>
+            <div class="tree-view">
+                <div class="tree-item"><span class="folder-icon">📁</span> entekhablock-mvp/</div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="file-icon">📄</span> app.py <span
+                        class="tree-comment">// Main Application Controller</span></div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="file-icon">📄</span> blockchain.py
+                    <span class="tree-comment">// Core Blockchain Engine & PoW Logic</span>
+                </div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="folder-icon">📁</span> data/</div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="file-icon">📄</span> blockchain.json <span class="tree-comment">// Immutable
+                        Ledger</span></div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="file-icon">📄</span> polls.json <span class="tree-comment">// Poll Database</span></div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="folder-icon">📁</span> static/
+                </div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="folder-icon">📁</span> css/ <span class="tree-comment">// Component-based CSS (M3)</span>
+                </div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="folder-icon">📁</span> js/ <span class="tree-comment">// Client-side Interactions</span>
+                </div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="folder-icon">📁</span> templates/
+                </div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="file-icon">📄</span> technical.html <span class="tree-comment">// This Documentation
+                        Page</span></div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="file-icon">📄</span> results.html <span class="tree-comment">// Visualization
+                        Dashboard</span></div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="folder-icon">📁</span> utils/</div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="file-icon">📄</span> auth.py <span class="tree-comment">// Hashing, OTP, Session
+                        Utils</span></div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="file-icon">📄</span> poll_manager.py <span class="tree-comment">// Poll CRUD Logic</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. COMPARISON TABLE -->
+        <section class="tech-card">
+            <div class="section-header">
+                <div class="section-icon">⚖️</div>
+                <h2>مقایسه با سیستم سنتی</h2>
+            </div>
+            <div class="modern-table-wrapper">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th width="40%">معیار</th>
+                            <th width="30%">صندوق رأی کاغذی</th>
+                            <th width="30%">انتخابِلاک</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>شفافیت شمارش</strong></td>
+                            <td>کم (جعبه سیاه)</td>
+                            <td><span class="check">✓</span> کامل (دفتر کل توزیع شده)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>غیرقابل تغییر بودن</strong></td>
+                            <td><span class="cross">✗</span> آسیب‌پذیر</td>
+                            <td><span class="check">✓</span> تضمین شده با رمزنگاری</td>
+                        </tr>
+                        <tr>
+                            <td><strong>هزینه برگزاری</strong></td>
+                            <td><span class="cross">✗</span> بسیار بالا (لجستیک)</td>
+                            <td><span class="check">✓</span> بسیار پایین (دیجیتال)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>اعلام نتایج</strong></td>
+                            <td>ساعت‌ها یا روزها</td>
+                            <td><span class="check">✓</span> به صورت آنی (Real-time)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>احراز هویت</strong></td>
+                            <td>چشمی (شناسنامه)</td>
+                            <td><span class="check">✓</span> بیومتریک + OTP (۳ عاملی)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section style="text-align: center; margin-top: 80px;">
+            <p style="margin-bottom: 24px; color: var(--m3-on-surface-variant);">توسعه داده شده با ❤️ توسط تیم
+                انتخابِلاک برای آینده‌ای شفاف</p>
+            <div style="display: flex; gap: 16px; justify-content: center;">
+                <a href="{{ url_for('index') }}" class="btn btn-filled btn-large">بازگشت به صفحه اصلی</a>
+                <a href="https://github.com/theMahdiyarB/ENTEKHABLOCK-MVP" class="btn btn-outlined btn-large"
+                    target="_blank">مشاهده در گیت‌هاب</a>
+            </div>
+        </section>
+
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}تأیید کد یکبار مصرف - مدیریت - انتخابِلاک{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="step-indicator">مدیریت - مرحله ۲ از ۲</div>
+            <h2>تأیید هویت دو مرحله‌ای</h2>
+        </div>
+
+        <div class="auth-body">
+            <p class="text-center mb-24">
+                کد تأیید به شماره همراه مدیر ارسال شد
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <div class="timer-box mb-24">
+                <div id="timer" class="timer-text">02:00</div>
+                <div class="timer-label">زمان باقی‌مانده</div>
+            </div>
+
+            <form method="POST" action="{{ url_for('admin_login_page') }}" id="otp-form" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="otp_code" name="otp_code" maxlength="4" pattern="[0-9]{4}" placeholder=" "
+                        required autocomplete="off" class="otp-input" autofocus>
+                    <span class="underline"></span>
+                    <label for="otp_code">کد تأیید</label>
+                    <div class="form-hint">۴ رقم</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">تایید و ورود به پنل</button>
+            </form>
+
+            <div class="resend-section">
+                <p>کد را دریافت نکردید؟</p>
+                <button id="resend-otp-btn" type="button" class="btn btn-outlined">دوباره ارسال کن</button>
+            </div>
+
+            <div class="test-credentials">
+                <h4>راهنمای مدیر</h4>
+                <div class="credential-item">کد دسترسی: <code>{{ otp_hint if otp_hint else "1234" }}</code></div>
+                <p style="font-size: 11px; color: var(--m3-on-surface-variant); margin-top: 8px;">
+                    امنیت پنل مدیریت توسط احراز هویت دو مرحله‌ای تضمین می‌شود.
+                </p>
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            <a href="{{ url_for('admin_login_page', reset=1) }}" class="link">← بازگشت به مرحله قبل</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

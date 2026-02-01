@@ -1,0 +1,315 @@
+/* 
+   Material 3 Navigation Rail 
+   RTL Optimized (Right Side)
+*/
+
+:root {
+    --rail-width: 80px;
+    --rail-width-expanded: 250px;
+    /* Future expansion support */
+    --rail-bg: var(--m3-surface-container);
+    --rail-color: var(--m3-on-surface-variant);
+    --rail-active-bg: var(--m3-secondary-container);
+    --rail-active-color: var(--m3-on-secondary-container);
+}
+
+/* Main Layout Wrapper - Applied to Body or Main Container */
+.layout-wrapper {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* The Rail Itself */
+.navigation-rail {
+    width: var(--rail-width);
+    height: 100vh;
+    background-color: var(--rail-bg);
+    border-left: 1px solid var(--m3-outline-variant);
+    /* Border on left because it's RTL (Right side rail) */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 0 16px 0;
+    padding: 32px 0 16px 0;
+    position: fixed;
+    /* Fixed position for permanent sidebar */
+    top: 0;
+    right: 0;
+    /* RTL: Rail on Right */
+    z-index: 1000;
+    transition: width 0.3s cubic-bezier(0.2, 0.0, 0.0, 1.0);
+    flex-shrink: 0;
+}
+
+/* Logo / Menu Button Area */
+.rail-header {
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.rail-logo {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.2s ease;
+}
+
+.rail-logo:hover {
+    transform: rotate(15deg);
+}
+
+/* FAB - Optional Floating Action Button at top */
+.rail-fab {
+    width: 56px;
+    height: 56px;
+    background-color: var(--m3-primary-container);
+    color: var(--m3-on-primary-container);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 32px;
+    box-shadow: var(--m3-elevation-1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    text-decoration: none;
+}
+
+.rail-fab:hover {
+    box-shadow: var(--m3-elevation-2);
+    transform: translateY(-2px);
+    background-color: #d0bcff;
+    /* Slightly lighter primary container */
+}
+
+/* Navigation Items Container */
+.rail-items {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    flex: 1;
+    /* Pushes footer down */
+}
+
+/* Individual Item */
+.rail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--rail-color);
+    position: relative;
+    padding: 0 4px;
+    /* Touch target spacing */
+}
+
+/* Icon Container (The Pill) */
+.rail-item-icon {
+    width: 56px;
+    height: 32px;
+    border-radius: 16px;
+    /* Pill shape */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    /* Icon size */
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Label */
+.rail-item-label {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    color: var(--rail-color);
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+/* Hover States */
+.rail-item:hover .rail-item-icon {
+    background-color: rgba(0, 0, 0, 0.05);
+    /* Surface variant hover */
+    color: var(--m3-on-surface);
+}
+
+.rail-item:hover .rail-item-label {
+    color: var(--m3-on-surface);
+    opacity: 1;
+}
+
+/* Active State */
+.rail-item.active .rail-item-icon {
+    background-color: var(--rail-active-bg);
+    color: var(--rail-active-color);
+}
+
+.rail-item.active .rail-item-label {
+    color: var(--m3-on-surface);
+    font-weight: 700;
+}
+
+/* Rail Footer (Settings/Profile) */
+.rail-footer {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 24px;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--m3-tertiary-container);
+    color: var(--m3-on-tertiary-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    border: 2px solid var(--m3-surface);
+    box-shadow: 0 0 0 1px var(--m3-outline-variant);
+    overflow: hidden;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Main Content Adjustment */
+.main-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    margin-right: var(--rail-width);
+    /* Push content for fixed rail */
+    transition: margin-right 0.3s ease;
+}
+
+/* Bottom Navigation Bar (Mobile) */
+.bottom-navigation-bar {
+    display: none;
+    /* Hidden on Desktop */
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background-color: var(--m3-surface-container);
+    border-top: 1px solid var(--m3-outline-variant);
+    z-index: 1000;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 8px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex: 1;
+    height: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--rail-color);
+    padding: 12px 0 16px;
+}
+
+.bottom-nav-icon {
+    width: 64px;
+    height: 32px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: all 0.2s ease;
+}
+
+.bottom-nav-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--rail-color);
+}
+
+/* Active State for Bottom Bar */
+.bottom-nav-item.active .bottom-nav-icon {
+    background-color: var(--rail-active-bg);
+    color: var(--rail-active-color);
+}
+
+.bottom-nav-item.active .bottom-nav-label {
+    color: var(--m3-on-surface);
+    font-weight: 700;
+}
+
+/* Special FAB for Mobile Bottom Bar */
+.rail-fab-mobile {
+    margin-top: -30px;
+    /* Floating effect */
+}
+
+.rail-fab-mobile {
+    font-size: 32px;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+    transform: scale(1.2);
+}
+
+/* Responsive: Switch to Bottom Bar on Mobile/Tablet */
+@media (max-width: 768px) {
+    .navigation-rail {
+        display: none;
+    }
+
+    .bottom-navigation-bar {
+        display: flex;
+    }
+
+    .main-content-wrapper {
+        margin-right: 0;
+        /* Remove rail spacing */
+        padding-bottom: 80px;
+        /* Add space for bottom bar */
+    }
+
+    .layout-wrapper {
+        flex-direction: column;
+    }
+
+    /* Adjust FAB size for mobile */
+    .rail-fab-mobile {
+        margin-top: -32px;
+        background-color: var(--m3-primary-container);
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        /* Don't stretch */
+    }
+}

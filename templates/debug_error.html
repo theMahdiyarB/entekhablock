@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Application Error</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f8f9fa; color: #212529; margin: 20px; }
+        .container { max-width: 800px; margin: auto; background: white; border: 1px solid #dee2e6; border-radius: 5px; padding: 20px; }
+        h1 { color: #dc3545; }
+        pre { background-color: #e9ecef; padding: 15px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>An Error Occurred</h1>
+        <p>The application encountered an error while trying to render this page.</p>
+        <h2>Error Details:</h2>
+        <pre>{{ error_message }}</pre>
+        <h2>Traceback:</h2>
+        <pre>{{ traceback }}</pre>
+    </div>
+</body>
+</html>

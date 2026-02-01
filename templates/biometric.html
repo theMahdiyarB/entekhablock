@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}احراز هویت بیومتریک - انتخابِلاک{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="step-indicator">مرحله ۳ از ۳</div>
+            <h2>احراز هویت بیومتریک</h2>
+        </div>
+
+        <div class="auth-body">
+            <p class="text-center mb-24">
+                لطفاً فیلم کوتاهی از چهره خود را ضبط کنید
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div id="video-container" class="video-container">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas" style="display: none;"></canvas>
+                <div id="no-camera" style="display: none;">
+                    <p>در حال اتصال به دوربین...</p>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('biometric') }}" id="biometric-form" class="auth-form">
+                <input type="hidden" name="video_data" id="video_data" value="">
+                
+                <button type="button" id="start-btn" class="btn btn-primary">شروع ضبط ویدئو</button>
+                <button type="button" id="stop-btn" class="btn btn-error" style="display: none;">پایان ضبط</button>
+                <button type="submit" id="verify-btn" class="btn btn-success" style="display: none;">تأیید و ورود به سیستم</button>
+            </form>
+
+            <div class="test-credentials">
+                <h4>حالت شبیه‌سازی</h4>
+                <p class="credential-item">
+                    برای تست سریع، می‌توانید بدون ضبط ویدئو روی دکمه "شروع ضبط" کلیک کنید و سپس فوراً "پایان ضبط" را فشار دهید.
+                </p>
+            </div>
+        </div>
+        
+        <div class="auth-footer">
+            <a href="{{ url_for('logout') }}" class="link">انصراف</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='js/biometric.js') }}"></script>
+{% endblock %}

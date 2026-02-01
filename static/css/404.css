@@ -1,0 +1,67 @@
+/* ========================================
+   Error Pages Styles - Material 3 Expressive
+   ======================================== */
+
+.error-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--m3-spacing-32);
+    text-align: center;
+}
+
+.error-content {
+    max-width: 600px;
+    animation: fadeInUp 0.8s var(--m3-motion-emphasized);
+}
+
+.error-illustration {
+    font-size: 120px;
+    margin-bottom: var(--m3-spacing-32);
+}
+
+.error-code {
+    font-family: 'Outfit', sans-serif;
+    font-size: 140px;
+    font-weight: 800;
+    color: var(--m3-primary);
+    opacity: 0.15;
+    line-height: 1;
+    margin-bottom: -40px;
+}
+
+.error-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--m3-on-surface);
+    margin-bottom: var(--m3-spacing-16);
+    position: relative;
+    z-index: 1;
+}
+
+.error-message {
+    font-size: 18px;
+    color: var(--m3-on-surface-variant);
+    margin-bottom: var(--m3-spacing-48);
+    line-height: 1.6;
+}
+
+.error-actions {
+    display: flex;
+    gap: var(--m3-spacing-16);
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

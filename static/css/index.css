@@ -1,0 +1,164 @@
+/* ============================================================
+   LANDING PAGE SPECIFIC STYLES - Material 3 Expressive
+   Focus: High-Impact Visuals, Professionalism, and Security
+   ============================================================ */
+
+.hero-section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: #f8f9ff;
+    /* Light fallback color */
+    background-image: url('../img/security_illustration.png');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+}
+
+/* Light blurred overlay to ensure text readability while keeping the image visible */
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(6px);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: var(--m3-on-surface);
+    max-width: 900px;
+    padding: 0 var(--m3-spacing-24);
+    animation: fadeInUp 1s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.hero-title {
+    font-size: clamp(48px, 8vw, 84px);
+    line-height: 1.1;
+    font-weight: 800;
+    margin-bottom: var(--m3-spacing-24);
+    letter-spacing: -1px;
+    color: var(--m3-on-surface);
+}
+
+.hero-subtitle {
+    font-size: clamp(18px, 3vw, 24px);
+    font-weight: 400;
+    margin-bottom: var(--m3-spacing-48);
+    opacity: 0.9;
+    line-height: 1.6;
+    color: var(--m3-on-surface-variant);
+}
+
+/* Feature Section Refinements */
+.landing-section {
+    padding: 120px 0;
+    background-color: var(--m3-surface);
+}
+
+.section-head {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.section-head h2 {
+    margin-bottom: 24px;
+    color: var(--m3-on-surface);
+}
+
+.section-head p {
+    color: var(--m3-on-surface-variant);
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: 18px;
+}
+
+.feature-grid-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+}
+
+.feature-card-premium {
+    background-color: var(--m3-surface-container-low);
+    padding: 48px;
+    border-radius: 24px;
+    border: 1px solid var(--m3-outline-variant);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: right;
+}
+
+.feature-card-premium:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    border-color: var(--m3-primary);
+    background-color: var(--m3-surface-container);
+}
+
+.feature-card-premium .icon-box {
+    font-size: 48px;
+    margin-bottom: 32px;
+    padding: 16px;
+    background-color: var(--m3-primary-container);
+    border-radius: 16px;
+    color: var(--m3-primary);
+    line-height: 1;
+}
+
+.feature-card-premium h3 {
+    margin-bottom: 16px;
+    font-size: 24px;
+}
+
+.feature-card-premium p {
+    line-height: 1.7;
+    color: var(--m3-on-surface-variant);
+}
+
+/* Spacing fix for headers and subtext */
+.spacing-roomy {
+    margin-top: 16px;
+    display: block;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+    .landing-section {
+        padding: 80px 0;
+    }
+
+    .section-head {
+        margin-bottom: 48px;
+    }
+
+    .feature-card-premium {
+        padding: 32px;
+    }
+}

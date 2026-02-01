@@ -1,0 +1,392 @@
+/* ============================================
+   Dashboard CSS - Material 3 Expressive
+   Strict adherence to M3 guidelines
+   No gradients - Solid colors only
+   ============================================ */
+
+/* CSS Variables - M3 Color System */
+:root {
+    /* Core M3 Colors (Light Mode) */
+    --m3-primary: #6750a4;
+    --m3-on-primary: #ffffff;
+    --m3-primary-container: #eaddff;
+    --m3-on-primary-container: #21005d;
+
+    --m3-secondary: #625b71;
+    --m3-on-secondary: #ffffff;
+    --m3-secondary-container: #e8def8;
+    --m3-on-secondary-container: #1e192b;
+
+    --m3-tertiary: #7d5260;
+    --m3-on-tertiary: #ffffff;
+    --m3-tertiary-container: #ffd8e4;
+    --m3-on-tertiary-container: #31111d;
+
+    --m3-surface: #fffbfe;
+    --m3-surface-dim: #ded8e1;
+    --m3-surface-bright: #fffbfe;
+    --m3-surface-container-lowest: #fffbfe;
+    --m3-surface-container-low: #f7f2fa;
+    --m3-surface-container: #f3eef7;
+    --m3-surface-container-high: #ede6f0;
+    --m3-surface-container-highest: #e7e0eb;
+    --m3-on-surface: #1c1b1f;
+    --m3-on-surface-variant: #49454e;
+
+    --m3-outline: #79747e;
+    --m3-outline-variant: #c4c7c5;
+
+    --m3-error: #b3261e;
+    --m3-on-error: #ffffff;
+    --m3-error-container: #f9dedc;
+    --m3-on-error-container: #410e0b;
+
+    --m3-success: #4caf50;
+    --m3-on-success: #ffffff;
+    --m3-success-container: #c8e6c9;
+    --m3-on-success-container: #1b5e20;
+
+    /* Spacing System */
+    --m3-spacing-4: 4px;
+    --m3-spacing-8: 8px;
+    --m3-spacing-12: 12px;
+    --m3-spacing-16: 16px;
+    --m3-spacing-24: 24px;
+    --m3-spacing-32: 32px;
+    --m3-spacing-48: 48px;
+
+    /* Shape Radius */
+    --m3-shape-xs: 4px;
+    --m3-shape-sm: 8px;
+    --m3-shape-md: 12px;
+    --m3-shape-lg: 16px;
+    --m3-shape-xl: 28px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+    background-color: var(--m3-surface);
+    color: var(--m3-on-surface);
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    direction: rtl;
+    text-align: right;
+}
+
+/* ============================================
+   Navbar - Material 3 Expressive
+   ============================================ */
+/* Main content spacing adjusted in nav-rail.css */
+
+/* ============================================
+   Main Content Area
+   ============================================ */
+.dashboard-main {
+    min-height: calc(100vh - 200px);
+    padding: var(--m3-spacing-32) var(--m3-spacing-16);
+    background-color: var(--m3-surface);
+}
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   Header Section - Hero Moment
+   ============================================ */
+.dashboard-header {
+    background-color: var(--m3-surface-container-high);
+    padding: var(--m3-spacing-48) var(--m3-spacing-32);
+    border-radius: var(--m3-shape-lg);
+    margin-bottom: var(--m3-spacing-32);
+    border: 1px solid var(--m3-outline-variant);
+}
+
+.header-content {
+    max-width: 600px;
+}
+
+.header-title {
+    font-size: 48px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: var(--m3-spacing-12);
+    color: var(--m3-on-surface);
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+.header-subtitle {
+    font-size: 16px;
+    color: var(--m3-on-surface-variant);
+    letter-spacing: 0.15px;
+    line-height: 1.6;
+}
+
+/* ============================================
+   Notifications
+   ============================================ */
+.notifications-container {
+    margin-bottom: var(--m3-spacing-24);
+}
+
+.notification {
+    padding: var(--m3-spacing-16);
+    border-radius: var(--m3-shape-md);
+    margin-bottom: var(--m3-spacing-12);
+    border-left: 4px solid;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.notification.error {
+    background-color: var(--m3-error-container);
+    color: var(--m3-on-error-container);
+    border-left-color: var(--m3-error);
+}
+
+.notification.success {
+    background-color: var(--m3-success-container);
+    color: var(--m3-on-success-container);
+    border-left-color: var(--m3-success);
+}
+
+/* ============================================
+   Stats Grid - Information Hierarchy
+   ============================================ */
+.stats-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--m3-spacing-16);
+    margin-bottom: var(--m3-spacing-48);
+}
+
+.stat-card {
+    background-color: var(--m3-surface-container-low);
+    padding: var(--m3-spacing-24);
+    border-radius: var(--m3-shape-md);
+    border: 1px solid var(--m3-outline-variant);
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.stat-card:hover {
+    background-color: var(--m3-surface-container);
+    border-color: var(--m3-outline);
+}
+
+.stat-icon {
+    font-size: 40px;
+    margin-bottom: var(--m3-spacing-16);
+    display: block;
+}
+
+.stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--m3-on-surface-variant);
+    margin-bottom: var(--m3-spacing-8);
+}
+
+.stat-value {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--m3-primary);
+    letter-spacing: -0.5px;
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* ============================================
+   Polls Section
+   ============================================ */
+.polls-section {
+    margin-bottom: var(--m3-spacing-48);
+}
+
+.section-header {
+    margin-bottom: var(--m3-spacing-24);
+}
+
+.section-title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--m3-on-surface);
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* ============================================
+   Loading Indicator
+   ============================================ */
+.loading-indicator {
+    text-align: center;
+    padding: var(--m3-spacing-48);
+    color: var(--m3-on-surface-variant);
+    font-size: 16px;
+}
+
+.loading-indicator::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: var(--m3-spacing-8);
+    border: 2px solid var(--m3-outline);
+    border-top-color: var(--m3-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   Polls Grid
+   ============================================ */
+.polls-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--m3-spacing-16);
+}
+
+.poll-card {
+    background-color: var(--m3-surface-container-low);
+    border: 1px solid var(--m3-outline-variant);
+    border-radius: var(--m3-shape-md);
+    overflow: hidden;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.poll-card:hover {
+    background-color: var(--m3-surface-container);
+    border-color: var(--m3-outline);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.poll-card-header {
+    padding: var(--m3-spacing-24);
+    border-bottom: 1px solid var(--m3-outline-variant);
+}
+
+.poll-card h4 {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--m3-on-surface);
+    margin-bottom: var(--m3-spacing-8);
+    letter-spacing: 0.15px;
+    line-height: 1.4;
+}
+
+.poll-card-body {
+    padding: var(--m3-spacing-24);
+    flex-grow: 1;
+}
+
+.poll-description {
+    font-size: 14px;
+    color: var(--m3-on-surface-variant);
+    margin-bottom: var(--m3-spacing-16);
+    line-height: 1.6;
+    letter-spacing: 0.25px;
+}
+
+.poll-meta {
+    font-size: 13px;
+    color: var(--m3-on-surface-variant);
+    letter-spacing: 0.15px;
+}
+
+.poll-card-footer {
+    padding: var(--m3-spacing-24);
+    border-top: 1px solid var(--m3-outline-variant);
+    display: flex;
+    gap: var(--m3-spacing-12);
+}
+
+.poll-btn {
+    flex: 1;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    min-height: 48px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.poll-btn-primary {
+    background-color: var(--m3-primary);
+    color: var(--m3-on-primary);
+}
+
+.poll-btn-primary:hover {
+    background-color: #5d41a0;
+    box-shadow: 0 8px 16px rgba(103, 80, 164, 0.3);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   Footer
+   ============================================ */
+.dashboard-footer {
+    background-color: var(--m3-surface);
+    padding: 24px;
+    text-align: center;
+    border-top: 1px solid var(--m3-outline-variant);
+    color: var(--m3-on-surface-variant);
+    font-size: 13px;
+    letter-spacing: 0.25px;
+    margin-top: auto;
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 768px) {
+    .dashboard-main {
+        padding: var(--m3-spacing-16);
+        padding-bottom: 100px;
+        /* Clear bottom nav */
+    }
+
+    .polls-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .stat-card {
+        padding: var(--m3-spacing-16);
+    }
+}

@@ -1,0 +1,279 @@
+# ===================================
+# Python
+# ===================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.env.local
+.env.*.local
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+
+# ===================================
+# IDEs and Editors
+# ===================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+
+# ===================================
+# Operating Systems
+# ===================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+.directory
+.Trash-*
+
+
+# ===================================
+# Project Specific
+# ===================================
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+instance/*.db
+instance/*.sqlite
+
+# Log files
+logs/
+*.log
+*.log.*
+
+# Upload folder (تصاویر آپلود شده)
+uploads/
+uploads/*
+!uploads/.gitkeep
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Cache files
+.cache/
+*.cache
+
+# Secrets and credentials
+secrets.json
+credentials.json
+*.pem
+*.key
+*.cert
+
+# Configuration overrides
+config.local.py
+local_settings.py
+
+# Media files (اگر نمی‌خواهید تصاویر را commit کنید)
+media/
+static/uploads/
+
+# Compiled CSS and JS (اگر از preprocessor استفاده می‌کنید)
+*.css.map
+*.js.map
+
+# Node modules (اگر از npm استفاده می‌کنید)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Documentation builds
+docs/_build/
+docs/.build/
+
+# Testing
+.tox/
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Security scans
+.snyk
+.bandit
+
+# Docker
+*.dockerignore
+docker-compose.override.yml
+
+# Kubernetes
+*.kubeconfig
+
+
+# ===================================
+# Keep Empty Directories
+# ===================================
+
+# این فایل‌ها را نگه دارید تا Git پوشه‌های خالی را ردیابی کند
+!instance/.gitkeep
+!logs/.gitkeep
+!uploads/.gitkeep
+!static/uploads/.gitkeep

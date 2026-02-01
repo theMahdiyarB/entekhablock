@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block title %}نتایج - انتخابِلاک{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/results.css') }}">
+<script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<main class="results-container">
+    <nav class="breadcrumb">
+        <a href="{{ url_for('dashboard') }}">داشبورد</a>
+        <span>←</span>
+        <span>نتایج</span>
+    </nav>
+
+    {% if poll %}
+    <!-- Single Poll Results View -->
+    <header class="results-header">
+        <h2 class="display-medium">{{ poll.title }}</h2>
+        {% if poll.description %}
+        <p class="results-description">{{ poll.description }}</p>
+        {% endif %}
+        <div class="results-meta">
+            <span class="meta-badge">
+                <span>📅</span>
+                شروع: {{ poll.start_time | jalali }}
+            </span>
+            <span class="meta-badge">
+                <span>⏰</span>
+                پایان: {{ poll.end_time | jalali }}
+            </span>
+            <span class="meta-badge">
+                <span>👥</span>
+                {{ total_votes }} رأی کل
+            </span>
+            <span class="meta-badge {% if poll.is_active %}badge-active{% else %}badge-ended{% endif %}">
+                <span>{% if poll.is_active %}🟢{% else %}🔴{% endif %}</span>
+                {% if poll.is_active %}در حال اجرا{% else %}پایان یافته{% endif %}
+            </span>
+        </div>
+    </header>
+
+    <div class="results-summary">
+        <div class="summary-card">
+            <div class="summary-icon">📊</div>
+            <div class="summary-content">
+                <h3>{{ total_votes }}</h3>
+                <p>تعداد کل آرا</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">🏆</div>
+            <div class="summary-content">
+                <h3>{{ winner }}</h3>
+                <p>گزینه برتر</p>
+            </div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-icon">📈</div>
+            <div class="summary-content">
+                <h3>{{ winner_percentage }}%</h3>
+                <p>درصد برنده</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="chart-section">
+        <div class="chart-controls">
+            <h3 class="title-large">نمایش بصری نتایج</h3>
+            <div class="chart-toggle">
+                <button type="button" class="chart-btn active" data-chart="bar">📊 نمودار میله‌ای</button>
+                <button type="button" class="chart-btn" data-chart="pie">🥧 نمودار دایره‌ای</button>
+            </div>
+        </div>
+
+        <div class="chart-wrapper">
+            <canvas id="barChart" class="chart-canvas active"></canvas>
+            <canvas id="pieChart" class="chart-canvas"></canvas>
+        </div>
+    </section>
+
+    <section class="detailed-results">
+        <h3 class="title-large">نتایج تفصیلی</h3>
+        <div class="results-table">
+            {% for option, count in results.items() %}
+            <div class="result-row">
+                <div class="result-info">
+                    <span class="result-option">{{ option }}</span>
+                    <span class="result-rank">رتبه {{ loop.index }}</span>
+                </div>
+                <div class="result-stats">
+                    <div class="result-bar-container">
+                        <div class="result-bar"
+                            style="width: {{ (count / total_votes * 100) if total_votes > 0 else 0 }}%"></div>
+                    </div>
+                    <span class="result-count">{{ count }} رأی</span>
+                    <span class="result-percentage">{{ "%.1f"|format((count / total_votes * 100) if total_votes > 0 else
+                        0) }} %</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="blockchain-verification">
+        <div class="verification-card">
+            <div class="verification-icon">⛓️</div>
+            <div class="verification-content">
+                <h4>تأیید اصالت در بلاک‌چین</h4>
+                <p>
+                    تمامی آرا با الگوریتم SHA-256 رمزنگاری شده و به صورت غیرقابل تغییر در شبکه بلاک‌چین ثبت شده‌اند.
+                    هرگونه تغییر در آرا منجر به نامعتبر شدن کل زنجیره خواهد شد.
+                </p>
+                <div class="verification-stats">
+                    <span><strong>بلاک‌ها:</strong> {{ blockchain_length }}</span>
+                    <span class="status-badge">✓ زنجیره معتبر است</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="action-buttons">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outlined">
+            ← بازگشت به داشبورد
+        </a>
+        {% if poll.is_active and not has_voted %}
+        <a href="{{ url_for('vote', poll_id=poll.poll_id) }}" class="btn btn-filled">
+            🗳️ شرکت در رأی‌گیری
+        </a>
+        {% endif %}
+        <button type="button" class="btn btn-text" onclick="window.print()">
+            🖨️ چاپ نتایج
+        </button>
+    </footer>
+
+    {% elif polls %}
+    <!-- Multiple Polls Results List View -->
+    <header class="results-header">
+        <h2 class="display-medium">نتایج انتخابات</h2>
+        <p class="results-description">نمایش نتایج تفصیلی برای تمامی انتخابات پایان یافته</p>
+    </header>
+
+    <div class="polls-grid">
+        {% for poll in polls %}
+        <div class="poll-card">
+            <header class="poll-header">
+                <h3 class="title-medium">{{ poll.title }}</h3>
+                <span class="meta-badge badge-ended">پایان یافته</span>
+            </header>
+            {% if poll.description %}
+            <p class="poll-description">{{ poll.description|truncate(120) }}</p>
+            {% endif %}
+            <div class="poll-stats">
+                <div class="stat">
+                    <strong>{{ poll.options_count }}</strong>
+                    <span>گزینه</span>
+                </div>
+                <div class="stat">
+                    <strong>{{ poll.total_votes }}</strong>
+                    <span>رأی کل</span>
+                </div>
+            </div>
+            <a href="{{ url_for('view_results', poll_id=poll.id) }}" class="btn btn-outlined" style="width: 100%;">
+                مشاهده نتایج
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <!-- No Results View -->
+    <div style="text-align: center; padding: 64px 0;">
+        <div style="font-size: 64px; margin-bottom: 24px;">📭</div>
+        <h2 class="headline-large">هنوز نتیجه‌ای ثبت نشده است</h2>
+        <p class="body-large" style="color: var(--m3-on-surface-variant); margin-bottom: 32px;">
+            پس از پایان یافتن اولین نظرسنجی، نتایج در این صفحه نمایش داده خواهد شد.
+        </p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-filled">بازگشت به داشبورد</a>
+    </div>
+    {% endif %}
+</main>
+{% endblock %}
+
+{% block scripts %}
+{% if poll %}
+<script>
+    // Injected from Flask
+    const rawLabels = {{ labels | tojson | safe }};
+    const rawValues = {{ values | tojson | safe }};
+
+    const chartData = {
+        labels: rawLabels,
+        values: rawValues
+    };
+    console.log("Chart Data Injected:", chartData);
+</script>
+<script src="{{ url_for('static', filename='js/results.js') }}?v={{ range(1, 100000) | random }}"></script>
+{% endif %}
+{% endblock %}

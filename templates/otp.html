@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}تأیید کد یکبار مصرف - انتخابِلاک{% endblock %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div class="step-indicator">مرحله ۲ از ۳</div>
+            <h2>تأیید کد OTP</h2>
+        </div>
+
+        <div class="auth-body">
+            <p class="text-center mb-24">
+                کد تأیید ۶ رقمی به شماره <strong>{{ mobile }}</strong> ارسال شد
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="timer-box mb-24">
+                <div id="timer" class="timer-text">01:00</div>
+                <div class="timer-label">زمان باقی‌مانده</div>
+            </div>
+
+            <form method="POST" action="{{ url_for('verify_otp') }}" id="otp-form" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="otp" name="otp" maxlength="4" pattern="[0-9]{4}" placeholder=" " required autocomplete="off" class="otp-input">
+                    <span class="underline"></span>
+                    <label for="otp">کد تأیید</label>
+                    <div class="form-hint">۴ رقم</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">تایید و ادامه</button>
+            </form>
+
+            <div class="resend-section">
+                <p>کد را دریافت نکردید؟</p>
+                <button id="resend-otp-btn" type="button" class="btn btn-outlined">دوباره ارسال کن</button>
+            </div>
+
+            <div class="test-credentials">
+                <h4>اطلاعات تست</h4>
+                <div class="credential-item"><strong>کد:</strong> <code>1234</code></div>
+            </div>
+        </div>
+
+        <div class="auth-footer">
+            <a href="{{ url_for('logout') }}" class="link">انصراف</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

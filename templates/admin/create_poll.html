@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}ایجاد نظرسنجی جدید - مدیریت{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="admin-logo">
+            <span class="logo-icon">🛠️</span>
+            <span class="logo-text">مدیریت</span>
+        </div>
+        <nav class="admin-nav">
+            <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
+                📊 داشبورد
+            </a>
+            <a href="{{ url_for('admin_create_poll') }}" class="nav-link active">
+                ➕ ایجاد نظرسنجی
+            </a>
+            <a href="{{ url_for('view_blockchain') }}" class="nav-link">
+                ⛓️ بلاکچین
+            </a>
+            <div style="margin-top: auto; padding-top: 32px;">
+                <a href="{{ url_for('admin_logout') }}" class="nav-link" style="color: var(--m3-error);">
+                    🚪 خروج
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <header class="admin-header">
+            <div>
+                <a href="{{ url_for('admin_dashboard') }}"
+                    style="text-decoration: none; color: var(--m3-primary); font-size: 14px; display: inline-block; margin-bottom: 16px;">←
+                    بازگشت به داشبورد</a>
+                <h1>ایجاد نظرسنجی جدید</h1>
+                <p>تنظیمات و گزینه‌های نظرسنجی را در این بخش وارد کنید</p>
+            </div>
+        </header>
+
+        <form action="{{ url_for('admin_create_poll') }}" method="POST" class="admin-card"
+            style="margin: 0; max-width: 100%;">
+            <section class="form-section">
+                <h3 class="title-large" style="margin-bottom: 24px;">اطلاعات پایه</h3>
+                <div class="form-group">
+                    <label class="form-label" for="title">عنوان نظرسنجی</label>
+                    <input type="text" id="title" name="title" class="form-input" required
+                        placeholder="مثال: انتخابات شورای صنفی ۱۴۰۳">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="description">توضیحات</label>
+                    <textarea id="description" name="description" class="form-textarea" rows="4"
+                        placeholder="جزئیات نظرسنجی را در اینجا بنویسید..."></textarea>
+                </div>
+            </section>
+
+            <section class="form-section" style="margin-top: 48px;">
+                <h3 class="title-large" style="margin-bottom: 24px;">زمان‌بندی</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                    <div class="form-group">
+                        <label class="form-label" for="start_date">تاریخ شروع</label>
+                        <input type="date" id="start_date" name="start_date" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="end_date">تاریخ پایان</label>
+                        <input type="date" id="end_date" name="end_date" class="form-input" required>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section" style="margin-top: 48px;">
+                <h3 class="title-large" style="margin-bottom: 24px;">گزینه‌های رأی‌گیری</h3>
+                <div id="options-container">
+                    <div class="form-group" style="display: flex; gap: 12px; margin-bottom: 12px;">
+                        <input type="text" name="options[]" class="form-input" required placeholder="گزینه ۱">
+                    </div>
+                    <div class="form-group" style="display: flex; gap: 12px; margin-bottom: 12px;">
+                        <input type="text" name="options[]" class="form-input" required placeholder="گزینه ۲">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outlined" id="add-option" style="margin-top: 8px;">
+                    ➕ افزودن گزینه دیگر
+                </button>
+            </section>
+
+            <section class="form-section"
+                style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--m3-outline-variant); display: flex; justify-content: flex-end; gap: 16px;">
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-text">انصراف</a>
+                <button type="submit" class="btn btn-filled">ایجاد و انتشار نظرسنجی</button>
+            </section>
+        </form>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.getElementById('add-option').addEventListener('click', function () {
+        const container = document.getElementById('options-container');
+        const count = container.children.length + 1;
+        const div = document.createElement('div');
+        div.className = 'form-group';
+        div.style.display = 'flex';
+        div.style.gap = '12px';
+        div.style.marginBottom = '12px';
+        div.innerHTML = `<input type="text" name="options[]" class="form-input" required placeholder="گزینه ${count}">`;
+        container.appendChild(div);
+    });
+</script>
+{% endblock %}

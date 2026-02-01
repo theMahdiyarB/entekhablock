@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block title %}مشاهده بلاک‌چین - انتخابِلاک{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/blockchain.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="blockchain-container">
+    <div class="breadcrumb">
+        <a href="{{ url_for('dashboard') }}">داشبورد</a>
+        <span class="separator">←</span>
+        <span class="current">بلاک‌چین</span>
+    </div>
+
+    <div class="blockchain-header">
+        <div class="header-content">
+            <h2>⛓️ زنجیره بلاک‌های رأی‌گیری</h2>
+            <p class="subtitle">
+                نمایش شفاف و غیرقابل تغییر تمامی آرا ثبت شده در سیستم
+            </p>
+        </div>
+        <div class="blockchain-stats">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-info">
+                    <h3>{{ blockchain_length }}</h3>
+                    <p>تعداد بلاک‌ها</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🗳️</div>
+                <div class="stat-info">
+                    <h3>{{ total_votes }}</h3>
+                    <p>کل آرای ثبت شده</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    {% if is_valid %}✅{% else %}⚠️{% endif %}
+                </div>
+                <div class="stat-info">
+                    <h3>{% if is_valid %}معتبر{% else %}نامعتبر{% endif %}</h3>
+                    <p>وضعیت زنجیره</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if not is_valid %}
+    <div class="alert alert-error">
+        <div class="alert-icon">⚠️</div>
+        <div class="alert-content">
+            <h4>هشدار: بلاک‌چین نامعتبر!</h4>
+            <p>
+                یک یا چند بلاک در زنجیره دستکاری شده است.
+                این امر می‌تواند نشانه تلاش برای دستکاری آرا باشد.
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="blockchain-controls">
+        <div class="search-box">
+            <input type="text" id="searchBlock" placeholder="🔍 جستجو بر اساس شماره بلاک، هش یا تاریخ..."
+                class="search-input">
+        </div>
+        <div class="control-buttons">
+            <button class="btn btn-outline" onclick="toggleAllBlocks()">
+                <span class="icon">📂</span>
+                باز/بسته کردن همه
+            </button>
+            <button class="btn btn-outline" onclick="verifyChain()">
+                <span class="icon">🔍</span>
+                تأیید اعتبار
+            </button>
+            <button class="btn btn-success" onclick="window.print()">
+                <span class="icon">🖨️</span>
+                چاپ
+            </button>
+        </div>
+    </div>
+
+    <div class="blockchain-chain" id="blockchainChain">
+        {% for block in blocks %}
+        <div class="block-item {% if not block.is_valid %}block-invalid{% endif %}"
+            data-block-index="{{ block.index }}">
+            <div class="block-header" onclick="toggleBlock({{ block.index }})">
+                <div class="block-number">
+                    <span class="block-icon">
+                        {% if block.index == 0 %}
+                        🏁
+                        {% else %}
+                        📦
+                        {% endif %}
+                    </span>
+                    <span class="block-label">
+                        {% if block.index == 0 %}
+                        بلاک پایه (Genesis)
+                        {% else %}
+                        بلاک #{{ block.index }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="block-summary">
+                    <span class="block-time">{{ block.timestamp }}</span>
+                    <span class="block-status">
+                        {% if block.is_valid %}
+                        <span class="status-badge status-valid">✓</span>
+                        {% else %}
+                        <span class="status-badge status-invalid">✗</span>
+                        {% endif %}
+                    </span>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+
+            <div class="block-details" id="block-{{ block.index }}">
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <label>شماره بلاک:</label>
+                        <span class="value-mono">{{ block.index }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <label>زمان ایجاد:</label>
+                        <span>{{ block.timestamp }}</span>
+                    </div>
+                    <div class="detail-item detail-full">
+                        <label>هش بلاک:</label>
+                        <span class="value-mono hash-value" title="{{ block.hash }}">
+                            {{ block.hash }}
+                        </span>
+                        <button class="copy-btn" onclick="copyToClipboard('{{ block.hash }}')">
+                            📋
+                        </button>
+                    </div>
+                    <div class="detail-item detail-full">
+                        <label>هش بلاک قبلی:</label>
+                        <span class="value-mono hash-value" title="{{ block.previous_hash }}">
+                            {{ block.previous_hash }}
+                        </span>
+                        <button class="copy-btn" onclick="copyToClipboard('{{ block.previous_hash }}')">
+                            📋
+                        </button>
+                    </div>
+                </div>
+
+                {% if block.index > 0 %}
+                <div class="block-data">
+                    <h4>📊 داده‌های رأی</h4>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <label>شناسه نظرسنجی:</label>
+                            <span>{{ block.data.poll_id }}</span>
+                        </div>
+                        <div class="data-item">
+                            <label>گزینه انتخابی:</label>
+                            <span class="vote-choice">{{ block.data.choice }}</span>
+                        </div>
+                        <div class="data-item">
+                            <label>هش کد ملی رأی‌دهنده:</label>
+                            <span class="value-mono hash-short" title="{{ block.data.voter_hash }}">
+                                {{ block.data.voter_hash[:16] }}...{{ block.data.voter_hash[-16:] }}
+                            </span>
+                            <button class="copy-btn" onclick="copyToClipboard('{{ block.data.voter_hash }}')">
+                                📋
+                            </button>
+                        </div>
+                        <div class="data-item">
+                            <label>زمان رأی:</label>
+                            <span>{{ block.data.timestamp }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="genesis-info">
+                    <p>
+                        این بلاک، بلاک پایه (Genesis Block) زنجیره است و شامل داده رأی نمی‌باشد.
+                        تمام بلاک‌های بعدی به این بلاک متصل هستند.
+                    </p>
+                </div>
+                {% endif %}
+
+                <div class="block-link">
+                    {% if block.index < blocks|length - 1 %} <div class="link-arrow">
+                        ⬇️ متصل به بلاک بعدی
+                </div>
+                {% else %}
+                <div class="link-end">
+                    🏁 آخرین بلاک زنجیره
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="blockchain-footer">
+    <div class="info-card">
+        <h3>🔒 امنیت بلاک‌چین</h3>
+        <p>
+            هر بلاک شامل هش بلاک قبلی است که تغییر هر بلاکی را غیرممکن می‌سازد.
+            حتی کوچک‌ترین تغییر در داده‌ها، هش بلاک را تغییر داده و زنجیره نامعتبر می‌شود.
+        </p>
+    </div>
+    <div class="info-card">
+        <h3>🕵️ حفظ حریم خصوصی</h3>
+        <p>
+            کد ملی رأی‌دهندگان به صورت هش‌شده (SHA-256) ذخیره می‌شود.
+            این روش امکان تأیید اصالت رأی را بدون افشای هویت واقعی فراهم می‌کند.
+        </p>
+    </div>
+    <div class="info-card">
+        <h3>✅ شفافیت کامل</h3>
+        <p>
+            هر رأی ثبت شده در بلاک‌چین علنی و قابل دسترسی است.
+            هیچ کس نمی‌تواند یک رأی را حذف یا مخفی کند و تمام ثبت‌های تاریخی محفوظ می‌ماند.
+        </p>
+    </div>
+</div>
+
+<div class="action-buttons">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline">
+        ← بازگشت به داشبورد
+    </a>
+    <button class="btn btn-danger" onclick="simulateTampering()">
+        <span class="icon">⚠️</span>
+        شبیه‌سازی دستکاری (تست)
+    </button>
+</div>
+</div>
+
+<div id="copyNotification" class="copy-notification">
+    ✓ کپی شد!
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/blockchain.js') }}"></script>
+{% endblock %}

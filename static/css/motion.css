@@ -1,0 +1,119 @@
+/* 
+   Material 3 Expressive Motion System 
+   Based on: https://m3.material.io/styles/motion/overview
+*/
+
+:root {
+    /* Easings */
+    /* Emphasized: Used for hero elements, cards, and main content entries */
+    --motion-easing-emphasized: cubic-bezier(0.2, 0.0, 0.0, 1.0);
+    /* Standard: Used for simple UI elements, checkboxes, buttons */
+    --motion-easing-standard: cubic-bezier(0.2, 0.0, 0, 1.0);
+    /* Decelerate: Used for entering screen */
+    --motion-easing-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1.0);
+    /* Accelerate: Used for exiting screen */
+    --motion-easing-accelerate: cubic-bezier(0.3, 0.0, 0.8, 0.15);
+
+    /* Durations */
+    --motion-duration-short: 200ms;
+    --motion-duration-medium: 400ms;
+    --motion-duration-long: 600ms;
+    --motion-duration-extra-long: 800ms;
+}
+
+/* Base Transition Class */
+.motion-safe-transition {
+    transition-timing-function: var(--motion-easing-standard);
+    transition-duration: var(--motion-duration-short);
+}
+
+/* Keyframe Animations */
+@keyframes fadeInUpEmphasized {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Utility Classes */
+.fade-in-up {
+    animation-name: fadeInUpEmphasized;
+    animation-duration: var(--motion-duration-long);
+    animation-timing-function: var(--motion-easing-emphasized);
+    animation-fill-mode: backwards;
+}
+
+.scale-in {
+    animation-name: scaleIn;
+    animation-duration: var(--motion-duration-medium);
+    animation-timing-function: var(--motion-easing-emphasized);
+    animation-fill-mode: backwards;
+}
+
+/* Stagger Delays for List Items / Cards */
+.stagger-1 {
+    animation-delay: 100ms;
+}
+
+.stagger-2 {
+    animation-delay: 200ms;
+}
+
+.stagger-3 {
+    animation-delay: 300ms;
+}
+
+.stagger-4 {
+    animation-delay: 400ms;
+}
+
+.stagger-5 {
+    animation-delay: 500ms;
+}
+
+.stagger-6 {
+    animation-delay: 600ms;
+}
+
+/* Page Entrance Wrapper */
+.page-transition-wrapper {
+    animation: fadeInUpEmphasized var(--motion-duration-medium) var(--motion-easing-emphasized);
+}
+
+/* Interactive Elements Hover Scale */
+.hover-lift {
+    transition: transform var(--motion-duration-short) var(--motion-easing-standard),
+        box-shadow var(--motion-duration-short) var(--motion-easing-standard);
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+}

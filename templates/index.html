@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}انتخابِلاک - سامانه مدرن رأی‌گیری بر بستر بلاک‌چین{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+<style>
+    /* Transparent navbar overlay for hero section */
+    .navbar {
+        background-color: rgba(255, 255, 255, 0.7) !important;
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--m3-outline-variant) !important;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .navbar-title,
+    .navbar-link {
+        color: var(--m3-on-surface) !important;
+    }
+
+    .navbar-link:hover {
+        background-color: var(--m3-surface-container-high) !important;
+    }
+
+    .navbar-link.active {
+        background-color: var(--m3-primary) !important;
+        color: #ffffff !important;
+    }
+
+    /* Adjust body to prevent navbar overlap on regular sections */
+    main {
+        padding-top: 0 !important;
+    }
+
+    /* Hero Animations & Variables from Technical Page */
+    :root {
+        --tech-primary: #6750A4;
+        --tech-accent: #7D5260;
+    }
+
+    .hero-section {
+        position: relative;
+        overflow: hidden;
+        background: var(--m3-surface-container);
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(103, 80, 164, 0.08) 0%, transparent 60%);
+        animation: rotate 80s linear infinite;
+        z-index: 0;
+    }
+
+    .hero-section::after {
+        content: '';
+        position: absolute;
+        bottom: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(125, 82, 96, 0.08) 0%, transparent 60%);
+        animation: rotate-rev 80s linear infinite;
+        z-index: 0;
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes rotate-rev {
+        from {
+            transform: rotate(360deg);
+        }
+
+        to {
+            transform: rotate(0deg);
+        }
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-title {
+        background: linear-gradient(135deg, var(--tech-primary), var(--tech-accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+        /* Helps with gradient clipping on some browsers */
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Professional Hero Section -->
+<section class="hero-section">
+    <div class="hero-content">
+        <div class="hero-content">
+            <h1 class="hero-title fade-in-up stagger-1">قدرت در دستان شما،<br>امنیت در قلب شبکه.</h1>
+            <p class="hero-subtitle fade-in-up stagger-2">
+                انتخابِلاک پلتفرم رأی‌گیری تماماً الکترونیک با تضمین لایه‌بندی امنیتی چندگانه و شفافیت مطلق
+                بلاک‌چین.
+            </p>
+
+            <div class="cta-group fade-in-up stagger-3" style="display: flex; gap: 16px; justify-content: center;">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-filled btn-large hover-lift"
+                    style="min-width: 200px;">
+                    <span>ورود به پیشخوان</span>
+                    <span style="margin-right: 8px;">📊</span>
+                </a>
+                {% else %}
+                <a href="{{ url_for('voter_authenticate') }}" class="btn btn-filled btn-large hover-lift"
+                    style="min-width: 200px;">
+                    <span>شروع رأی‌دهی</span>
+                    <span style="margin-right: 8px;">🗳️</span>
+                </a>
+                <a href="{{ url_for('public_results') }}" class="btn btn-outlined btn-large hover-lift"
+                    style="border-color: var(--m3-primary); color: var(--m3-primary);">
+                    <span>مشاهده نتایج</span>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+</section>
+
+<!-- Core Value Proposition -->
+<section class="landing-section">
+    <div class="container text-center">
+        <div class="section-head">
+            <h2 class="display-small">چرا انتخابِلاک را انتخاب کنیم؟</h2>
+            <p class="body-large text-secondary spacing-roomy">
+                ما پلی میان تکنولوژی و دموکراسی ساخته‌ایم تا هر رأی با اطمینان کامل ثبت و شمرده شود.
+            </p>
+        </div>
+
+        <div class="feature-grid-modern">
+            <div class="feature-card-premium fade-in-up stagger-1 hover-lift">
+                <div class="icon-box">⛓️</div>
+                <h3 class="title-large">بلاک‌چین تغییرناپذیر</h3>
+                <p class="body-medium">
+                    هر رأی به عنوان یک بلاک در زنجیره ثبت می‌شود. هیچ کس، حتی مدیران سیستم، قادر به تغییر یا حذف آرای
+                    ثبت شده نخواهند بود.
+                </p>
+            </div>
+
+            <div class="feature-card-premium fade-in-up stagger-2 hover-lift">
+                <div class="icon-box">🔐</div>
+                <h3 class="title-large">ناشناسی مطلق</h3>
+                <p class="body-medium">
+                    با استفاده از الگوریتم‌های پیشرفته هش، هویت شما از رأی‌تان جدا می‌شود. حریم خصوصی شما خط قرمز ماست.
+                </p>
+            </div>
+
+            <div class="feature-card-premium fade-in-up stagger-3 hover-lift">
+                <div class="icon-box">📱</div>
+                <h3 class="title-large">احراز هویت بیومتریک</h3>
+                <p class="body-medium">
+                    ترکیب کد ملی، OTP و اسکن بیومتریک زنده برای جلوگیری از هرگونه تخلف و ایجاد اطمینان از حضور رأی‌دهنده
+                    واقعی.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Section -->
+<section class="landing-section" style="background-color: var(--m3-surface-container-low);">
+    <div class="container">
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 64px; align-items: center;">
+            <div class="fade-in-up stagger-1">
+                <h2 class="display-small" style="margin-bottom: 24px;">شفافیت، نه فقط یک ادعا</h2>
+                <p class="body-large"
+                    style="margin-bottom: 32px; line-height: 1.8; color: var(--m3-on-surface-variant);">
+                    در انتخابِلاک، شما می‌توانید کل زنجیره بلاک‌چین را بررسی کنید. هر بلاک دارای یک اثر انگشت دیجیتالی
+                    (Hash) است که اعتبار آن را به بلاک قبلی گره می‌زند. کوچکترین تغییر در کل شبکه قابل ردیابی است.
+                </p>
+                <div style="display: flex; gap: 16px;">
+                    <a href="{{ url_for('view_blockchain') }}" class="btn btn-outlined hover-lift">
+                        🔗 بررسی فنی بلاک‌چین
+                    </a>
+                </div>
+            </div>
+            <div class="fade-in-up stagger-2"
+                style="background-color: var(--m3-surface-container-highest); padding: 40px; border-radius: 32px; border: 1px solid var(--m3-outline-variant);">
+                <div style="margin-bottom: 24px;">
+                    <div style="font-size: 14px; font-weight: 700; color: var(--m3-primary); margin-bottom: 8px;">اعتبار
+                        علمی</div>
+                    <div style="font-size: 18px; font-weight: 600;">پروژه درسی</div>
+                    <div style="font-size: 14px; color: var(--m3-on-surface-variant);">مدیریت نوآوری و تکنولوژی</div>
+                </div>
+                <p class="body-medium" style="font-style: italic;">
+                    "این سامانه با هدف ارتقای استانداردها و بهره‌گیری از تکنولوژی‌های نوظهور در مدیریت انتخابات،
+                    نظرسنجی‌ها و پرسشنامه‌ها
+                    طراحی شده است."
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Technical Deep Dive Call-to-Action -->
+<section class="landing-section"
+    style="position: relative; overflow: hidden; background-color: #0d0d0d; color: #fff; padding: 100px 0;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;">
+        <div
+            style="position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(103, 80, 164, 0.15), transparent 70%); top: -100px; right: -100px;">
+        </div>
+        <div
+            style="position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(125, 82, 96, 0.15), transparent 70%); bottom: -50px; left: -50px;">
+        </div>
+    </div>
+
+    <div class="container text-center" style="position: relative; z-index: 1;">
+        <h2 class="display-medium fade-in-up stagger-1"
+            style="font-family: 'Fira Code', monospace; margin-bottom: 24px; word-break: break-all;">
+            <span style="color: #6a9955;">&lt;Technical_Deep_Dive /&gt;</span>
+        </h2>
+        <p class="body-large fade-in-up stagger-2" style="max-width: 700px; margin: 0 auto 48px; color: #ccc;">
+            علاقه‌مند به جزئیات فنی هستید؟ مستندات کامل ما شامل معماری ۴ لایه، الگوریتم‌های رمزنگاری و دیاگرام‌های
+            تعاملی را بررسی کنید.
+        </p>
+        <div class="fade-in-up stagger-3">
+            <a href="{{ url_for('technical_info') }}" class="btn btn-filled btn-large hover-lift"
+                style="background: #2d2d30; border: 1px solid #444; font-family: 'Fira Code', monospace;">
+                View_System_Specs() 🚀
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Final CTA -->
+<section class="landing-section">
+    <div class="container text-center">
+        <h2 class="display-medium" style="margin-bottom: 16px;">آماده‌اید تا بخشی از آینده باشید؟</h2>
+        <p class="body-large text-secondary" style="margin-bottom: 48px;">
+            همین حالا وارد سیستم شوید و قدرت انتخاب آگاهانه و امن را تجربه کنید.
+        </p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('voter_authenticate') }}" class="btn btn-filled btn-large">شروع فرآیند رأی‌دهی</a>
+        </div>
+    </div>
+</section>
+
+<footer class="footer" style="background-color: #1c1b1f; color: #ffffff; padding: 64px 0;">
+    <div class="container">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 48px;">
+            <div>
+                <h3 style="color: #ffffff; margin-bottom: 24px;">انتخابِلاک</h3>
+                <p style="font-size: 14px; opacity: 0.7; line-height: 1.8;">
+                    پلتفرم هوشمند رأی‌گیری الکترونیک مبتنی بر اعتماد و تکنولوژی بلاک‌چین.
+                </p>
+            </div>
+            <div>
+                <h4 style="color: #ffffff; margin-bottom: 16px;">دسترسی سریع</h4>
+                <ul style="list-style: none; font-size: 14px;">
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('public_results') }}"
+                            style="color: inherit; text-decoration: none; opacity: 0.7;">نتایج نظرسنجی‌ها</a></li>
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('view_blockchain') }}"
+                            style="color: inherit; text-decoration: none; opacity: 0.7;">مشاهده بلاک‌چین</a></li>
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('technical_info') }}"
+                            style="color: inherit; text-decoration: none; opacity: 0.7;">توضیحات فنی</a></li>
+                    <li style="margin-bottom: 12px;"><a href="{{ url_for('admin_login_page') }}"
+                            style="color: inherit; text-decoration: none; opacity: 0.7;">پنل مدیریت</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: #ffffff; margin-bottom: 16px;">امنیت</h4>
+                <p style="font-size: 13px; opacity: 0.6;">
+                    تمامی تبادلات در این سامانه با پروتکل‌های SSL/TLS رمزنگاری شده و داده‌ها در نودهای توزیع شده
+                    بلاک‌چین ذخیره می‌شوند.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %}

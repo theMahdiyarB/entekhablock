@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}رأی‌دهی - انتخابِلاک{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/vote.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="vote-container">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{{ url_for('dashboard') }}">داشبورد</a>
+        <span>←</span>
+        <span>رأی‌دهی</span>
+    </nav>
+
+    <!-- Vote Header -->
+    <header class="vote-header">
+        <h1 class="vote-title">{{ poll.title }}</h1>
+        {% if poll.description %}
+        <p class="vote-description">{{ poll.description }}</p>
+        {% endif %}
+
+        <div class="vote-meta">
+            <div class="meta-item">
+                <span class="stat-icon">📅</span>
+                <span>پایان: {{ poll.end_time | jalali }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="stat-icon">👥</span>
+                <span>{{ poll.votes.values()|sum }} رأی ثبت شده</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="vote-layout">
+        <!-- Vote Form Area -->
+        <div class="card-elevated">
+            <!-- Instructions -->
+            <div class="info-box">
+                <h3>📝 دستورالعمل رأی‌دهی</h3>
+                <ul>
+                    <li>یکی از گزینه‌های زیر را انتخاب کنید</li>
+                    <li>پس از انتخاب، دکمه "ثبت رأی" را بزنید</li>
+                    <li>رأی شما به صورت رمزنگاری شده در بلاک‌چین ثبت می‌شود</li>
+                    <li>امکان تغییر رأی پس از ثبت وجود ندارد</li>
+                </ul>
+            </div>
+
+            <!-- Vote Form -->
+            <form method="POST" action="{{ url_for('vote', poll_id=poll.poll_id) }}" id="vote-form">
+                <div class="options-container">
+                    {% for option in poll.options %}
+                    <div class="option-card">
+                        <input type="radio" name="option" id="option-{{ loop.index }}" value="{{ option }}" required>
+                        <label for="option-{{ loop.index }}" class="option-label">
+                            <div class="radio-indicator">
+                                <div class="radio-circle"></div>
+                                <span>{{ option }}</span>
+                            </div>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="control-buttons">
+                    <button type="button" id="preview-btn" class="btn btn-outlined" disabled>
+                        👁️ پیش‌نمایش
+                    </button>
+                    <button type="submit" id="submit-btn" class="btn btn-filled" disabled>
+                        🔒 ثبت قطعی رأی
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="vote-sidebar">
+            <div class="card-elevated">
+                <div class="stat-icon" style="font-size: 32px; margin-bottom: 12px;">🔐</div>
+                <h3 style="font-size: 16px; font-weight: 600; color: var(--m3-on-surface); margin-bottom: 12px;">
+                    امنیت رأی شما
+                </h3>
+                <p style="margin: 0; font-size: 13px; color: var(--m3-on-surface-variant); line-height: 1.6;">
+                    رأی شما با الگوریتم SHA-256 هش می‌شود و به صورت ناشناس در بلاک‌چین ثبت می‌گردد.
+                </p>
+            </div>
+
+            <div style="margin-top: 24px; text-align: center;">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-text">
+                    ← بازگشت به داشبورد
+                </a>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<!-- Preview Modal -->
+<div id="preview-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>پیش‌نمایش رأی شما</h3>
+            <button type="button" id="close-modal">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <div
+                style="background-color: var(--m3-surface-container-low); padding: 16px; border-radius: var(--m3-shape-md); margin-bottom: 16px;">
+                <div style="margin-bottom: 12px;">
+                    <span style="font-size: 12px; color: var(--m3-on-surface-variant);">نظرسنجی</span>
+                    <p style="margin: 4px 0 0 0; font-size: 15px; color: var(--m3-on-surface);">{{ poll.title }}</p>
+                </div>
+                <div style="border-top: 1px solid var(--m3-outline-variant); padding-top: 12px;">
+                    <span style="font-size: 12px; color: var(--m3-on-surface-variant);">انتخاب شما</span>
+                    <p style="margin: 4px 0 0 0; font-size: 15px; font-weight: 600; color: var(--m3-primary);"
+                        id="selected-option"></p>
+                </div>
+            </div>
+
+            <div class="alert alert-error">
+                <span class="alert-icon">⚠️</span>
+                <p>توجه: پس از ثبت قطعی، امکان تغییر رأی وجود ندارد!</p>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outlined" id="edit-btn">ویرایش</button>
+            <button type="button" class="btn btn-filled" id="confirm-btn">تأیید و ثبت</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>window.POLL_ID = "{{ poll.poll_id }}";</script>
+<script src="{{ url_for('static', filename='js/vote.js') }}"></script>
+{% endblock %}
