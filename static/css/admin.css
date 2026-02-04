@@ -16,15 +16,6 @@
   margin: 0 auto;
 }
 
-/* Hide global navigation rail on admin pages */
-.navigation-rail {
-  display: none !important;
-}
-
-.main-content-wrapper {
-  margin-right: 0 !important;
-}
-
 .admin-header {
   margin-bottom: var(--m3-spacing-48);
   display: flex;
