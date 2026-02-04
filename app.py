@@ -530,21 +530,41 @@ def admin_create_poll():
     if request.method == 'POST':
         title = request.form.get('title', '').strip()
         description = request.form.get('description', '').strip()
-        start_date = request.form.get('start_date', '').strip()
-        end_date = request.form.get('end_date', '').strip()
         options = request.form.getlist('options[]')
         
-        # Combine date with default time if only date is provided
-        start_time = f"{start_date} 00:00:00" if start_date else ""
-        end_time = f"{end_date} 23:59:59" if end_date else ""
-        
-        success, message, poll = poll_manager.create_poll(
-            title=title,
-            options=options,
-            start_time=start_time,
-            end_time=end_time,
-            description=description
-        )
+        try:
+            # Get separate date components
+            start_year = int(request.form.get('start_year'))
+            start_month = int(request.form.get('start_month'))
+            start_day = int(request.form.get('start_day'))
+
+            end_year = int(request.form.get('end_year'))
+            end_month = int(request.form.get('end_month'))
+            end_day = int(request.form.get('end_day'))
+
+            # Convert Jalali to Gregorian
+            start_g = jdatetime.date(start_year, start_month, start_day).togregorian()
+            end_g = jdatetime.date(end_year, end_month, end_day).togregorian()
+
+            # Format as YYYY-MM-DD
+            start_date_str = start_g.strftime("%Y-%m-%d")
+            end_date_str = end_g.strftime("%Y-%m-%d")
+
+            # Combine date with default time
+            start_time = f"{start_date_str} 00:00:00"
+            end_time = f"{end_date_str} 23:59:59"
+
+            success, message, poll = poll_manager.create_poll(
+                title=title,
+                options=options,
+                start_time=start_time,
+                end_time=end_time,
+                description=description
+            )
+        except ValueError:
+            success, message = False, "تاریخ وارد شده نامعتبر است"
+        except Exception as e:
+            success, message = False, f"خطا در پردازش تاریخ: {str(e)}"
         
         if success:
             flash(message, 'success')
