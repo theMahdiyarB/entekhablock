@@ -249,11 +249,12 @@ def api_auth_stage1():
         national_code = data.get('national_code', '').strip()
         birth_date = data.get('birth_date', '').strip()
         mobile = data.get('mobile', '').strip()
+        serial_number = data.get('serial_number', '').strip()
         
-        if not all([national_code, birth_date, mobile]):
+        if not all([national_code, birth_date, mobile, serial_number]):
             return jsonify({'success': False, 'message': 'لطفاً تمام فیلدها را پر کنید'}), 400
         
-        success, message, voter_data = voter_db.verify_stage1(national_code, birth_date, mobile)
+        success, message, voter_data = voter_db.verify_stage1(national_code, birth_date, mobile, serial_number)
         
         if not success:
             return jsonify({'success': False, 'message': message}), 401
@@ -781,13 +782,14 @@ def login():
         national_code = request.form.get('national_code', '').strip()
         birth_date = request.form.get('birth_date', '').strip()
         mobile = request.form.get('mobile', '').strip()
+        serial_number = request.form.get('serial_number', '').strip()
         
-        if not all([national_code, birth_date, mobile]):
+        if not all([national_code, birth_date, mobile, serial_number]):
             flash('لطفاً تمام فیلدها را پر کنید', 'error')
             return redirect(url_for('login'))
         
         # Verify stage 1
-        success, message, voter_data = voter_db.verify_stage1(national_code, birth_date, mobile)
+        success, message, voter_data = voter_db.verify_stage1(national_code, birth_date, mobile, serial_number)
         
         if not success:
             flash(message, 'error')
@@ -896,12 +898,14 @@ def biometric():
         if request.method == 'POST':
             voter_data = session_manager.get_voter_data(auth_session_id)
             video_data = request.form.get('video_data', '')
-            serial_number = request.form.get('serial_number', '').strip()
+
+            # We already have serial_number from Stage 1
+            serial_number = voter_data.get('serial_number')
 
             if not serial_number:
-                flash('لطفاً شماره سریال کارت ملی را وارد کنید', 'error')
-                return redirect(url_for('biometric'))
-            
+                flash('خطا: شماره سریال کارت ملی یافت نشد. لطفاً مجدداً وارد شوید.', 'error')
+                return redirect(url_for('login'))
+
             # If no video data provided, still allow in MVP mode
             if not video_data:
                 flash('هشدار: ویدئویی ضبط نشد، احراز هویت به صورت شبیه‌سازی انجام می‌شود', 'warning')
@@ -924,9 +928,6 @@ def biometric():
                     flash(f'خطا در احراز هویت: {str(e)}', 'error')
                     return redirect(url_for('biometric'))
             
-            # Update voter data with the verified serial number if success
-            voter_data['serial_number'] = serial_number
-
             # Mark stage 3 as complete (authentication fully complete)
             session_manager.update_stage(auth_session_id, 'stage3', voter_data)
             
