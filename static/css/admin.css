@@ -4,68 +4,25 @@
    ======================================== */
 
 .admin-layout {
-  display: grid;
-  grid-template-columns: 280px 1fr;
+  display: block;
   min-height: 100vh;
-}
-
-/* Sidebar */
-.admin-sidebar {
-  background-color: var(--m3-surface-container-high);
-  border-left: 1px solid var(--m3-outline-variant);
-  padding: var(--m3-spacing-32);
-}
-
-.admin-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: var(--m3-spacing-48);
-}
-
-.logo-icon {
-  font-size: 24px;
-}
-
-.logo-text {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--m3-primary);
-}
-
-.admin-nav {
-  display: flex;
-  flex-direction: column;
-  gap: var(--m3-spacing-8);
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  text-decoration: none;
-  color: var(--m3-on-surface-variant);
-  border-radius: var(--m3-shape-md);
-  transition: all 0.2s;
-  font-weight: 500;
-}
-
-.nav-link:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-  color: var(--m3-on-surface);
-}
-
-.nav-link.active {
-  background-color: var(--m3-primary-container);
-  color: var(--m3-on-primary-container);
-  font-weight: 700;
 }
 
 /* Main Content */
 .admin-main {
   padding: var(--m3-spacing-48);
   background-color: var(--m3-surface);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Hide global navigation rail on admin pages */
+.navigation-rail {
+  display: none !important;
+}
+
+.main-content-wrapper {
+  margin-right: 0 !important;
 }
 
 .admin-header {
@@ -232,11 +189,7 @@
 
 /* Responsive */
 @media (max-width: 900px) {
-  .admin-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-sidebar {
-    display: none;
+  .admin-main {
+    padding: var(--m3-spacing-24);
   }
 }

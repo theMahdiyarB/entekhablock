@@ -8,30 +8,6 @@
 
 {% block content %}
 <div class="admin-layout">
-    <!-- Sidebar -->
-    <aside class="admin-sidebar">
-        <div class="admin-logo">
-            <span class="logo-icon">🛠️</span>
-            <span class="logo-text">مدیریت</span>
-        </div>
-        <nav class="admin-nav">
-            <a href="{{ url_for('admin_dashboard') }}" class="nav-link">
-                📊 داشبورد
-            </a>
-            <a href="{{ url_for('admin_create_poll') }}" class="nav-link active">
-                ➕ ایجاد نظرسنجی
-            </a>
-            <a href="{{ url_for('view_blockchain') }}" class="nav-link">
-                ⛓️ بلاکچین
-            </a>
-            <div style="margin-top: auto; padding-top: 32px;">
-                <a href="{{ url_for('admin_logout') }}" class="nav-link" style="color: var(--m3-error);">
-                    🚪 خروج
-                </a>
-            </div>
-        </nav>
-    </aside>
-
     <!-- Main Content -->
     <div class="admin-main fade-in-up">
         <header class="admin-header">
@@ -61,15 +37,71 @@
             </section>
 
             <section class="form-section" style="margin-top: 48px;">
-                <h3 class="title-large" style="margin-bottom: 24px;">زمان‌بندی</h3>
+                <h3 class="title-large" style="margin-bottom: 24px;">زمان‌بندی (شمسی)</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                     <div class="form-group">
-                        <label class="form-label" for="start_date">تاریخ شروع</label>
-                        <input type="date" id="start_date" name="start_date" class="form-input" required>
+                        <label class="form-label">تاریخ شروع</label>
+                        <div style="display: flex; gap: 8px;">
+                            <select name="start_day" class="form-select" required style="width: 33%;">
+                                <option value="" disabled selected>روز</option>
+                                {% for d in range(1, 32) %}
+                                <option value="{{ d }}">{{ d }}</option>
+                                {% endfor %}
+                            </select>
+                            <select name="start_month" class="form-select" required style="width: 33%;">
+                                <option value="" disabled selected>ماه</option>
+                                <option value="1">فروردین</option>
+                                <option value="2">اردیبهشت</option>
+                                <option value="3">خرداد</option>
+                                <option value="4">تیر</option>
+                                <option value="5">مرداد</option>
+                                <option value="6">شهریور</option>
+                                <option value="7">مهر</option>
+                                <option value="8">آبان</option>
+                                <option value="9">آذر</option>
+                                <option value="10">دی</option>
+                                <option value="11">بهمن</option>
+                                <option value="12">اسفند</option>
+                            </select>
+                            <select name="start_year" class="form-select" required style="width: 33%;">
+                                <option value="" disabled selected>سال</option>
+                                {% for y in range(1402, 1412) %}
+                                <option value="{{ y }}" {% if y == 1403 %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label" for="end_date">تاریخ پایان</label>
-                        <input type="date" id="end_date" name="end_date" class="form-input" required>
+                        <label class="form-label">تاریخ پایان</label>
+                        <div style="display: flex; gap: 8px;">
+                            <select name="end_day" class="form-select" required style="width: 33%;">
+                                <option value="" disabled selected>روز</option>
+                                {% for d in range(1, 32) %}
+                                <option value="{{ d }}">{{ d }}</option>
+                                {% endfor %}
+                            </select>
+                            <select name="end_month" class="form-select" required style="width: 33%;">
+                                <option value="" disabled selected>ماه</option>
+                                <option value="1">فروردین</option>
+                                <option value="2">اردیبهشت</option>
+                                <option value="3">خرداد</option>
+                                <option value="4">تیر</option>
+                                <option value="5">مرداد</option>
+                                <option value="6">شهریور</option>
+                                <option value="7">مهر</option>
+                                <option value="8">آبان</option>
+                                <option value="9">آذر</option>
+                                <option value="10">دی</option>
+                                <option value="11">بهمن</option>
+                                <option value="12">اسفند</option>
+                            </select>
+                            <select name="end_year" class="form-select" required style="width: 33%;">
+                                <option value="" disabled selected>سال</option>
+                                {% for y in range(1402, 1412) %}
+                                <option value="{{ y }}" {% if y == 1403 %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
                 </div>
             </section>
