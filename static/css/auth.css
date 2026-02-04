@@ -19,7 +19,7 @@
     box-shadow: var(--m3-elevation-1);
     max-width: 480px;
     width: 100%;
-    overflow: hidden;
+    /* overflow: hidden; Removed to allow tooltips */
     transition: box-shadow 0.3s ease;
     /* Motion System */
     animation-name: fadeInUpEmphasized;
@@ -49,6 +49,7 @@
     text-align: center;
     border-bottom: 1px solid var(--m3-outline-variant);
     background-color: var(--m3-surface-container-high);
+    border-radius: var(--m3-shape-lg) var(--m3-shape-lg) 0 0;
 }
 
 .auth-header h2 {
@@ -219,6 +220,7 @@
     padding: var(--m3-spacing-24);
     background-color: var(--m3-surface-container-low);
     font-size: 14px;
+    border-radius: 0 0 var(--m3-shape-lg) var(--m3-shape-lg);
 }
 
 .auth-footer .link {

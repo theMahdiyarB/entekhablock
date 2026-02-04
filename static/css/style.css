@@ -36,6 +36,8 @@
 
   --m3-on-surface: #1c1b1f;
   --m3-on-surface-variant: #49454e;
+  --m3-inverse-surface: #313033;
+  --m3-inverse-on-surface: #f4eff4;
 
   /* OUTLINE */
   --m3-outline: #79747e;
@@ -395,6 +397,225 @@ main {
 .alert-success {
   background-color: var(--m3-success-container);
   color: var(--m3-on-success-container);
+}
+
+/* ========================
+   M3 Tooltips
+   ======================== */
+.tooltip-anchor {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1000;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.2, 0, 0, 1), transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.tooltip-anchor:hover .tooltip,
+.tooltip-anchor:focus-visible .tooltip {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Plain Tooltip */
+.tooltip-plain {
+  background-color: var(--m3-inverse-surface);
+  color: var(--m3-inverse-on-surface);
+  border-radius: var(--m3-shape-xs);
+  padding: 4px 8px;
+  font-size: 12px;
+  line-height: 16px;
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Rich Tooltip */
+.tooltip-rich {
+  background-color: var(--m3-surface-container);
+  color: var(--m3-on-surface-variant);
+  border-radius: var(--m3-shape-md);
+  padding: 12px 16px;
+  box-shadow: var(--m3-elevation-2);
+  width: max-content;
+  max-width: 300px;
+  white-space: normal;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: right;
+}
+
+.tooltip-rich-title {
+  color: var(--m3-on-surface);
+  font-weight: 500;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.tooltip-rich-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+/* ========================
+   M3 Menus
+   ======================== */
+.menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.menu {
+  background-color: var(--m3-surface-container);
+  border-radius: var(--m3-shape-xs);
+  padding: 8px 0;
+  box-shadow: var(--m3-elevation-2);
+  min-width: 112px;
+  max-width: 280px;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  display: none;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.menu.open {
+  display: block;
+  animation: fadeIn 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 12px;
+  color: var(--m3-on-surface);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: right;
+  gap: 12px;
+  transition: background-color 0.2s;
+  box-sizing: border-box;
+}
+
+.menu-item:hover,
+.menu-item:focus {
+  background-color: rgba(28, 27, 31, 0.08);
+  outline: none;
+}
+
+.menu-item-icon {
+  font-size: 24px;
+  color: var(--m3-on-surface-variant);
+}
+
+.menu-item-text {
+  flex: 1;
+}
+
+.menu-item-trailing {
+  color: var(--m3-on-surface-variant);
+  font-size: 14px;
+}
+
+/* Vibrant Menu (Tertiary Based) */
+.menu-vibrant .menu {
+  background-color: var(--m3-tertiary-container);
+  color: var(--m3-on-tertiary-container);
+}
+
+.menu-vibrant .menu-item {
+  color: var(--m3-on-tertiary-container);
+}
+
+.menu-vibrant .menu-item-icon {
+  color: var(--m3-on-tertiary-container);
+  opacity: 0.8;
+}
+
+.menu-vibrant .menu-item:hover,
+.menu-vibrant .menu-item:focus {
+  background-color: rgba(49, 17, 29, 0.08);
+}
+
+/* Text Field Dropdown Menu (Date Picker Style) */
+.text-field-menu-container {
+  position: relative;
+  width: 100%;
+}
+
+.text-field-select {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: 1px solid var(--m3-outline);
+  border-radius: var(--m3-shape-xs);
+  padding: 16px 16px 16px 48px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--m3-on-surface);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2379747E'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: left 12px center;
+  background-size: 24px;
+}
+
+.text-field-select:focus {
+  border-color: var(--m3-primary);
+  border-width: 2px;
+  outline: none;
+  padding: 15px 15px 15px 47px;
+}
+
+.text-field-select-label {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--m3-surface);
+  padding: 0 4px;
+  font-size: 16px;
+  color: var(--m3-outline);
+  pointer-events: none;
+  transition: 0.2s ease all;
+}
+
+.text-field-select:focus ~ .text-field-select-label,
+.text-field-select:not([value=""]) ~ .text-field-select-label,
+.text-field-select:valid ~ .text-field-select-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.75);
+  color: var(--m3-primary);
+  right: 12px;
+  transform-origin: top right;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* Responsive */
