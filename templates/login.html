@@ -3,143 +3,89 @@
 {% block title %}ورود به سیستم - انتخابِلاک{% endblock %}
 
 {% block head %}
+    <!-- Reverting to standard auth.css for consistency -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
-    <!-- Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
-        /* M3 Styling Overrides */
-        :root {
-            --md-sys-color-primary: #6750A4;
-            --md-sys-color-on-primary: #FFFFFF;
-            --md-sys-color-primary-container: #EADDFF;
-            --md-sys-color-on-primary-container: #21005D;
-            --md-sys-color-surface: #FEF7FF;
-            --md-sys-color-on-surface: #1D1B20;
-            --md-sys-color-outline: #79747E;
-            --md-sys-color-surface-variant: #E7E0EC;
-        }
-
-        .auth-card {
-            background: var(--md-sys-color-surface);
-            border-radius: 28px; /* M3 Medium/Large shape */
-            box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.3); /* Elevation 2 */
-            padding: 32px;
-            max-width: 440px;
-        }
-
-        .auth-header h2 {
-            font-family: 'Roboto', 'Vazirmatn', sans-serif; /* Assuming Vazirmatn is main font */
-            font-size: 24px; /* Headline Small */
-            line-height: 32px;
-            color: var(--md-sys-color-on-surface);
+        /* Date Picker Styling Preserved & Adapted */
+        .date-picker-label {
+            font-size: 14px;
+            color: #666; /* Match typical label color in auth.css */
             margin-bottom: 8px;
+            display: block;
+            pointer-events: none; /* Make it behave like a static label */
         }
 
-        .step-indicator {
-            font-size: 12px;
-            color: var(--md-sys-color-primary);
-            background: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-            padding: 4px 12px;
-            border-radius: 16px;
-            display: inline-block;
-            margin-bottom: 16px;
-            font-weight: 500;
+        .date-picker-container {
+            display: flex;
+            gap: 10px;
+            direction: rtl;
         }
 
-        /* Material 3 Text Field Style (Outlined) */
-        .form-group {
-            position: relative;
-            margin-bottom: 24px;
-        }
-
-        .form-group input, .form-group select {
+        /*
+           Styling selects to match the look of auth.css inputs
+           The auth.css inputs usually have a bottom border or outlined style.
+           We'll try to match the "form-group input" style from auth.css
+           while keeping the date picker specific layout.
+        */
+        .date-picker-container select {
+            flex: 1;
             width: 100%;
-            height: 56px;
-            padding: 0 16px;
-            border: 1px solid var(--md-sys-color-outline);
+            height: 48px; /* Typical height */
+            padding: 0 10px;
+            border: 1px solid #ccc; /* Fallback/Standard border */
             border-radius: 4px;
             background: transparent;
             font-family: inherit;
             font-size: 16px;
-            color: var(--md-sys-color-on-surface);
-            transition: border-color 0.2s, border-width 0.2s;
-            box-sizing: border-box;
+            color: inherit;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 10px center;
+            background-size: 24px;
         }
 
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--md-sys-color-primary);
-            border-width: 2px;
+        .date-picker-container select:focus {
             outline: none;
-            padding: 0 15px; /* Adjust for border width change */
+            border-color: var(--m3-primary, #6750A4); /* Use var if avail, else fallback */
+            border-width: 2px;
         }
 
-        .form-group label {
-            position: absolute;
-            right: 12px; /* RTL */
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: var(--md-sys-color-surface);
-            padding: 0 4px;
-            font-size: 16px;
-            color: var(--md-sys-color-outline);
-            pointer-events: none;
-            transition: 0.2s ease all;
+        /* Tooltip Logic for Serial Number */
+        .tooltip-container {
+            display: inline-block;
+            position: relative;
+            vertical-align: middle;
+            margin-right: 5px;
         }
 
-        /* Floating Label Logic */
-        .form-group input:focus ~ label,
-        .form-group input:not(:placeholder-shown) ~ label,
-        .form-group select:focus ~ label,
-        .form-group select:valid ~ label {
-            top: 0;
-            transform: translateY(-50%) scale(0.75);
-            color: var(--md-sys-color-primary);
-            right: 12px;
-            transform-origin: top right; /* RTL */
-        }
-
-        .form-hint {
-            font-size: 12px;
-            color: var(--md-sys-color-outline);
-            margin-top: 4px;
-            margin-right: 16px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Tooltip Style */
         .tooltip-icon {
             font-size: 16px;
+            color: #888;
             cursor: help;
-            color: var(--md-sys-color-outline);
-            vertical-align: middle;
         }
 
         .tooltip-text {
             visibility: hidden;
-            width: 280px;
-            background-color: #323232; /* Inverse Surface */
-            color: #f2f2f2; /* Inverse On Surface */
+            width: 260px;
+            background-color: #333;
+            color: #fff;
             text-align: center;
-            border-radius: 8px;
-            padding: 8px;
+            border-radius: 6px;
+            padding: 10px;
             position: absolute;
-            z-index: 10;
-            bottom: 125%;
-            right: 50%;
-            transform: translateX(50%); /* Center */
+            z-index: 100;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
             opacity: 0;
             transition: opacity 0.3s;
             font-size: 12px;
-            line-height: 1.4;
+            line-height: 1.5;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .tooltip-container {
-            position: relative;
-            display: inline-block;
+            pointer-events: none;
         }
 
         .tooltip-container:hover .tooltip-text {
@@ -147,57 +93,10 @@
             opacity: 1;
         }
 
-        /* Date Picker M3 Style */
-        .date-picker-label {
-            font-size: 14px;
-            color: var(--md-sys-color-on-surface);
-            margin-bottom: 12px;
-            display: block;
-            font-weight: 500;
-        }
-
-        .date-picker-container {
-            display: flex;
-            gap: 12px;
-            direction: rtl;
-        }
-
-        .date-input-wrapper {
+        /* Ensure Date Picker Wrapper matches form-group spacing */
+        .date-picker-wrapper {
+            margin-bottom: 24px;
             position: relative;
-            flex: 1;
-        }
-
-        .date-input-wrapper select {
-            appearance: none;
-            -webkit-appearance: none;
-            /* SVG Arrow */
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2379747E'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: left 12px center;
-            background-size: 24px;
-            padding-left: 36px; /* Space for arrow */
-        }
-
-        /* Buttons M3 */
-        .btn-primary {
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            border-radius: 20px; /* Fully rounded */
-            height: 40px;
-            font-weight: 500;
-            font-size: 14px;
-            letter-spacing: 0.1px;
-            text-transform: none;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3); /* Elevation 1 */
-            transition: background 0.2s, box-shadow 0.2s;
-            width: 100%;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 2px 4px 1px rgba(0,0,0,0.2); /* Elevation 2 */
-            background-color: #554089; /* Slightly darker */
         }
     </style>
 {% endblock %}
@@ -226,6 +125,7 @@
                 <!-- National Code -->
                 <div class="form-group">
                     <input type="text" id="national_code" name="national_code" maxlength="10" pattern="[0-9]{10}" placeholder=" " required>
+                    <span class="underline"></span>
                     <label for="national_code">کد ملی</label>
                     <div class="form-hint">۱۰ رقم</div>
                 </div>
@@ -233,63 +133,59 @@
                 <!-- Mobile -->
                 <div class="form-group">
                     <input type="text" id="mobile" name="mobile" maxlength="11" pattern="09[0-9]{9}" placeholder=" " required>
+                    <span class="underline"></span>
                     <label for="mobile">شماره موبایل</label>
                     <div class="form-hint">فرمت: 09123456789</div>
                 </div>
 
-                <!-- Serial Number with Tooltip -->
+                <!-- Serial Number -->
                 <div class="form-group">
+                    <!-- Format: 9 numbers + 1 English char -->
                     <input type="text" id="serial_number" name="serial_number" maxlength="10" placeholder=" " required>
+                    <span class="underline"></span>
                     <label for="serial_number">سریال پشت کارت ملی</label>
                     <div class="form-hint">
-                        <span>مثال: A1B2345678</span>
+                        <span>مثال: 123456789A</span>
                         <div class="tooltip-container">
                             <span class="material-icons-round tooltip-icon">info</span>
-                            <span class="tooltip-text">سریال کارت ملی هوشمند یک کد ۱۰ کاراکتری (ترکیبی از ۹ عدد و یک حرف انگلیسی) است که در پشت کارت، نزدیک تراشه زرد رنگ قرار دارد. در طراحی‌های جدیدتر، این شماره ۱۰ رقمی در جلو کارت، پایین سمت راست و زیر امضا نیز چاپ شده است.</span>
+                            <div class="tooltip-text">
+                                سریال کارت ملی هوشمند یک کد ۱۰ کاراکتری (ترکیبی از ۹ عدد و ۱ حرف انگلیسی) است که در پشت کارت، نزدیک تراشه زرد رنگ قرار دارد. در طراحی‌های جدیدتر، این شماره در جلو کارت نیز چاپ شده است.
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Date Picker (M3 Style) -->
-                <div style="margin-bottom: 24px;">
+                <!-- Date Picker (Preserved Style) -->
+                <div class="date-picker-wrapper">
                     <label class="date-picker-label">تاریخ تولد</label>
                     <div class="date-picker-container">
-                        <div class="date-input-wrapper">
-                            <select id="day" required>
-                                <option value="" disabled selected></option>
-                                {% for i in range(1, 32) %}
-                                    <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="day">روز</label>
-                        </div>
-                        <div class="date-input-wrapper" style="flex: 1.5;">
-                            <select id="month" required>
-                                <option value="" disabled selected></option>
-                                <option value="1">فروردین</option>
-                                <option value="2">اردیبهشت</option>
-                                <option value="3">خرداد</option>
-                                <option value="4">تیر</option>
-                                <option value="5">مرداد</option>
-                                <option value="6">شهریور</option>
-                                <option value="7">مهر</option>
-                                <option value="8">آبان</option>
-                                <option value="9">آذر</option>
-                                <option value="10">دی</option>
-                                <option value="11">بهمن</option>
-                                <option value="12">اسفند</option>
-                            </select>
-                            <label for="month">ماه</label>
-                        </div>
-                        <div class="date-input-wrapper" style="flex: 1.2;">
-                            <select id="year" required>
-                                <option value="" disabled selected></option>
-                                {% for i in range(1390, 1299, -1) %}
-                                    <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="year">سال</label>
-                        </div>
+                        <select id="day" required aria-label="روز">
+                            <option value="" disabled selected>روز</option>
+                            {% for i in range(1, 32) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <select id="month" required aria-label="ماه">
+                            <option value="" disabled selected>ماه</option>
+                            <option value="1">فروردین</option>
+                            <option value="2">اردیبهشت</option>
+                            <option value="3">خرداد</option>
+                            <option value="4">تیر</option>
+                            <option value="5">مرداد</option>
+                            <option value="6">شهریور</option>
+                            <option value="7">مهر</option>
+                            <option value="8">آبان</option>
+                            <option value="9">آذر</option>
+                            <option value="10">دی</option>
+                            <option value="11">بهمن</option>
+                            <option value="12">اسفند</option>
+                        </select>
+                        <select id="year" required aria-label="سال">
+                            <option value="" disabled selected>سال</option>
+                            {% for i in range(1390, 1299, -1) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <input type="hidden" id="birth_date" name="birth_date">
                 </div>
@@ -300,9 +196,9 @@
             <div class="test-credentials">
                 <h4>اطلاعات تست</h4>
                 <div class="credential-item"><strong>کد ملی:</strong> <code>0012345678</code></div>
-                <div class="credential-item"><strong>شماره موبایل:</strong> <code>09123456789</code></div>
-                <div class="credential-item"><strong>سریال:</strong> <code>A1B2345678</code></div>
-                <div class="credential-item"><strong>تاریخ تولد:</strong> <code>1370/05/15</code></div>
+                <div class="credential-item"><strong>موبایل:</strong> <code>09123456789</code></div>
+                <div class="credential-item"><strong>سریال:</strong> <code>123456789A</code></div>
+                <div class="credential-item"><strong>تولد:</strong> <code>1370/05/15</code></div>
             </div>
         </div>
 
@@ -339,7 +235,7 @@
             if (month > 6 && month < 12) {
                 maxDays = 30;
             } else if (month === 12) {
-                maxDays = 30; // Simplified for M3 demo
+                maxDays = 30; // Simplified
             }
 
             // Hide/Disable invalid days
