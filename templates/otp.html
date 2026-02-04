@@ -35,6 +35,7 @@
             </div>
 
             <form method="POST" action="{{ url_for('verify_otp') }}" id="otp-form" class="auth-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="form-group">
                     <input type="text" id="otp" name="otp" maxlength="4" pattern="[0-9]{4}" placeholder=" " required autocomplete="off" class="otp-input">
                     <span class="underline"></span>

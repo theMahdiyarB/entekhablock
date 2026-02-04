@@ -18,6 +18,12 @@ class AdminDashboard {
         this.animateStatCards();
     }
 
+    // Helper to get CSRF token
+    getCsrfToken() {
+        const meta = document.querySelector('meta[name="csrf-token"]');
+        return meta ? meta.getAttribute('content') : '';
+    }
+
     // Load dashboard statistics
     async loadDashboardStats() {
         try {
@@ -287,6 +293,9 @@ class AdminDashboard {
         try {
             const response = await fetch('/api/admin/upload-voters', {
                 method: 'POST',
+                headers: {
+                    'X-CSRFToken': this.getCsrfToken()
+                },
                 body: formData
             });
 
@@ -323,7 +332,8 @@ class AdminDashboard {
             const response = await fetch(`/api/admin/poll/${pollId}/toggle`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': this.getCsrfToken()
                 },
                 body: JSON.stringify({ is_active: newStatus })
             });
@@ -400,7 +410,10 @@ class AdminDashboard {
 
         try {
             const response = await fetch(`/api/admin/delete-poll/${pollId}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    'X-CSRFToken': this.getCsrfToken()
+                }
             });
 
             const data = await response.json();
