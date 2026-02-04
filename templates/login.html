@@ -3,193 +3,100 @@
 {% block title %}ورود به سیستم - انتخابِلاک{% endblock %}
 
 {% block head %}
-    <!-- Using the main style.css which defines M3 variables -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Reverting to standard auth.css for consistency -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
-        /* M3 Expressive Auth Specific Styles */
-        body {
-            background-color: var(--m3-surface);
+        /* Date Picker Styling Preserved & Adapted */
+        .date-picker-label {
+            font-size: 14px;
+            color: #666; /* Match typical label color in auth.css */
+            margin-bottom: 8px;
+            display: block;
+            pointer-events: none; /* Make it behave like a static label */
+        }
+
+        .date-picker-container {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            gap: 10px;
+            direction: rtl;
         }
 
-        .auth-container {
+        /*
+           Styling selects to match the look of auth.css inputs
+           The auth.css inputs usually have a bottom border or outlined style.
+           We'll try to match the "form-group input" style from auth.css
+           while keeping the date picker specific layout.
+        */
+        .date-picker-container select {
+            flex: 1;
             width: 100%;
-            display: flex;
-            justify-content: center;
-            padding: var(--m3-spacing-16);
-        }
-
-        .auth-card {
-            background-color: var(--m3-surface-container-low);
-            border-radius: var(--m3-shape-xl); /* 28px for expressive */
-            padding: var(--m3-spacing-32);
-            width: 100%;
-            max-width: 480px;
-            /* M3 Elevation 2 */
-            box-shadow: var(--m3-elevation-2);
-            display: flex;
-            flex-direction: column;
-            gap: var(--m3-spacing-24);
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: var(--m3-spacing-16);
-        }
-
-        .auth-icon {
-            font-size: 48px;
-            color: var(--m3-primary);
-            margin-bottom: var(--m3-spacing-16);
-        }
-
-        .step-indicator {
-            background-color: var(--m3-secondary-container);
-            color: var(--m3-on-secondary-container);
-            border-radius: var(--m3-shape-sm);
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: 500;
-            display: inline-block;
-            margin-bottom: var(--m3-spacing-12);
-        }
-
-        /* M3 Outlined Text Field Implementation */
-        .m3-field {
-            position: relative;
-            margin-bottom: var(--m3-spacing-24);
-        }
-
-        .m3-field input, .m3-field select {
-            width: 100%;
-            height: 56px;
-            padding: 0 16px;
+            height: 48px; /* Typical height */
+            padding: 0 10px;
+            border: 1px solid #ccc; /* Fallback/Standard border */
+            border-radius: 4px;
             background: transparent;
-            border: 1px solid var(--m3-outline);
-            border-radius: var(--m3-shape-xs); /* 4px for text fields */
-            color: var(--m3-on-surface);
             font-family: inherit;
             font-size: 16px;
+            color: inherit;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23777'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 10px center;
+            background-size: 24px;
+        }
+
+        .date-picker-container select:focus {
             outline: none;
-            transition: border-color 0.2s, border-width 0.2s;
-            appearance: none; /* For selects */
-        }
-
-        .m3-field input:focus, .m3-field select:focus {
-            border-color: var(--m3-primary);
+            border-color: var(--m3-primary, #6750A4); /* Use var if avail, else fallback */
             border-width: 2px;
-            padding: 0 15px; /* Adjust for border width */
         }
 
-        /* Floating Label */
-        .m3-field label {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: var(--m3-surface-container-low); /* Match card bg */
-            padding: 0 4px;
-            color: var(--m3-on-surface-variant);
-            font-size: 16px;
-            pointer-events: none;
-            transition: 0.2s ease all;
-        }
-
-        .m3-field input:focus ~ label,
-        .m3-field input:not(:placeholder-shown) ~ label,
-        .m3-field select:focus ~ label,
-        .m3-field select:valid ~ label {
-            top: 0;
-            right: 12px;
-            font-size: 12px;
-            color: var(--m3-primary);
-            transform: translateY(-50%);
-        }
-
-        .m3-field .supporting-text {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 4px;
-            margin-right: 16px;
-            font-size: 12px;
-            color: var(--m3-on-surface-variant);
-        }
-
-        /* Date Picker specific */
-        .date-picker-group {
-            display: flex;
-            gap: var(--m3-spacing-12);
-        }
-
-        .date-picker-group .m3-field {
-            flex: 1;
-        }
-
-        /* Tooltip implementation */
-        .info-icon {
-            font-size: 16px;
+        /* Tooltip Logic for Serial Number */
+        .tooltip-container {
+            display: inline-block;
+            position: relative;
             vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .tooltip-icon {
+            font-size: 16px;
+            color: #888;
             cursor: help;
         }
 
-        .tooltip-box {
+        .tooltip-text {
             visibility: hidden;
             width: 260px;
-            background-color: var(--m3-on-surface);
-            color: var(--m3-surface);
+            background-color: #333;
+            color: #fff;
             text-align: center;
-            border-radius: var(--m3-shape-sm);
-            padding: 8px;
+            border-radius: 6px;
+            padding: 10px;
             position: absolute;
-            z-index: 10;
-            bottom: 100%;
+            z-index: 100;
+            bottom: 130%;
             left: 50%;
             transform: translateX(-50%);
             opacity: 0;
             transition: opacity 0.3s;
             font-size: 12px;
+            line-height: 1.5;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             pointer-events: none;
         }
 
-        .supporting-text:hover .tooltip-box {
+        .tooltip-container:hover .tooltip-text {
             visibility: visible;
-            opacity: 0.9;
+            opacity: 1;
         }
 
-        /* Submit Button */
-        .auth-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: var(--m3-spacing-24);
-        }
-
-        .btn-filled {
-            width: 100%;
-            border-radius: 100px; /* Fully rounded for buttons */
-            height: 40px;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: var(--m3-spacing-16);
-            display: block;
-            color: var(--m3-primary);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        /* Select Arrow */
-        select {
-             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2349454e'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-             background-repeat: no-repeat;
-             background-position: left 12px center;
-             background-size: 24px;
+        /* Ensure Date Picker Wrapper matches form-group spacing */
+        .date-picker-wrapper {
+            margin-bottom: 24px;
+            position: relative;
         }
     </style>
 {% endblock %}
@@ -198,9 +105,8 @@
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-header">
-            <div class="material-icons-round auth-icon">lock</div>
-            <h1 class="headline-medium">احراز هویت</h1>
-            <div class="step-indicator">مرحله ۱ از ۳: اطلاعات هویتی</div>
+            <div class="step-indicator">مرحله ۱ از ۳</div>
+            <h2>احراز هویت</h2>
         </div>
 
         <div class="auth-body">
@@ -214,101 +120,90 @@
                 {% endif %}
             {% endwith %}
 
-            <form method="POST" action="{{ url_for('login') }}" id="login-form">
+            <form method="POST" action="{{ url_for('login') }}" class="auth-form" id="login-form">
 
                 <!-- National Code -->
-                <div class="m3-field">
+                <div class="form-group">
                     <input type="text" id="national_code" name="national_code" maxlength="10" pattern="[0-9]{10}" placeholder=" " required>
+                    <span class="underline"></span>
                     <label for="national_code">کد ملی</label>
-                    <div class="supporting-text">۱۰ رقم بدون خط تیره</div>
+                    <div class="form-hint">۱۰ رقم</div>
                 </div>
 
                 <!-- Mobile -->
-                <div class="m3-field">
+                <div class="form-group">
                     <input type="text" id="mobile" name="mobile" maxlength="11" pattern="09[0-9]{9}" placeholder=" " required>
+                    <span class="underline"></span>
                     <label for="mobile">شماره موبایل</label>
-                    <div class="supporting-text">مثال: 09123456789</div>
+                    <div class="form-hint">فرمت: 09123456789</div>
                 </div>
 
                 <!-- Serial Number -->
-                <div class="m3-field">
-                    <!-- Adjusted pattern to allow for mixed alphanumeric, focusing on 2 letters as requested?
-                         "Serial Number has 2 latin characters instead of 1".
-                         Assuming standard format might be like A12B345678 or similar 10 chars.
-                         Using a broad pattern [A-Za-z0-9]{10} to be safe, but validation logic in backend can be stricter if needed.
-                    -->
-                    <input type="text" id="serial_number" name="serial_number" maxlength="10" pattern="[A-Za-z0-9]{10}" placeholder=" " required>
+                <div class="form-group">
+                    <!-- Format: 9 numbers + 1 English char -->
+                    <input type="text" id="serial_number" name="serial_number" maxlength="10" placeholder=" " required>
+                    <span class="underline"></span>
                     <label for="serial_number">سریال پشت کارت ملی</label>
-                    <div class="supporting-text" style="position: relative; cursor: help;">
-                        <span class="material-icons-round info-icon">info</span>
-                        <span>شامل ۱۰ کاراکتر (۲ حرف انگلیسی)</span>
-                        <div class="tooltip-box">
-                            سریال کارت ملی هوشمند یک کد ۱۰ کاراکتری (ترکیبی از اعداد و ۲ حرف انگلیسی) است که در پشت کارت، نزدیک تراشه زرد رنگ قرار دارد. در طراحی‌های جدیدتر، این شماره در جلو کارت نیز چاپ شده است.
+                    <div class="form-hint">
+                        <span>مثال: 123456789A</span>
+                        <div class="tooltip-container">
+                            <span class="material-icons-round tooltip-icon">info</span>
+                            <div class="tooltip-text">
+                                سریال کارت ملی هوشمند یک کد ۱۰ کاراکتری (ترکیبی از ۹ عدد و ۱ حرف انگلیسی) است که در پشت کارت، نزدیک تراشه زرد رنگ قرار دارد. در طراحی‌های جدیدتر، این شماره در جلو کارت نیز چاپ شده است.
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Date Picker (M3 Input Mode Style) -->
-                <div style="margin-bottom: 8px;">
-                    <label class="title-medium" style="display: block; margin-bottom: 12px; color: var(--m3-on-surface);">تاریخ تولد</label>
-                    <div class="date-picker-group">
-                        <div class="m3-field">
-                            <select id="day" required>
-                                <option value="" disabled selected></option>
-                                {% for i in range(1, 32) %}
-                                    <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="day">روز</label>
-                        </div>
-                        <div class="m3-field" style="flex: 1.5;">
-                            <select id="month" required>
-                                <option value="" disabled selected></option>
-                                <option value="1">فروردین</option>
-                                <option value="2">اردیبهشت</option>
-                                <option value="3">خرداد</option>
-                                <option value="4">تیر</option>
-                                <option value="5">مرداد</option>
-                                <option value="6">شهریور</option>
-                                <option value="7">مهر</option>
-                                <option value="8">آبان</option>
-                                <option value="9">آذر</option>
-                                <option value="10">دی</option>
-                                <option value="11">بهمن</option>
-                                <option value="12">اسفند</option>
-                            </select>
-                            <label for="month">ماه</label>
-                        </div>
-                        <div class="m3-field" style="flex: 1.2;">
-                            <select id="year" required>
-                                <option value="" disabled selected></option>
-                                {% for i in range(1390, 1299, -1) %}
-                                    <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="year">سال</label>
-                        </div>
+                <!-- Date Picker (Preserved Style) -->
+                <div class="date-picker-wrapper">
+                    <label class="date-picker-label">تاریخ تولد</label>
+                    <div class="date-picker-container">
+                        <select id="day" required aria-label="روز">
+                            <option value="" disabled selected>روز</option>
+                            {% for i in range(1, 32) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <select id="month" required aria-label="ماه">
+                            <option value="" disabled selected>ماه</option>
+                            <option value="1">فروردین</option>
+                            <option value="2">اردیبهشت</option>
+                            <option value="3">خرداد</option>
+                            <option value="4">تیر</option>
+                            <option value="5">مرداد</option>
+                            <option value="6">شهریور</option>
+                            <option value="7">مهر</option>
+                            <option value="8">آبان</option>
+                            <option value="9">آذر</option>
+                            <option value="10">دی</option>
+                            <option value="11">بهمن</option>
+                            <option value="12">اسفند</option>
+                        </select>
+                        <select id="year" required aria-label="سال">
+                            <option value="" disabled selected>سال</option>
+                            {% for i in range(1390, 1299, -1) %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <input type="hidden" id="birth_date" name="birth_date">
                 </div>
 
-                <div class="auth-actions">
-                    <button type="submit" class="btn btn-filled">
-                        ادامه
-                        <span class="material-icons-round" style="font-size: 18px;">arrow_back</span>
-                    </button>
-                </div>
+                <button type="submit" class="btn btn-primary">ادامه</button>
             </form>
 
-            <a href="{{ url_for('index') }}" class="back-link">بازگشت</a>
-
-            <div style="margin-top: 32px; padding-top: 16px; border-top: 1px solid var(--m3-outline-variant); font-size: 12px; color: var(--m3-on-surface-variant);">
-                <strong>داده‌های تست:</strong><br>
-                کد ملی: <code>0012345678</code><br>
-                موبایل: <code>09123456789</code><br>
-                سریال: <code>A1B2345678</code> (مثال)<br>
-                تولد: <code>1370/05/15</code>
+            <div class="test-credentials">
+                <h4>اطلاعات تست</h4>
+                <div class="credential-item"><strong>کد ملی:</strong> <code>0012345678</code></div>
+                <div class="credential-item"><strong>موبایل:</strong> <code>09123456789</code></div>
+                <div class="credential-item"><strong>سریال:</strong> <code>123456789A</code></div>
+                <div class="credential-item"><strong>تولد:</strong> <code>1370/05/15</code></div>
             </div>
+        </div>
+
+        <div class="auth-footer">
+            <a href="{{ url_for('index') }}" class="link">بازگشت به صفحه اصلی</a>
         </div>
     </div>
 </div>
