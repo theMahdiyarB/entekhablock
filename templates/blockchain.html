@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="blockchain-container">
+<div class="blockchain-container fade-in-up">
     <div class="breadcrumb">
         <a href="{{ url_for('dashboard') }}">داشبورد</a>
         <span class="separator">←</span>
@@ -84,7 +84,7 @@
 
     <div class="blockchain-chain" id="blockchainChain">
         {% for block in blocks %}
-        <div class="block-item {% if not block.is_valid %}block-invalid{% endif %}"
+        <div class="block-item {% if not block.is_valid %}block-invalid{% endif %} fade-in-up stagger-{{ loop.index if loop.index <= 6 else 6 }}"
             data-block-index="{{ block.index }}">
             <div class="block-header" onclick="toggleBlock({{ block.index }})">
                 <div class="block-number">

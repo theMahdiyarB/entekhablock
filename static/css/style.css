@@ -63,12 +63,13 @@
   --m3-spacing-48: 48px;
   --m3-spacing-64: 64px;
 
-  /* SHAPES (M3 Expressive: Confident 12px corners) */
+  /* SHAPES (M3 Expressive: Playful & Larger) */
   --m3-shape-xs: 4px;
   --m3-shape-sm: 8px;
-  --m3-shape-md: 12px;
-  --m3-shape-lg: 16px;
-  --m3-shape-xl: 28px;
+  --m3-shape-md: 16px;
+  --m3-shape-lg: 24px;
+  --m3-shape-xl: 32px;
+  --m3-shape-full: 9999px;
 
   /* ELEVATION */
   --m3-elevation-0: none;
@@ -271,7 +272,7 @@ main {
   gap: 8px;
   padding: 10px 24px;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--m3-shape-full);
   font-family: inherit;
   font-weight: 600;
   cursor: pointer;
@@ -304,7 +305,7 @@ main {
 .btn-large {
   padding: 16px 32px;
   font-size: 18px;
-  border-radius: 16px;
+  border-radius: var(--m3-shape-full);
 }
 
 /* Hero Section */

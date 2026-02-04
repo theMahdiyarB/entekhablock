@@ -58,9 +58,10 @@
     /* Shape Radius */
     --m3-shape-xs: 4px;
     --m3-shape-sm: 8px;
-    --m3-shape-md: 12px;
-    --m3-shape-lg: 16px;
-    --m3-shape-xl: 28px;
+    --m3-shape-md: 16px;
+    --m3-shape-lg: 24px;
+    --m3-shape-xl: 32px;
+    --m3-shape-full: 9999px;
 }
 
 * {
@@ -333,7 +334,7 @@ body {
     flex: 1;
     padding: 14px 24px;
     border: none;
-    border-radius: 12px;
+    border-radius: var(--m3-shape-full);
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.5px;

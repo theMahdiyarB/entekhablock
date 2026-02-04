@@ -191,7 +191,7 @@
     <div class="dashboard-container">
 
         <!-- Welcome Hero -->
-        <section class="stats-hero">
+        <section class="stats-hero fade-in-up">
             <div class="hero-text">
                 <h1 class="display-medium" style="margin-bottom: 12px;">سلام، {{ voter_name }} 👋</h1>
                 <p class="body-large" style="color: var(--m3-on-primary-container);">
@@ -223,7 +223,7 @@
             <div class="polls-grid" id="polls-grid" style="margin-top: 32px;">
                 {% if polls %}
                 {% for poll in polls %}
-                <div class="poll-card">
+                <div class="poll-card fade-in-up stagger-{{ loop.index if loop.index <= 6 else 6 }}">
                     <div class="poll-content">
                         <div class="poll-status-chip status-active">
                             <span class="dot"></span>
