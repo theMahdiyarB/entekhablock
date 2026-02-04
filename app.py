@@ -30,7 +30,7 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 # To enable real biometric verification with Iranian Shahkar API:
 # Set environment variable: VIDEOLIVE_API_TOKEN="your_api_token_here"
 # Without the token, the system runs in MVP simulation mode
-# API Documentation: https://s.api.ir/docs#operation/post_api_sw1_VideoLive
+# API Documentation: https://s.api.ir/docs#operation/post_api_sw1_VideoMatch
 # ========================================================
 
 # Ensure upload folder exists
@@ -248,12 +248,13 @@ def api_auth_stage1():
         data = request.json
         national_code = data.get('national_code', '').strip()
         birth_date = data.get('birth_date', '').strip()
+        mobile = data.get('mobile', '').strip()
         serial_number = data.get('serial_number', '').strip()
         
-        if not all([national_code, birth_date, serial_number]):
+        if not all([national_code, birth_date, mobile, serial_number]):
             return jsonify({'success': False, 'message': 'لطفاً تمام فیلدها را پر کنید'}), 400
         
-        success, message, voter_data = voter_db.verify_stage1(national_code, birth_date, serial_number)
+        success, message, voter_data = voter_db.verify_stage1(national_code, birth_date, mobile, serial_number)
         
         if not success:
             return jsonify({'success': False, 'message': message}), 401
@@ -780,14 +781,15 @@ def login():
         # Get form data
         national_code = request.form.get('national_code', '').strip()
         birth_date = request.form.get('birth_date', '').strip()
+        mobile = request.form.get('mobile', '').strip()
         serial_number = request.form.get('serial_number', '').strip()
         
-        if not all([national_code, birth_date, serial_number]):
+        if not all([national_code, birth_date, mobile, serial_number]):
             flash('لطفاً تمام فیلدها را پر کنید', 'error')
             return redirect(url_for('login'))
         
         # Verify stage 1
-        success, message, voter_data = voter_db.verify_stage1(national_code, birth_date, serial_number)
+        success, message, voter_data = voter_db.verify_stage1(national_code, birth_date, mobile, serial_number)
         
         if not success:
             flash(message, 'error')
@@ -882,7 +884,7 @@ def verify_otp():
 
 @app.route('/biometric', methods=['GET', 'POST'])
 def biometric():
-    """Biometric verification page - STAGE 3 (VideoLive API)"""
+    """Biometric verification page - STAGE 3 (VideoMatch API)"""
     auth_session_id = session.get('auth_session_id')
     print(f"[DEBUG] biometric: session_id={auth_session_id}", flush=True)
     print(f"[DEBUG] biometric: session_data={json.dumps(session_manager.sessions.get(auth_session_id), default=str)}", flush=True)
@@ -896,17 +898,24 @@ def biometric():
         if request.method == 'POST':
             voter_data = session_manager.get_voter_data(auth_session_id)
             video_data = request.form.get('video_data', '')
-            
+
+            # We already have serial_number from Stage 1
+            serial_number = voter_data.get('serial_number')
+
+            if not serial_number:
+                flash('خطا: شماره سریال کارت ملی یافت نشد. لطفاً مجدداً وارد شوید.', 'error')
+                return redirect(url_for('login'))
+
             # If no video data provided, still allow in MVP mode
             if not video_data:
                 flash('هشدار: ویدئویی ضبط نشد، احراز هویت به صورت شبیه‌سازی انجام می‌شود', 'warning')
             else:
-                # Call VideoLive API for real biometric verification
+                # Call VideoMatch API for real biometric verification
                 try:
-                    success = call_videolive_api(
+                    success = call_videomatch_api(
                         national_code=voter_data['national_code'],
                         birth_date=voter_data['birth_date'],
-                        serial_number=voter_data['serial_number'],
+                        serial_number=serial_number,
                         video_base64=video_data
                     )
                     
@@ -920,7 +929,7 @@ def biometric():
                     return redirect(url_for('biometric'))
             
             # Mark stage 3 as complete (authentication fully complete)
-            session_manager.update_stage(auth_session_id, 'stage3', {})
+            session_manager.update_stage(auth_session_id, 'stage3', voter_data)
             
             flash('احراز هویت با موفقیت انجام شد', 'success')
             return redirect(url_for('dashboard'))
@@ -933,9 +942,9 @@ def biometric():
         return render_template('debug_error.html', error_message=error_message, traceback=tb_str)
 
 
-def call_videolive_api(national_code: str, birth_date: str, serial_number: str, video_base64: str) -> bool:
+def call_videomatch_api(national_code: str, birth_date: str, serial_number: str, video_base64: str) -> bool:
     """
-    Call the Iranian Shahkar VideoLive API for biometric verification
+    Call the Iranian Shahkar VideoMatch API for biometric verification
     
     Args:
         national_code: National code
@@ -948,8 +957,8 @@ def call_videolive_api(national_code: str, birth_date: str, serial_number: str, 
     """
     import requests
     
-    # VideoLive API endpoint
-    api_url = "https://s.api.ir/api/sw1/VideoLive"
+    # VideoMatch API endpoint
+    api_url = "https://s.api.ir/api/sw1/VideoMatch"
     
     # Get API token from environment or config
     api_token = os.getenv('VIDEOLIVE_API_TOKEN', '')
@@ -966,8 +975,7 @@ def call_videolive_api(national_code: str, birth_date: str, serial_number: str, 
             "birthDate": birth_date.replace('-', '/'),  # Convert from 1370-05-15 to 1370/5/15
             "serialNumber": serial_number,
             "videoBase64": video_base64,
-            "matchingThreshold": 90,
-            "livenessThreshold": 80
+            "matchingThreshold": 90
         }
         
         headers = {
@@ -979,12 +987,12 @@ def call_videolive_api(national_code: str, birth_date: str, serial_number: str, 
         
         if response.status_code == 200:
             data = response.json()
-            if data.get('success') and data.get('data', {}).get('isMatch') and data.get('data', {}).get('isLiveness'):
+            if data.get('success') and data.get('data', {}).get('isMatch'):
                 return True
         
         return False
     except Exception as e:
-        print(f"VideoLive API error: {str(e)}")
+        print(f"VideoMatch API error: {str(e)}")
         # In MVP mode, return True to allow testing
         return True
 

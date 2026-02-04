@@ -57,13 +57,14 @@ class VoterDatabase:
         
         return voters
     
-    def verify_stage1(self, national_code: str, birth_date: str, serial_number: str) -> Tuple[bool, str, Optional[Dict]]:
+    def verify_stage1(self, national_code: str, birth_date: str, mobile: str, serial_number: str) -> Tuple[bool, str, Optional[Dict]]:
         """
-        STAGE 1: Verify basic information (simulates Shahkar API)
+        STAGE 1: Verify basic information (simulates Shahkar 2 API + Serial Verification)
         
         Args:
             national_code: 10-digit national ID
             birth_date: Birth date in YYYY-MM-DD format
+            mobile: Mobile number
             serial_number: ID card serial number
         
         Returns:
@@ -72,10 +73,8 @@ class VoterDatabase:
         # Clean inputs
         national_code = national_code.strip()
         birth_date = birth_date.strip()
+        mobile = mobile.strip()
         serial_number = serial_number.strip()
-        
-        # Normalize serial number (remove dashes to be flexible with format)
-        serial_normalized = serial_number.replace('-', '')
         
         # Check if national code exists
         if national_code not in self.voters:
@@ -87,10 +86,13 @@ class VoterDatabase:
         if voter['birth_date'] != birth_date:
             return False, "تاریخ تولد مطابقت ندارد", None
         
-        # Verify serial number (compare normalized versions to accept different formats)
-        voter_serial_normalized = voter['serial_number'].replace('-', '')
-        if voter_serial_normalized != serial_normalized:
-            return False, "سریال شناسنامه مطابقت ندارد", None
+        # Verify mobile number
+        if voter['mobile'] != mobile:
+            return False, "شماره موبایل با کد ملی مطابقت ندارد", None
+
+        # Verify serial number
+        if voter['serial_number'].upper() != serial_number.upper():
+             return False, "سریال کارت ملی مطابقت ندارد", None
         
         # All checks passed
         return True, "اطلاعات پایه تأیید شد", voter
@@ -368,7 +370,7 @@ if __name__ == "__main__":
     # Test voter database
     print("1. Testing Voter Database:")
     db = VoterDatabase("../data/voters.csv")
-    success, msg, voter = db.verify_stage1("0012345678", "1370-05-15", "123-456789-1")
+    success, msg, voter = db.verify_stage1("0012345678", "1370-05-15", "09123456789")
     print(f"   Stage 1: {success} - {msg}")
     if voter:
         print(f"   Voter: {voter['full_name']}")
