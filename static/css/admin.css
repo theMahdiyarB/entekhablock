@@ -150,7 +150,7 @@
 /* Status Badges */
 .badge {
   padding: 4px 12px;
-  border-radius: 12px;
+  border-radius: var(--m3-shape-full);
   font-size: 12px;
   font-weight: 700;
 }

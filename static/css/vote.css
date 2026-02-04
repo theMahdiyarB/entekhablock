@@ -268,15 +268,15 @@ main {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--md-sys-color-primary), var(--md-sys-color-tertiary));
+  background: linear-gradient(90deg, var(--m3-primary), var(--m3-tertiary));
   transform: scaleX(0);
-  transition: transform var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized);
+  transition: transform var(--motion-duration-medium) var(--motion-easing-emphasized);
 }
 
 .candidate-card:hover {
-  box-shadow: var(--md-sys-elevation-level2);
+  box-shadow: var(--m3-elevation-2);
   transform: translateY(-4px);
-  border-color: var(--md-sys-color-primary);
+  border-color: var(--m3-primary);
 }
 
 .candidate-card:hover::before {
@@ -284,14 +284,14 @@ main {
 }
 
 .candidate-card.selected {
-  background-color: var(--md-sys-color-primary-container);
-  border-color: var(--md-sys-color-primary);
-  box-shadow: var(--md-sys-elevation-level3);
+  background-color: var(--m3-primary-container);
+  border-color: var(--m3-primary);
+  box-shadow: var(--m3-elevation-2);
 }
 
 .candidate-card.selected::before {
   transform: scaleX(1);
-  background: var(--md-sys-color-primary);
+  background: var(--m3-primary);
 }
 
 .candidate-header {
@@ -304,15 +304,15 @@ main {
 .candidate-avatar {
   width: 64px;
   height: 64px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: linear-gradient(135deg, var(--md-sys-color-secondary), var(--md-sys-color-tertiary));
+  border-radius: var(--m3-shape-full);
+  background: linear-gradient(135deg, var(--m3-secondary), var(--m3-tertiary));
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 28px;
   font-weight: 700;
-  color: var(--md-sys-color-on-secondary);
-  box-shadow: var(--md-sys-elevation-level1);
+  color: var(--m3-on-secondary);
+  box-shadow: var(--m3-elevation-1);
   flex-shrink: 0;
 }
 
@@ -321,15 +321,15 @@ main {
 }
 
 .candidate-name {
-  font-size: var(--md-sys-typescale-title-large-size);
-  font-weight: var(--md-sys-typescale-title-large-weight);
-  color: var(--md-sys-color-on-surface);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--m3-on-surface);
   margin-bottom: 4px;
 }
 
 .candidate-party {
-  font-size: var(--md-sys-typescale-body-medium-size);
-  color: var(--md-sys-color-on-surface-variant);
+  font-size: 14px;
+  color: var(--m3-on-surface-variant);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -340,9 +340,9 @@ main {
 }
 
 .candidate-description {
-  font-size: var(--md-sys-typescale-body-medium-size);
-  line-height: var(--md-sys-typescale-body-medium-line-height);
-  color: var(--md-sys-color-on-surface-variant);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--m3-on-surface-variant);
   margin-bottom: 16px;
 }
 
@@ -356,12 +356,12 @@ main {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: var(--md-sys-typescale-body-small-size);
-  color: var(--md-sys-color-on-surface-variant);
+  font-size: 12px;
+  color: var(--m3-on-surface-variant);
 }
 
 .detail-item i {
-  color: var(--md-sys-color-primary);
+  color: var(--m3-primary);
   font-size: 18px;
 }
 
@@ -371,21 +371,21 @@ main {
   right: 16px;
   width: 32px;
   height: 32px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background-color: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
+  border-radius: var(--m3-shape-full);
+  background-color: var(--m3-primary);
+  color: var(--m3-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   transform: scale(0);
-  transition: all var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+  transition: all var(--motion-duration-medium) var(--motion-easing-decelerate);
 }
 
 .candidate-card.selected .selection-indicator {
   opacity: 1;
   transform: scale(1);
-  animation: bounceIn var(--md-sys-motion-duration-medium4) var(--md-sys-motion-easing-emphasized);
+  animation: bounceIn var(--motion-duration-medium) var(--motion-easing-emphasized);
 }
 
 @keyframes bounceIn {
@@ -406,16 +406,16 @@ main {
 .vote-actions {
   position: sticky;
   bottom: 24px;
-  background-color: var(--md-sys-color-surface);
-  border-radius: var(--md-sys-shape-corner-extra-large);
+  background-color: var(--m3-surface);
+  border-radius: var(--m3-shape-xl);
   padding: 24px;
-  box-shadow: var(--md-sys-elevation-level3);
+  box-shadow: var(--m3-elevation-2);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
   margin-top: 32px;
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--m3-outline-variant);
 }
 
 .selected-info {
@@ -428,13 +428,13 @@ main {
 .selected-avatar-small {
   width: 40px;
   height: 40px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: linear-gradient(135deg, var(--md-sys-color-secondary), var(--md-sys-color-tertiary));
+  border-radius: var(--m3-shape-full);
+  background: linear-gradient(135deg, var(--m3-secondary), var(--m3-tertiary));
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  color: var(--md-sys-color-on-secondary);
+  color: var(--m3-on-secondary);
 }
 
 .selected-text {
@@ -442,14 +442,14 @@ main {
 }
 
 .selected-label {
-  font-size: var(--md-sys-typescale-body-small-size);
-  color: var(--md-sys-color-on-surface-variant);
+  font-size: 12px;
+  color: var(--m3-on-surface-variant);
 }
 
 .selected-candidate-name {
-  font-size: var(--md-sys-typescale-title-medium-size);
-  font-weight: var(--md-sys-typescale-title-medium-weight);
-  color: var(--md-sys-color-on-surface);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--m3-on-surface);
 }
 
 .action-buttons {
@@ -466,38 +466,38 @@ main {
 .confirmation-icon {
   width: 80px;
   height: 80px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: linear-gradient(135deg, var(--md-sys-color-primary), var(--md-sys-color-tertiary));
+  border-radius: var(--m3-shape-full);
+  background: linear-gradient(135deg, var(--m3-primary), var(--m3-tertiary));
   margin: 0 auto 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--md-sys-color-on-primary);
+  color: var(--m3-on-primary);
   font-size: 40px;
-  box-shadow: var(--md-sys-elevation-level2);
+  box-shadow: var(--m3-elevation-2);
 }
 
 .confirmation-title {
-  font-size: var(--md-sys-typescale-headline-small-size);
-  font-weight: var(--md-sys-typescale-headline-small-weight);
-  color: var(--md-sys-color-on-surface);
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--m3-on-surface);
   margin-bottom: 16px;
 }
 
 .confirmation-message {
-  font-size: var(--md-sys-typescale-body-large-size);
-  color: var(--md-sys-color-on-surface-variant);
-  line-height: var(--md-sys-typescale-body-large-line-height);
+  font-size: 16px;
+  color: var(--m3-on-surface-variant);
+  line-height: 24px;
   margin-bottom: 8px;
 }
 
 .confirmation-warning {
   display: inline-block;
-  background-color: var(--md-sys-color-error-container);
-  color: var(--md-sys-color-on-error-container);
+  background-color: var(--m3-error-container);
+  color: var(--m3-on-error-container);
   padding: 12px 16px;
-  border-radius: var(--md-sys-shape-corner-medium);
-  font-size: var(--md-sys-typescale-body-medium-size);
+  border-radius: var(--m3-shape-md);
+  font-size: 14px;
   margin-top: 16px;
 }
 
@@ -510,16 +510,16 @@ main {
 .success-icon {
   width: 120px;
   height: 120px;
-  border-radius: var(--md-sys-shape-corner-full);
-  background: linear-gradient(135deg, var(--md-sys-color-tertiary), var(--md-sys-color-primary));
+  border-radius: var(--m3-shape-full);
+  background: linear-gradient(135deg, var(--m3-tertiary), var(--m3-primary));
   margin: 0 auto 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--md-sys-color-on-tertiary);
+  color: var(--m3-on-tertiary);
   font-size: 64px;
-  box-shadow: var(--md-sys-elevation-level3);
-  animation: successPop var(--md-sys-motion-duration-long4) var(--md-sys-motion-easing-emphasized);
+  box-shadow: var(--m3-elevation-2);
+  animation: successPop var(--motion-duration-long) var(--motion-easing-emphasized);
 }
 
 @keyframes successPop {
@@ -539,31 +539,31 @@ main {
 }
 
 .success-title {
-  font-size: var(--md-sys-typescale-headline-medium-size);
-  font-weight: var(--md-sys-typescale-headline-medium-weight);
-  color: var(--md-sys-color-on-surface);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--m3-on-surface);
   margin-bottom: 16px;
 }
 
 .success-message {
-  font-size: var(--md-sys-typescale-body-large-size);
-  color: var(--md-sys-color-on-surface-variant);
-  line-height: var(--md-sys-typescale-body-large-line-height);
+  font-size: 16px;
+  color: var(--m3-on-surface-variant);
+  line-height: 24px;
   margin-bottom: 32px;
 }
 
 .blockchain-info {
-  background-color: var(--md-sys-color-tertiary-container);
-  border-radius: var(--md-sys-shape-corner-large);
+  background-color: var(--m3-tertiary-container);
+  border-radius: var(--m3-shape-lg);
   padding: 16px;
   margin-bottom: 24px;
   text-align: left;
 }
 
 .blockchain-info-title {
-  font-size: var(--md-sys-typescale-title-small-size);
-  font-weight: var(--md-sys-typescale-title-small-weight);
-  color: var(--md-sys-color-on-tertiary-container);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--m3-on-tertiary-container);
   margin-bottom: 12px;
   display: flex;
   align-items: center;
@@ -575,8 +575,8 @@ main {
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
-  font-size: var(--md-sys-typescale-body-small-size);
+  border-bottom: 1px solid var(--m3-outline-variant);
+  font-size: 12px;
 }
 
 .blockchain-field:last-child {
@@ -584,12 +584,12 @@ main {
 }
 
 .field-label {
-  color: var(--md-sys-color-on-tertiary-container);
+  color: var(--m3-on-tertiary-container);
   font-weight: 500;
 }
 
 .field-value {
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--m3-on-surface-variant);
   font-family: 'Courier New', monospace;
   word-break: break-all;
 }
@@ -611,7 +611,7 @@ main {
   }
 
   .poll-title {
-    font-size: var(--md-sys-typescale-headline-medium-size);
+    font-size: 28px;
   }
 
   .candidates-grid {
@@ -623,7 +623,7 @@ main {
     align-items: stretch;
     bottom: 80px;
     /* Adjusted to clear bottom nav */
-    border-radius: var(--md-sys-shape-corner-large) var(--md-sys-shape-corner-large) 0 0;
+    border-radius: var(--m3-shape-lg) var(--m3-shape-lg) 0 0;
     margin-top: 0;
     position: fixed;
     left: 0;

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<main class="vote-container">
+<div class="vote-container">
     <!-- Breadcrumb -->
     <nav class="breadcrumb">
         <a href="{{ url_for('dashboard') }}">داشبورد</a>
@@ -63,7 +63,7 @@
             <form method="POST" action="{{ url_for('vote', poll_id=poll.poll_id) }}" id="vote-form">
                 <div class="options-container">
                     {% for option in poll.options %}
-                    <div class="option-card">
+                    <div class="option-card fade-in-up stagger-{{ loop.index if loop.index <= 4 else 4 }}">
                         <input type="radio" name="option" id="option-{{ loop.index }}" value="{{ option }}" required>
                         <label for="option-{{ loop.index }}" class="option-label">
                             <div class="radio-indicator">
@@ -88,7 +88,7 @@
         </div>
 
         <!-- Sidebar -->
-        <aside class="vote-sidebar">
+        <aside class="vote-sidebar fade-in-up stagger-2">
             <div class="card-elevated">
                 <div class="stat-icon" style="font-size: 32px; margin-bottom: 12px;">🔐</div>
                 <h3 style="font-size: 16px; font-weight: 600; color: var(--m3-on-surface); margin-bottom: 12px;">
@@ -106,7 +106,7 @@
             </div>
         </aside>
     </div>
-</main>
+</div>
 
 <!-- Preview Modal -->
 <div id="preview-modal" class="modal">

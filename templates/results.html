@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-<main class="results-container">
+<div class="results-container fade-in-up">
     <nav class="breadcrumb">
         <a href="{{ url_for('dashboard') }}">داشبورد</a>
         <span>←</span>
@@ -180,7 +180,7 @@
         <a href="{{ url_for('dashboard') }}" class="btn btn-filled">بازگشت به داشبورد</a>
     </div>
     {% endif %}
-</main>
+</div>
 {% endblock %}
 
 {% block scripts %}
