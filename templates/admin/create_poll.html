@@ -22,6 +22,7 @@
 
         <form action="{{ url_for('admin_create_poll') }}" method="POST" class="admin-card"
             style="margin: 0; max-width: 100%;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <section class="form-section">
                 <h3 class="title-large" style="margin-bottom: 24px;">اطلاعات پایه</h3>
                 <div class="form-group">

@@ -61,6 +61,7 @@
 
             <!-- Vote Form -->
             <form method="POST" action="{{ url_for('vote', poll_id=poll.poll_id) }}" id="vote-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <div class="options-container">
                     {% for option in poll.options %}
                     <div class="option-card fade-in-up stagger-{{ loop.index if loop.index <= 4 else 4 }}">

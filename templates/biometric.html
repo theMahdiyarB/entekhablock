@@ -38,6 +38,7 @@
             </div>
 
             <form method="POST" action="{{ url_for('biometric') }}" id="biometric-form" class="auth-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="video_data" id="video_data" value="">
                 
                 <button type="button" id="start-btn" class="btn btn-primary">شروع ضبط ویدئو</button>

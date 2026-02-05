@@ -129,6 +129,7 @@
             {% endwith %}
 
             <form method="POST" action="{{ url_for('login') }}" class="auth-form" id="login-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- National Code -->
                 <div class="form-group">

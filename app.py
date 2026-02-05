@@ -5,6 +5,9 @@ Handles all API endpoints, authentication flow, and blockchain integration
 
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, flash
 from werkzeug.utils import secure_filename
+from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import os
 import secrets
 import csv
@@ -25,6 +28,17 @@ app = Flask(__name__)
 app.secret_key = os.getenv('FLASK_SECRET_KEY', 'dev-secret-key-change-in-production-' + secrets.token_hex(16))
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5MB max file size
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+# Security: CSRF Protection
+csrf = CSRFProtect(app)
+
+# Security: Rate Limiting
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
 
 # ==================== CONFIGURATION ====================
 # To enable real biometric verification with Iranian Shahkar API:
@@ -147,6 +161,7 @@ def technical_info():
 
 @app.route('/voter/vote', defaults={'poll_id': None}, methods=['GET', 'POST'])
 @app.route('/voter/vote/<poll_id>', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
 def voter_vote(poll_id):
     """Voting page - only accessible after full authentication"""
     auth_session_id = session.get('auth_session_id')
@@ -449,6 +464,7 @@ def api_poll_results(poll_id):
 # ==================== ADMIN ROUTES ====================
 
 @app.route('/admin', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def admin_login_page():
     """Admin login page"""
     if request.args.get('reset'):
@@ -795,6 +811,7 @@ def api_blockchain_validate():
 # ==================== TEMPLATE COMPATIBILITY ROUTES ====================
 
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def login():
     """Login handler - STAGE 1 verification"""
     if request.method == 'POST':
@@ -827,6 +844,7 @@ def login():
 
 
 @app.route('/verify_otp', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def verify_otp():
     """OTP verification handler - STAGE 2 verification"""
     try:
@@ -903,6 +921,7 @@ def verify_otp():
 
 
 @app.route('/biometric', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def biometric():
     """Biometric verification page - STAGE 3 (VideoMatch API)"""
     auth_session_id = session.get('auth_session_id')

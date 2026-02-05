@@ -31,6 +31,7 @@
         {% endwith %}
 
         <form method="POST" action="{{ url_for('admin_login_page') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="form-group">
                 <label class="form-label" for="username">نام کاربری</label>
                 <input type="text" id="username" name="username" class="form-input" required autofocus
