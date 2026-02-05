@@ -246,6 +246,18 @@ h4 {
   margin-top: 32px;
 }
 
+.mb-24 {
+    margin-bottom: var(--m3-spacing-24);
+}
+
+.mb-16 {
+    margin-bottom: var(--m3-spacing-16);
+}
+
+.mt-24 {
+    margin-top: var(--m3-spacing-24);
+}
+
 /* Layout */
 .container {
   max-width: 1200px;
@@ -264,6 +276,158 @@ main {
   margin-top: auto;
 }
 
+/* ========== M3 Filled Text Field (Global) ========== */
+/* Container */
+.md-filled-text-field {
+    position: relative;
+    background-color: var(--m3-surface-container-highest);
+    border-radius: var(--m3-shape-xs) var(--m3-shape-xs) 0 0;
+    min-height: 56px; /* Allow growth for textareas */
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+.md-filled-text-field:hover {
+    background-color: #DFD8E3; /* State Layer - slightly darker */
+}
+
+/* Input / Select / Textarea */
+.md-filled-text-field input,
+.md-filled-text-field select,
+.md-filled-text-field textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 56px;
+    border: none;
+    background: transparent;
+    padding: 24px 16px 8px 16px; /* Top padding for label space */
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 16px;
+    color: var(--m3-on-surface);
+    outline: none;
+    caret-color: var(--m3-primary);
+    z-index: 1;
+    resize: vertical;
+}
+
+.md-filled-text-field select {
+    appearance: none;
+    cursor: pointer;
+}
+
+/* Active Indicator (Underline) */
+.md-filled-text-field::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--m3-on-surface-variant);
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.md-filled-text-field:focus-within::after {
+    height: 2px;
+    background-color: var(--m3-primary);
+}
+
+/* Label */
+.md-filled-text-field label {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--m3-on-surface-variant);
+    pointer-events: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    z-index: 0;
+}
+
+/* Special handling for Textarea label positioning */
+.md-filled-text-field textarea ~ label {
+    top: 28px; /* Approx middle of single line height */
+}
+
+/* Floating Label State */
+.md-filled-text-field input:focus ~ label,
+.md-filled-text-field input:not(:placeholder-shown) ~ label,
+.md-filled-text-field textarea:focus ~ label,
+.md-filled-text-field textarea:not(:placeholder-shown) ~ label,
+.md-filled-text-field select:focus ~ label,
+.md-filled-text-field select:not([value=""]) ~ label,
+.md-filled-text-field select:valid ~ label {
+    top: 8px;
+    transform: none;
+    font-size: 12px;
+    color: var(--m3-primary);
+}
+
+.md-filled-text-field input:not(:focus):not(:placeholder-shown) ~ label,
+.md-filled-text-field textarea:not(:focus):not(:placeholder-shown) ~ label,
+.md-filled-text-field select:not(:focus):valid ~ label {
+    color: var(--m3-on-surface-variant);
+}
+
+/* Supporting Text */
+.form-hint {
+    font-size: 12px;
+    color: var(--m3-on-surface-variant);
+    margin-top: 4px;
+    padding: 0 16px;
+}
+
+/* Error State */
+.md-filled-text-field.error::after {
+    background-color: var(--m3-error);
+}
+
+.md-filled-text-field.error label {
+    color: var(--m3-error);
+}
+
+.md-filled-text-field.error input {
+    color: var(--m3-on-surface); /* Keep text color readable */
+}
+
+/* Disabled State */
+.md-filled-text-field.disabled {
+    opacity: 0.38;
+    pointer-events: none;
+}
+
+/* Fix for Select Arrow */
+.md-filled-text-field.select-wrapper::before {
+    content: '▼';
+    position: absolute;
+    left: 16px; /* RTL layout */
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: var(--m3-on-surface-variant);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Form Group Layout */
+.form-group {
+    margin-bottom: var(--m3-spacing-24);
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;
@@ -273,12 +437,13 @@ main {
   padding: 10px 24px;
   border: none;
   border-radius: var(--m3-shape-full);
-  font-family: inherit;
+  font-family: 'Vazirmatn', sans-serif;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
   min-height: 44px;
+  font-size: 14px;
 }
 
 .btn-filled {
@@ -290,6 +455,23 @@ main {
   background-color: #5a41a0;
   box-shadow: var(--m3-elevation-1);
   transform: translateY(-1px);
+}
+
+.btn-primary { /* Alias for btn-filled often used in auth */
+    background-color: var(--m3-primary);
+    color: var(--m3-on-primary);
+    width: 100%;
+    box-shadow: var(--m3-elevation-1);
+}
+
+.btn-primary:hover {
+    box-shadow: var(--m3-elevation-2);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    box-shadow: var(--m3-elevation-0);
+    transform: translateY(0);
 }
 
 .btn-outlined {
@@ -307,6 +489,39 @@ main {
   font-size: 18px;
   border-radius: var(--m3-shape-full);
 }
+
+.btn-success {
+    background-color: var(--m3-success);
+    color: var(--m3-on-success);
+    width: 100%;
+}
+
+.btn-success:hover {
+    background-color: #45a049;
+    box-shadow: var(--m3-elevation-2);
+}
+
+.btn-error {
+    background-color: var(--m3-error);
+    color: var(--m3-on-error);
+    width: 100%;
+}
+
+.btn-error:hover {
+    background-color: #9a1f16;
+    box-shadow: var(--m3-elevation-2);
+}
+
+.btn-text {
+    background: none;
+    color: var(--m3-primary);
+    padding: 8px 16px;
+}
+
+.btn-text:hover {
+    background-color: rgba(103, 80, 164, 0.08);
+}
+
 
 /* Hero Section */
 .hero-section {
@@ -396,11 +611,19 @@ main {
 .alert-error {
   background-color: var(--m3-error-container);
   color: var(--m3-on-error-container);
+  border-left: 4px solid var(--m3-error);
 }
 
 .alert-success {
   background-color: var(--m3-success-container);
   color: var(--m3-on-success-container);
+  border-left: 4px solid var(--m3-success);
+}
+
+.alert-info {
+    background-color: var(--m3-primary-container);
+    color: var(--m3-on-primary-container);
+    border-left: 4px solid var(--m3-primary);
 }
 
 /* Responsive */
