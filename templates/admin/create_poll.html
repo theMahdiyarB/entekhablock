@@ -26,15 +26,27 @@
             <section class="form-section">
                 <h3 class="title-large" style="margin-bottom: 24px;">اطلاعات پایه</h3>
                 <div class="form-group">
-                    <div class="md-filled-text-field">
-                        <input type="text" id="title" name="title" required placeholder=" ">
-                        <label for="title">عنوان نظرسنجی</label>
+                    <div class="text-field-wrapper">
+                        <div class="md-filled-text-field">
+                            <input type="text" id="title" name="title" required placeholder=" " maxlength="100">
+                            <label for="title">عنوان نظرسنجی</label>
+                        </div>
+                        <div class="field-supporting-text">
+                            <span class="supporting-text">عنوان کوتاه و گویا</span>
+                            <span class="character-counter">0/100</span>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="md-filled-text-field" style="height: auto;">
-                        <textarea id="description" name="description" rows="4" placeholder=" " style="padding-top: 24px;"></textarea>
-                        <label for="description">توضیحات</label>
+                    <div class="text-field-wrapper">
+                        <div class="md-filled-text-field" style="height: auto;">
+                            <textarea id="description" name="description" rows="4" placeholder=" " style="padding-top: 24px;" maxlength="500"></textarea>
+                            <label for="description">توضیحات</label>
+                        </div>
+                        <div class="field-supporting-text">
+                            <span class="supporting-text">جزئیات کامل نظرسنجی</span>
+                            <span class="character-counter">0/500</span>
+                        </div>
                     </div>
                 </div>
             </section>

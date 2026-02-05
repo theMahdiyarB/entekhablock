@@ -94,31 +94,46 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- National Code -->
-                <div class="md-filled-text-field">
-                    <input type="text" id="national_code" name="national_code" maxlength="10" pattern="[0-9]{10}" placeholder=" " required>
-                    <label for="national_code">کد ملی</label>
-                    <div class="form-hint">۱۰ رقم</div>
+                <div class="text-field-wrapper">
+                    <div class="md-filled-text-field">
+                        <input type="text" id="national_code" name="national_code" maxlength="10" pattern="[0-9]{10}" placeholder=" " required>
+                        <label for="national_code">کد ملی</label>
+                    </div>
+                    <div class="field-supporting-text">
+                        <span class="supporting-text">۱۰ رقم</span>
+                        <span class="character-counter">0/10</span>
+                    </div>
                 </div>
 
                 <!-- Mobile -->
-                <div class="md-filled-text-field">
-                    <input type="text" id="mobile" name="mobile" maxlength="11" pattern="09[0-9]{9}" placeholder=" " required>
-                    <label for="mobile">شماره موبایل</label>
-                    <div class="form-hint">فرمت: 09123456789</div>
+                <div class="text-field-wrapper">
+                    <div class="md-filled-text-field">
+                        <input type="text" id="mobile" name="mobile" maxlength="11" pattern="09[0-9]{9}" placeholder=" " required>
+                        <label for="mobile">شماره موبایل</label>
+                    </div>
+                    <div class="field-supporting-text">
+                        <span class="supporting-text">فرمت: 09123456789</span>
+                        <span class="character-counter">0/11</span>
+                    </div>
                 </div>
 
                 <!-- Serial Number -->
-                <div class="md-filled-text-field">
-                    <input type="text" id="serial_number" name="serial_number" maxlength="10" placeholder=" " required>
-                    <label for="serial_number">سریال پشت کارت ملی</label>
-                    <div class="form-hint" style="display: flex; align-items: center; justify-content: space-between;">
-                        <span>مثال: 123456789A</span>
-                        <div class="tooltip-container">
-                            <span class="material-icons-round tooltip-icon">info</span>
-                            <div class="tooltip-text">
-                                سریال کارت ملی هوشمند یک کد ۱۰ کاراکتری (ترکیبی از ۹ عدد و ۱ حرف انگلیسی) است که در پشت کارت، نزدیک تراشه زرد رنگ قرار دارد.
+                <div class="text-field-wrapper">
+                    <div class="md-filled-text-field">
+                        <input type="text" id="serial_number" name="serial_number" maxlength="10" placeholder=" " required>
+                        <label for="serial_number">سریال پشت کارت ملی</label>
+                    </div>
+                    <div class="field-supporting-text">
+                        <span class="supporting-text">
+                            مثال: 123456789A
+                            <div class="tooltip-container">
+                                <span class="material-icons-round tooltip-icon">info</span>
+                                <div class="tooltip-text">
+                                    سریال کارت ملی هوشمند یک کد ۱۰ کاراکتری (ترکیبی از ۹ عدد و ۱ حرف انگلیسی) است که در پشت کارت، نزدیک تراشه زرد رنگ قرار دارد.
+                                </div>
                             </div>
-                        </div>
+                        </span>
+                        <span class="character-counter">0/10</span>
                     </div>
                 </div>
 

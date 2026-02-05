@@ -376,14 +376,6 @@ main {
     color: var(--m3-on-surface-variant);
 }
 
-/* Supporting Text */
-.form-hint {
-    font-size: 12px;
-    color: var(--m3-on-surface-variant);
-    margin-top: 4px;
-    padding: 0 16px;
-}
-
 /* Error State */
 .md-filled-text-field.error::after {
     background-color: var(--m3-error);
@@ -427,6 +419,30 @@ main {
     font-weight: 600;
     margin-bottom: 8px;
 }
+
+/* Supporting Text & Character Counter */
+.field-supporting-text {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 16px 0;
+    font-size: 12px;
+    color: var(--m3-on-surface-variant);
+}
+
+.supporting-text {
+    /* Helps helper text logic */
+}
+
+.character-counter {
+    /* Aligned to end via flex space-between */
+    font-feature-settings: "tnum"; /* Tabular nums for stable width */
+}
+
+/* Error Text (replaces supporting text color) */
+.field-supporting-text.error {
+    color: var(--m3-error);
+}
+
 
 /* Buttons */
 .btn {

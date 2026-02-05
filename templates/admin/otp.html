@@ -37,11 +37,16 @@
             <form method="POST" action="{{ url_for('admin_login_page') }}" id="otp-form" class="auth-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-                <div class="md-filled-text-field">
-                    <input type="text" id="otp_code" name="otp_code" maxlength="4" pattern="[0-9]{4}" placeholder=" "
-                        required autocomplete="off" class="otp-input" autofocus>
-                    <label for="otp_code">کد تأیید</label>
-                    <div class="form-hint">۴ رقم</div>
+                <div class="text-field-wrapper">
+                    <div class="md-filled-text-field">
+                        <input type="text" id="otp_code" name="otp_code" maxlength="4" pattern="[0-9]{4}" placeholder=" "
+                            required autocomplete="off" class="otp-input" autofocus>
+                        <label for="otp_code">کد تأیید</label>
+                    </div>
+                    <div class="field-supporting-text">
+                        <span class="supporting-text">۴ رقم</span>
+                        <span class="character-counter">0/4</span>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">تایید و ورود به پنل</button>
