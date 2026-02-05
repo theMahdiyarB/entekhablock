@@ -6,25 +6,12 @@
     <!-- Reverting to standard auth.css for consistency -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+    <!-- Persian Datepicker Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lib/persian-datepicker.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker-theme.css') }}">
+
     <style>
-        /* Date Picker specific overrides if needed, mostly handled by md-filled-text-field now */
-        .date-picker-label {
-            font-size: 14px;
-            color: var(--m3-on-surface-variant);
-            margin-bottom: 8px;
-            display: block;
-        }
-
-        .date-picker-container {
-            display: flex;
-            gap: 10px;
-            direction: rtl;
-        }
-
-        .date-picker-container .md-filled-text-field {
-            flex: 1;
-        }
-
         /* Tooltip Logic for Serial Number */
         .tooltip-container {
             display: inline-block;
@@ -139,48 +126,16 @@
 
                 <!-- Date Picker (M3 Filled Style) -->
                 <div class="date-picker-wrapper">
-                    <label class="date-picker-label">تاریخ تولد</label>
-                    <div class="date-picker-container">
-                        <div class="md-filled-text-field select-wrapper">
-                            <select id="day" required>
-                                <option value="" disabled selected></option>
-                                {% for i in range(1, 32) %}
-                                    <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="day">روز</label>
+                     <div class="text-field-wrapper">
+                        <div class="md-filled-text-field">
+                            <input type="text" id="birth_date_input" placeholder=" " required maxlength="10">
+                            <label for="birth_date_input">تاریخ تولد</label>
                         </div>
-
-                        <div class="md-filled-text-field select-wrapper">
-                            <select id="month" required>
-                                <option value="" disabled selected></option>
-                                <option value="1">فروردین</option>
-                                <option value="2">اردیبهشت</option>
-                                <option value="3">خرداد</option>
-                                <option value="4">تیر</option>
-                                <option value="5">مرداد</option>
-                                <option value="6">شهریور</option>
-                                <option value="7">مهر</option>
-                                <option value="8">آبان</option>
-                                <option value="9">آذر</option>
-                                <option value="10">دی</option>
-                                <option value="11">بهمن</option>
-                                <option value="12">اسفند</option>
-                            </select>
-                            <label for="month">ماه</label>
+                        <div class="field-supporting-text">
+                            <span class="supporting-text">فرمت: YYYY/MM/DD (مثال: 1370/05/15)</span>
                         </div>
-
-                        <div class="md-filled-text-field select-wrapper">
-                            <select id="year" required>
-                                <option value="" disabled selected></option>
-                                {% for i in range(1390, 1299, -1) %}
-                                    <option value="{{ i }}">{{ i }}</option>
-                                {% endfor %}
-                            </select>
-                            <label for="year">سال</label>
-                        </div>
+                        <input type="hidden" id="birth_date" name="birth_date">
                     </div>
-                    <input type="hidden" id="birth_date" name="birth_date">
                 </div>
 
                 <button type="submit" class="btn btn-primary">ادامه</button>
@@ -200,64 +155,54 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/lib/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lib/persian-date.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lib/persian-datepicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datepicker-setup.js') }}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const daySelect = document.getElementById('day');
-        const monthSelect = document.getElementById('month');
-        const yearSelect = document.getElementById('year');
-        const birthDateInput = document.getElementById('birth_date');
-        const form = document.getElementById('login-form');
+    $(document).ready(function() {
+        // Initialize Datepicker
+        setupPersianDatepicker('#birth_date_input', '#birth_date');
 
-        function updateDate() {
-            const day = daySelect.value.padStart(2, '0');
-            const month = monthSelect.value.padStart(2, '0');
-            const year = yearSelect.value;
-
-            if (day && month && year) {
-                birthDateInput.value = `${year}-${month}-${day}`;
+        // Form Validation Logic
+        $('#login-form').on('submit', function(e) {
+            const birthDateVal = $('#birth_date').val();
+            // If user typed properly, hidden field should be updated by setup logic
+            // But let's verify if the visible input has a value but hidden doesn't (rare edge case)
+            if (!$('#birth_date_input').val()) {
+                e.preventDefault();
+                alert('لطفاً تاریخ تولد را وارد کنید');
+                return;
             }
-        }
-
-        // Adjust days based on month
-        monthSelect.addEventListener('change', function() {
-            const month = parseInt(this.value);
-            const currentDay = parseInt(daySelect.value);
-            let maxDays = 31;
-
-            if (month > 6 && month < 12) {
-                maxDays = 30;
-            } else if (month === 12) {
-                maxDays = 30; // Simplified
-            }
-
-            // Hide/Disable invalid days
-            for (let i = 0; i < daySelect.options.length; i++) {
-                const opt = daySelect.options[i];
-                if (parseInt(opt.value) > maxDays) {
-                    opt.disabled = true;
-                    opt.style.display = 'none';
+            if (!birthDateVal) {
+                // Try to sync manually if missing
+                const val = $('#birth_date_input').val();
+                if(val.length === 10) {
+                     $('#birth_date').val(val.replace(/\//g, '-'));
                 } else {
-                    opt.disabled = false;
-                    opt.style.display = 'block';
+                    e.preventDefault();
+                    alert('لطفاً تاریخ تولد را کامل وارد کنید');
                 }
             }
-
-            if (currentDay > maxDays) {
-                daySelect.value = "";
-            }
-            updateDate();
         });
 
-        daySelect.addEventListener('change', updateDate);
-        yearSelect.addEventListener('change', updateDate);
+        // Character counters
+        function setupCharCounter(inputId, maxLength) {
+             const input = document.getElementById(inputId);
+             if(!input) return;
+             const counter = input.closest('.text-field-wrapper').querySelector('.character-counter');
 
-        form.addEventListener('submit', function(e) {
-            if (!birthDateInput.value) {
-                e.preventDefault();
-                alert('لطفاً تاریخ تولد را کامل وارد کنید');
-            }
-        });
+             input.addEventListener('input', function() {
+                 counter.textContent = `${this.value.length}/${maxLength}`;
+             });
+        }
+
+        setupCharCounter('national_code', 10);
+        setupCharCounter('mobile', 11);
+        setupCharCounter('serial_number', 10);
     });
 </script>
 {% endblock %}

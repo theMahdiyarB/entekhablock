@@ -1,0 +1,127 @@
+/* Material Design 3 Theme for Persian Datepicker */
+
+.datepicker-container {
+    font-family: 'Vazirmatn', sans-serif;
+    z-index: 9999 !important;
+}
+
+.datepicker-plot-area {
+    font-family: 'Vazirmatn', sans-serif;
+    background-color: var(--m3-surface-container-high) !important;
+    border: none !important;
+    border-radius: var(--m3-shape-lg) !important;
+    box-shadow: var(--m3-elevation-2) !important;
+    padding: 16px !important;
+    width: 320px !important; /* Standard mobile width */
+}
+
+/* Header */
+.datepicker-header {
+    background-color: transparent !important;
+    border: none !important;
+    color: var(--m3-on-surface) !important;
+    font-weight: bold;
+    padding: 0 0 16px 0 !important;
+}
+
+.datepicker-header .btn-next,
+.datepicker-header .btn-switch,
+.datepicker-header .btn-prev {
+    background-color: transparent !important;
+    color: var(--m3-primary) !important;
+    border-radius: 50% !important;
+    width: 40px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    transition: background-color 0.2s ease;
+}
+
+.datepicker-header .btn-next:hover,
+.datepicker-header .btn-switch:hover,
+.datepicker-header .btn-prev:hover {
+    background-color: var(--m3-surface-container-highest) !important;
+}
+
+/* Days Grid */
+.datepicker-day-view .table-days {
+    width: 100% !important;
+}
+
+.datepicker-day-view .table-days th {
+    color: var(--m3-on-surface-variant) !important;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.datepicker-day-view .table-days td span {
+    border-radius: 50% !important;
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    margin: 2px auto !important;
+    font-size: 14px !important;
+    color: var(--m3-on-surface) !important;
+    background-color: transparent !important;
+    border: none !important;
+    text-shadow: none !important;
+}
+
+.datepicker-day-view .table-days td span:hover {
+    background-color: var(--m3-surface-container-highest) !important;
+}
+
+/* Selected Date */
+.datepicker-day-view .table-days td.selected span {
+    background-color: var(--m3-primary) !important;
+    color: var(--m3-on-primary) !important;
+    text-shadow: none !important;
+}
+
+/* Today */
+.datepicker-day-view .table-days td.today span {
+    border: 1px solid var(--m3-primary) !important;
+    color: var(--m3-primary) !important;
+}
+
+.datepicker-day-view .table-days td.today.selected span {
+    background-color: var(--m3-primary) !important;
+    color: var(--m3-on-primary) !important;
+}
+
+/* Disabled */
+.datepicker-day-view .table-days td.disabled span {
+    color: var(--m3-on-surface-variant) !important;
+    opacity: 0.38;
+}
+
+/* Month/Year View */
+.datepicker-month-view .month-item,
+.datepicker-year-view .year-item {
+    border-radius: var(--m3-shape-full) !important;
+    color: var(--m3-on-surface) !important;
+    background-color: transparent !important;
+}
+
+.datepicker-month-view .month-item:hover,
+.datepicker-year-view .year-item:hover {
+    background-color: var(--m3-surface-container-highest) !important;
+}
+
+.datepicker-month-view .month-item.selected,
+.datepicker-year-view .year-item.selected {
+    background-color: var(--m3-primary) !important;
+    color: var(--m3-on-primary) !important;
+}
+
+/* Toolbox */
+.datepicker-plot-area .toolbox {
+    border-top: 1px solid var(--m3-outline-variant) !important;
+    margin-top: 8px !important;
+    padding-top: 8px !important;
+}
+
+.datepicker-plot-area .toolbox .btn-today {
+    background-color: transparent !important;
+    color: var(--m3-primary) !important;
+    font-weight: bold;
+}

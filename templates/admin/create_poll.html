@@ -4,6 +4,9 @@
 
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<!-- Persian Datepicker Styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/persian-datepicker.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker-theme.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -21,7 +24,7 @@
         </header>
 
         <form action="{{ url_for('admin_create_poll') }}" method="POST" class="admin-card"
-            style="margin: 0; max-width: 100%;">
+            style="margin: 0; max-width: 100%;" id="create-poll-form">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <section class="form-section">
                 <h3 class="title-large" style="margin-bottom: 24px;">اطلاعات پایه</h3>
@@ -55,85 +58,27 @@
                 <h3 class="title-large" style="margin-bottom: 24px;">زمان‌بندی (شمسی)</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                     <div class="form-group">
-                        <label class="form-label">تاریخ شروع</label>
-                        <div style="display: flex; gap: 8px;">
-                            <div class="md-filled-text-field select-wrapper" style="width: 33%;">
-                                <select name="start_day" required>
-                                    <option value="" disabled selected></option>
-                                    {% for d in range(1, 32) %}
-                                    <option value="{{ d }}">{{ d }}</option>
-                                    {% endfor %}
-                                </select>
-                                <label>روز</label>
+                        <div class="text-field-wrapper">
+                            <div class="md-filled-text-field">
+                                <input type="text" id="start_date_input" placeholder=" " required maxlength="10">
+                                <label for="start_date_input">تاریخ شروع</label>
                             </div>
-                            <div class="md-filled-text-field select-wrapper" style="width: 33%;">
-                                <select name="start_month" required>
-                                    <option value="" disabled selected></option>
-                                    <option value="1">فروردین</option>
-                                    <option value="2">اردیبهشت</option>
-                                    <option value="3">خرداد</option>
-                                    <option value="4">تیر</option>
-                                    <option value="5">مرداد</option>
-                                    <option value="6">شهریور</option>
-                                    <option value="7">مهر</option>
-                                    <option value="8">آبان</option>
-                                    <option value="9">آذر</option>
-                                    <option value="10">دی</option>
-                                    <option value="11">بهمن</option>
-                                    <option value="12">اسفند</option>
-                                </select>
-                                <label>ماه</label>
+                            <div class="field-supporting-text">
+                                <span class="supporting-text">YYYY/MM/DD</span>
                             </div>
-                            <div class="md-filled-text-field select-wrapper" style="width: 33%;">
-                                <select name="start_year" required>
-                                    <option value="" disabled selected></option>
-                                    {% for y in range(1402, 1412) %}
-                                    <option value="{{ y }}" {% if y == 1403 %}selected{% endif %}>{{ y }}</option>
-                                    {% endfor %}
-                                </select>
-                                <label>سال</label>
-                            </div>
+                            <input type="hidden" id="start_date" name="start_date">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">تاریخ پایان</label>
-                        <div style="display: flex; gap: 8px;">
-                            <div class="md-filled-text-field select-wrapper" style="width: 33%;">
-                                <select name="end_day" required>
-                                    <option value="" disabled selected></option>
-                                    {% for d in range(1, 32) %}
-                                    <option value="{{ d }}">{{ d }}</option>
-                                    {% endfor %}
-                                </select>
-                                <label>روز</label>
+                        <div class="text-field-wrapper">
+                            <div class="md-filled-text-field">
+                                <input type="text" id="end_date_input" placeholder=" " required maxlength="10">
+                                <label for="end_date_input">تاریخ پایان</label>
                             </div>
-                            <div class="md-filled-text-field select-wrapper" style="width: 33%;">
-                                <select name="end_month" required>
-                                    <option value="" disabled selected></option>
-                                    <option value="1">فروردین</option>
-                                    <option value="2">اردیبهشت</option>
-                                    <option value="3">خرداد</option>
-                                    <option value="4">تیر</option>
-                                    <option value="5">مرداد</option>
-                                    <option value="6">شهریور</option>
-                                    <option value="7">مهر</option>
-                                    <option value="8">آبان</option>
-                                    <option value="9">آذر</option>
-                                    <option value="10">دی</option>
-                                    <option value="11">بهمن</option>
-                                    <option value="12">اسفند</option>
-                                </select>
-                                <label>ماه</label>
+                            <div class="field-supporting-text">
+                                <span class="supporting-text">YYYY/MM/DD</span>
                             </div>
-                            <div class="md-filled-text-field select-wrapper" style="width: 33%;">
-                                <select name="end_year" required>
-                                    <option value="" disabled selected></option>
-                                    {% for y in range(1402, 1412) %}
-                                    <option value="{{ y }}" {% if y == 1403 %}selected{% endif %}>{{ y }}</option>
-                                    {% endfor %}
-                                </select>
-                                <label>سال</label>
-                            </div>
+                            <input type="hidden" id="end_date" name="end_date">
                         </div>
                     </div>
                 </div>
@@ -171,32 +116,62 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/lib/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lib/persian-date.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/lib/persian-datepicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datepicker-setup.js') }}"></script>
 <script>
-    document.getElementById('add-option').addEventListener('click', function () {
-        const container = document.getElementById('options-container');
-        const count = container.children.length + 1;
+    $(document).ready(function() {
+        // Initialize Datepickers
+        setupPersianDatepicker('#start_date_input', '#start_date');
+        setupPersianDatepicker('#end_date_input', '#end_date');
 
-        const formGroup = document.createElement('div');
-        formGroup.className = 'form-group';
-        formGroup.style.marginBottom = '12px';
+        // Add Option Logic
+        document.getElementById('add-option').addEventListener('click', function () {
+            const container = document.getElementById('options-container');
+            const count = container.children.length + 1;
 
-        const filledField = document.createElement('div');
-        filledField.className = 'md-filled-text-field';
+            const formGroup = document.createElement('div');
+            formGroup.className = 'form-group';
+            formGroup.style.marginBottom = '12px';
 
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'options[]';
-        input.required = true;
-        input.placeholder = ' '; // Required for label floating
+            const filledField = document.createElement('div');
+            filledField.className = 'md-filled-text-field';
 
-        const label = document.createElement('label');
-        label.innerText = `گزینه ${count}`;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'options[]';
+            input.required = true;
+            input.placeholder = ' '; // Required for label floating
 
-        filledField.appendChild(input);
-        filledField.appendChild(label);
-        formGroup.appendChild(filledField);
+            const label = document.createElement('label');
+            label.innerText = `گزینه ${count}`;
 
-        container.appendChild(formGroup);
+            filledField.appendChild(input);
+            filledField.appendChild(label);
+            formGroup.appendChild(filledField);
+
+            container.appendChild(formGroup);
+        });
+
+        // Manual validation for hidden inputs
+        $('#create-poll-form').on('submit', function(e) {
+            const startVal = $('#start_date').val();
+            const endVal = $('#end_date').val();
+
+            if (!startVal) {
+                // Try sync from visible
+                const visible = $('#start_date_input').val();
+                if(visible && visible.length === 10) $('#start_date').val(visible.replace(/\//g, '-'));
+                else { e.preventDefault(); alert('لطفاً تاریخ شروع را وارد کنید'); return; }
+            }
+            if (!endVal) {
+                 // Try sync from visible
+                const visible = $('#end_date_input').val();
+                if(visible && visible.length === 10) $('#end_date').val(visible.replace(/\//g, '-'));
+                else { e.preventDefault(); alert('لطفاً تاریخ پایان را وارد کنید'); return; }
+            }
+        });
     });
 </script>
 {% endblock %}
