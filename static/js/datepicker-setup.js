@@ -20,6 +20,14 @@ function setupPersianDatepicker(inputId, hiddenInputId, initialValue = false) {
         return;
     }
 
+    // Helper to convert Persian/Arabic digits to English
+    function toEnglishDigits(str) {
+        if (!str) return str;
+        return str.replace(/[\u0660-\u0669\u06f0-\u06f9]/g, function (c) {
+            return c.charCodeAt(0) & 0xf;
+        });
+    }
+
     // Initialize the datepicker
     $input.pDatepicker({
         format: 'YYYY/MM/DD',
@@ -37,18 +45,21 @@ function setupPersianDatepicker(inputId, hiddenInputId, initialValue = false) {
         },
         onSelect: function(unix) {
             console.log("Date selected via picker");
-            // The library sets the visible input value based on format 'YYYY/MM/DD'
-            // We need to update the hidden input with 'YYYY-MM-DD'
             setTimeout(() => {
-                const val = $input.val();
+                let val = $input.val();
                 if (val) {
+                    // Convert to English digits just in case the picker put Persian ones
+                    val = toEnglishDigits(val);
+
+                    // Update visible input to match (optional, but good for consistency)
+                    if ($input.val() !== val) {
+                        $input.val(val);
+                    }
+
                     const formatted = val.replace(/\//g, '-');
                     $hiddenInput.val(formatted);
 
-                    // Trigger change event if needed for other listeners
                     $hiddenInput.trigger('change');
-
-                    // Update floating label state
                     $input.parent().addClass('has-value');
                 }
             }, 0);
@@ -59,7 +70,10 @@ function setupPersianDatepicker(inputId, hiddenInputId, initialValue = false) {
     $input.on('input', function(e) {
         let input = this.value;
 
-        // Remove any non-digit characters to process raw numbers
+        // Convert to English digits immediately
+        input = toEnglishDigits(input);
+
+        // Remove any non-digit characters
         let raw = input.replace(/\D/g, '');
 
         // Limit to 8 digits (YYYYMMDD)
@@ -84,7 +98,7 @@ function setupPersianDatepicker(inputId, hiddenInputId, initialValue = false) {
             formatted += '/' + raw.substring(6, 8);
         }
 
-        // Only update if the value is different to avoid cursor jumping issues (mostly)
+        // Update input if different
         if (this.value !== formatted) {
              this.value = formatted;
         }
@@ -97,16 +111,19 @@ function setupPersianDatepicker(inputId, hiddenInputId, initialValue = false) {
         }
     });
 
-    // Fix for floating label when value is present
-    $input.on('blur', function() {
-        if (this.value) {
-             // In M3 CSS logic, :not(:placeholder-shown) handles this, but sometimes helper classes are needed
-             // With the current CSS, placeholder=" " and valid value should work.
-        }
-    });
-
     // Check initial state
     if ($input.val()) {
-        $input.parent().addClass('has-value'); // Ensure label stays up
+        $input.parent().addClass('has-value');
     }
 }
+
+/**
+ * Global utility to convert Persian/Arabic digits to English digits
+ * Can be used by other scripts
+ */
+window.toEnglishDigits = function(str) {
+    if (!str) return str;
+    return str.replace(/[\u0660-\u0669\u06f0-\u06f9]/g, function (c) {
+        return c.charCodeAt(0) & 0xf;
+    });
+};
