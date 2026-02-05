@@ -15,20 +15,19 @@ class TestAuthChanges(unittest.TestCase):
         self.app = app.test_client()
         self.app.testing = True
 
-        # Mock VoterDatabase to avoid reading real CSV file during test initialization
-        # if needed, but here we can just use the real one since we updated it
-        # Actually, let's just use the real VoterDatabase
+        # Disable CSRF for testing
+        app.config['WTF_CSRF_ENABLED'] = False
+
         self.voter_db = VoterDatabase('data/voters.csv')
 
     def test_verify_stage1_success(self):
-        """Test verify_stage1 with valid data (Mobile + National Code + Birth Date)"""
-        # Data from updated CSV
-        # 0012345678,1370-05-15,A1B2345678,09123456789,علی احمدی
+        """Test verify_stage1 with valid data (Mobile + National Code + Birth Date + Serial)"""
         national_code = "0012345678"
         birth_date = "1370-05-15"
         mobile = "09123456789"
+        serial = "123456789A"
 
-        success, message, voter = self.voter_db.verify_stage1(national_code, birth_date, mobile)
+        success, message, voter = self.voter_db.verify_stage1(national_code, birth_date, mobile, serial)
         self.assertTrue(success)
         self.assertEqual(voter['full_name'], "علی احمدی")
 
@@ -37,8 +36,9 @@ class TestAuthChanges(unittest.TestCase):
         national_code = "0012345678"
         birth_date = "1370-05-15"
         mobile = "09000000000" # Wrong
+        serial = "123456789A"
 
-        success, message, voter = self.voter_db.verify_stage1(national_code, birth_date, mobile)
+        success, message, voter = self.voter_db.verify_stage1(national_code, birth_date, mobile, serial)
         self.assertFalse(success)
         self.assertIn("شماره موبایل", message)
 
@@ -47,13 +47,18 @@ class TestAuthChanges(unittest.TestCase):
         payload = {
             "national_code": "0012345678",
             "birth_date": "1370-05-15",
-            "mobile": "09123456789"
+            "mobile": "09123456789",
+            "serial_number": "123456789A"
         }
 
         response = self.app.post('/api/voter/auth/stage1',
                                json=payload,
                                content_type='application/json')
 
+        if response.status_code != 200:
+            print(f"API Error: {response.data}")
+
+        self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         self.assertTrue(data['success'])
         self.assertEqual(data['mobile'], "09123456789")
@@ -62,19 +67,6 @@ class TestAuthChanges(unittest.TestCase):
     def test_biometric_success(self, mock_api):
         """Test Biometric flow (Stage 3)"""
         mock_api.return_value = True
-
-        # Setup session
-        with self.app.session_transaction() as sess:
-            # We need a session with stage 2 completed
-            # Need to create session manually or via helper
-            # Let's verify stage 1 and 2 via API first? Or just mock session
-            pass
-
-        # It's easier to unit test the function call_videomatch_api if it was exposed properly
-        # or test the route with session setup.
-
-        # Let's test call_videomatch_api via app logic is hard without full flow.
-        # Instead, verify the payload sent to API if possible.
         pass
 
 if __name__ == '__main__':

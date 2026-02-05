@@ -123,46 +123,6 @@
   margin: 0 auto;
 }
 
-.form-group {
-  margin-bottom: var(--m3-spacing-24);
-}
-
-.form-label {
-  display: block;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 8px;
-}
-
-.form-input,
-.form-textarea,
-.form-select {
-  width: 100%;
-  padding: 12px 16px;
-  border: none;
-  border-bottom: 1px solid var(--m3-on-surface-variant);
-  border-radius: var(--m3-shape-xs) var(--m3-shape-xs) 0 0;
-  font-family: inherit;
-  font-size: 16px;
-  background-color: var(--m3-surface-container-highest);
-  transition: all 0.2s ease;
-}
-
-.form-input:hover,
-.form-textarea:hover,
-.form-select:hover {
-  background-color: #DFD8E3; /* State Layer */
-  border-bottom-color: var(--m3-on-surface);
-}
-
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus {
-  border-bottom: 2px solid var(--m3-primary);
-  background-color: var(--m3-surface-container-highest);
-  outline: none;
-}
-
 /* Admin Login */
 .admin-auth-container {
   min-height: 100vh;
