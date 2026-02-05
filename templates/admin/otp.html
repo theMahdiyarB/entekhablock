@@ -36,10 +36,10 @@
 
             <form method="POST" action="{{ url_for('admin_login_page') }}" id="otp-form" class="auth-form">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <div class="form-group">
+
+                <div class="md-filled-text-field">
                     <input type="text" id="otp_code" name="otp_code" maxlength="4" pattern="[0-9]{4}" placeholder=" "
                         required autocomplete="off" class="otp-input" autofocus>
-                    <span class="underline"></span>
                     <label for="otp_code">کد تأیید</label>
                     <div class="form-hint">۴ رقم</div>
                 </div>
