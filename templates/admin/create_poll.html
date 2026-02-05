@@ -5,7 +5,7 @@
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 <!-- Persian Datepicker Styles -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/lib/persian-datepicker.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/persian-datepicker.min.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/datepicker-theme.css') }}">
 {% endblock %}
 
@@ -116,9 +116,9 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/lib/jquery.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lib/persian-date.min.js') }}"></script>
-<script src="{{ url_for('static', filename='js/lib/persian-datepicker.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/persian-date.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/vendor/persian-datepicker.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/datepicker-setup.js') }}"></script>
 <script>
     $(document).ready(function() {
