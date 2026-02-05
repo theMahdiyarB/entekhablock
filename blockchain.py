@@ -76,17 +76,15 @@ class Blockchain:
     Ensures integrity and provides methods for adding/validating blocks
     """
     
-    def __init__(self, storage_path: Optional[str] = None, difficulty: int = 4):
+    def __init__(self, storage_path: Optional[str] = None):
         """
         Initialize blockchain with genesis block or load from file
         
         Args:
             storage_path: Path to JSON file for persistence
-            difficulty: Number of leading zeros required for PoW
         """
         self.chain: List[Block] = []
         self.storage_path = storage_path
-        self.difficulty = difficulty
         
         if storage_path and os.path.exists(storage_path):
             self.load_from_file()
@@ -113,9 +111,6 @@ class Blockchain:
             previous_hash="0"
         )
         
-        # Mine the genesis block
-        self.proof_of_work(genesis_block)
-
         self.chain.append(genesis_block)
 
     def save_to_file(self) -> bool:
@@ -164,19 +159,6 @@ class Blockchain:
         """
         return self.chain[-1]
     
-    def proof_of_work(self, block: Block) -> str:
-        """
-        Perform Proof of Work mining
-        Find a nonce that produces a hash starting with the required number of zeros
-        """
-        block.nonce = 0
-        computed_hash = block.calculate_hash()
-        while not computed_hash.startswith('0' * self.difficulty):
-            block.nonce += 1
-            computed_hash = block.calculate_hash()
-        block.hash = computed_hash
-        return computed_hash
-
     def add_block(self, data: Dict[str, Any]) -> Block:
         """
         Add a new block to the chain with vote data
@@ -197,9 +179,6 @@ class Blockchain:
             previous_hash=latest_block.hash
         )
         
-        # Mine the block
-        self.proof_of_work(new_block)
-
         self.chain.append(new_block)
         self.save_to_file()
         return new_block
@@ -223,10 +202,6 @@ class Blockchain:
             if current_block.hash != current_block.calculate_hash():
                 return False
             
-            # Check if hash meets difficulty requirements
-            if not current_block.hash.startswith('0' * self.difficulty):
-                return False
-
             # Check if previous_hash matches
             if current_block.previous_hash != previous_block.hash:
                 return False
