@@ -6,8 +6,19 @@
  * @param {boolean} initialValue - Whether to set the initial value (default: false)
  */
 function setupPersianDatepicker(inputId, hiddenInputId, initialValue = false) {
+    console.log(`Setting up datepicker for ${inputId}`);
     const $input = $(inputId);
     const $hiddenInput = $(hiddenInputId);
+
+    if ($input.length === 0) {
+        console.error(`Input ${inputId} not found!`);
+        return;
+    }
+
+    if (typeof $input.pDatepicker !== 'function') {
+        console.error("pDatepicker function not found on jQuery object. Is the library loaded?");
+        return;
+    }
 
     // Initialize the datepicker
     $input.pDatepicker({
@@ -25,9 +36,9 @@ function setupPersianDatepicker(inputId, hiddenInputId, initialValue = false) {
             }
         },
         onSelect: function(unix) {
+            console.log("Date selected via picker");
             // The library sets the visible input value based on format 'YYYY/MM/DD'
             // We need to update the hidden input with 'YYYY-MM-DD'
-            // Wait a tick for the input to update
             setTimeout(() => {
                 const val = $input.val();
                 if (val) {
@@ -44,44 +55,58 @@ function setupPersianDatepicker(inputId, hiddenInputId, initialValue = false) {
         }
     });
 
-    // Input Masking Logic for YYYY/MM/DD
+    // Improved Input Masking Logic for YYYY/MM/DD
     $input.on('input', function(e) {
-        let val = this.value.replace(/\D/g, ''); // Remove non-digits
+        let input = this.value;
 
-        // Prevent typing more than 8 digits
-        if (val.length > 8) {
-            val = val.substring(0, 8);
+        // Remove any non-digit characters to process raw numbers
+        let raw = input.replace(/\D/g, '');
+
+        // Limit to 8 digits (YYYYMMDD)
+        if (raw.length > 8) {
+            raw = raw.substring(0, 8);
         }
 
-        // Add slashes
-        if (val.length >= 5) {
-            val = val.substring(0, 4) + '/' + val.substring(4);
-        }
-        if (val.length >= 8) {
-            val = val.substring(0, 7) + '/' + val.substring(7);
+        let formatted = '';
+
+        if (raw.length > 0) {
+            // Add Year
+            formatted += raw.substring(0, 4);
         }
 
-        this.value = val;
+        if (raw.length >= 5) {
+            // Add Month slash
+            formatted += '/' + raw.substring(4, 6);
+        }
+
+        if (raw.length >= 7) {
+            // Add Day slash
+            formatted += '/' + raw.substring(6, 8);
+        }
+
+        // Only update if the value is different to avoid cursor jumping issues (mostly)
+        if (this.value !== formatted) {
+             this.value = formatted;
+        }
 
         // Update hidden input if full date is entered
-        if (val.length === 10) {
-             const formatted = val.replace(/\//g, '-');
-             $hiddenInput.val(formatted);
-        } else {
-            // Optional: clear hidden input if invalid?
-            // Better to keep it or handle valid logic elsewhere
+        if (formatted.length === 10) {
+             const hiddenVal = formatted.replace(/\//g, '-');
+             $hiddenInput.val(hiddenVal);
+             console.log("Hidden input updated:", hiddenVal);
         }
     });
 
     // Fix for floating label when value is present
     $input.on('blur', function() {
         if (this.value) {
-             $input.addClass('has-value'); // Ensure label stays up
+             // In M3 CSS logic, :not(:placeholder-shown) handles this, but sometimes helper classes are needed
+             // With the current CSS, placeholder=" " and valid value should work.
         }
     });
 
     // Check initial state
     if ($input.val()) {
-        $input.addClass('has-value');
+        $input.parent().addClass('has-value'); // Ensure label stays up
     }
 }
