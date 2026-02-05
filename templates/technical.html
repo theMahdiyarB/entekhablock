@@ -1063,7 +1063,15 @@
                         <i class="devicon-bash-plain tech-icon"></i>
                         <h4>Security Ops</h4>
                     </div>
-                    <p>استفاده از کتابخانه‌های hashlib و secrets برای تولید اعداد تصادفی امن و هش‌های غیرقابل بازگشت.
+                    <p>استفاده از Flask-Limiter برای کنترل نرخ درخواست‌ها و Flask-WTF برای جلوگیری از حملات CSRF.
+                    </p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-item-header">
+                        <i class="devicon-javascript-plain tech-icon"></i>
+                        <h4>Persian Localization</h4>
+                    </div>
+                    <p>استفاده از کتابخانه jdatetime و persian-datepicker برای مدیریت دقیق تقویم و تاریخ‌های شمسی.
                     </p>
                 </div>
             </div>
@@ -1419,6 +1427,25 @@
                         این اندپوینت خطا برمی‌گرداند.</p>
                 </div>
             </div>
+
+            <div class="api-endpoint">
+                <div class="api-header">
+                    <div>
+                        <span class="method-badge m-post">POST</span>
+                        <span class="endpoint-url">/api/blockchain/tamper/&lt;index&gt;</span>
+                    </div>
+                    <span>دستکاری بلاک (Demo Only)</span>
+                </div>
+                <div class="api-body">
+                    <p class="api-desc">یک اندپوینت آزمایشی برای شبیه‌سازی حمله به بلاک‌چین. با فراخوانی این متد، داده‌های یک بلاک تغییر کرده و اعتبار کل زنجیره از بین می‌رود.</p>
+                    <div class="api-params">
+                        <h5>Parameters (URL):</h5>
+                        <div>
+                            <span class="param-tag">index (int)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- 8. PROJECT TREE -->
@@ -1447,6 +1474,9 @@
                 </div>
                 <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
                         class="folder-icon">📁</span> js/ <span class="tree-comment">// Client-side Interactions</span>
+                </div>
+                <div class="tree-item"><span class="tree-indent"></span><span class="tree-indent"></span><span
+                        class="tree-indent"></span><span class="file-icon">📄</span> datepicker-setup.js <span class="tree-comment">// Jalali Calendar</span>
                 </div>
                 <div class="tree-item"><span class="tree-indent"></span><span class="folder-icon">📁</span> templates/
                 </div>
