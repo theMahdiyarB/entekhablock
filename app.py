@@ -549,18 +549,24 @@ def admin_create_poll():
         options = request.form.getlist('options[]')
         
         try:
-            # Get separate date components
-            start_year = int(request.form.get('start_year'))
-            start_month = int(request.form.get('start_month'))
-            start_day = int(request.form.get('start_day'))
+            # Get date strings (YYYY-MM-DD or YYYY/MM/DD)
+            start_date_input = request.form.get('start_date', '').strip()
+            end_date_input = request.form.get('end_date', '').strip()
 
-            end_year = int(request.form.get('end_year'))
-            end_month = int(request.form.get('end_month'))
-            end_day = int(request.form.get('end_day'))
+            if not start_date_input or not end_date_input:
+                raise ValueError("تاریخ شروع و پایان الزامی است")
+
+            # Helper to parse Jalali string
+            def parse_jalali(date_str):
+                date_str = date_str.replace('/', '-')
+                parts = date_str.split('-')
+                if len(parts) != 3:
+                    raise ValueError(f"فرمت تاریخ نامعتبر است: {date_str}")
+                return jdatetime.date(int(parts[0]), int(parts[1]), int(parts[2])).togregorian()
 
             # Convert Jalali to Gregorian
-            start_g = jdatetime.date(start_year, start_month, start_day).togregorian()
-            end_g = jdatetime.date(end_year, end_month, end_day).togregorian()
+            start_g = parse_jalali(start_date_input)
+            end_g = parse_jalali(end_date_input)
 
             # Format as YYYY-MM-DD
             start_date_str = start_g.strftime("%Y-%m-%d")

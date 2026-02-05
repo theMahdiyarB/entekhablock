@@ -30,7 +30,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* =========================================
-       Ripple Effect (Optional enhancement)
+       Global Persian Digit Converter
        ========================================= */
-    // Add simple ripple if needed in future
+    const numericInputs = document.querySelectorAll('input[type="number"], input[pattern*="0-9"], input.numeric-only');
+
+    // Helper function (duplicate of what is in datepicker-setup.js to ensure independence)
+    function toEnglishDigits(str) {
+        if (!str) return str;
+        return str.replace(/[\u0660-\u0669\u06f0-\u06f9]/g, function (c) {
+            return c.charCodeAt(0) & 0xf;
+        });
+    }
+
+    numericInputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            const original = this.value;
+            const converted = toEnglishDigits(original);
+            if (original !== converted) {
+                // Determine cursor position to maintain it
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+
+                this.value = converted;
+
+                // Restore cursor if supported
+                if (this.setSelectionRange) {
+                    this.setSelectionRange(start, end);
+                }
+            }
+        });
+    });
 });
