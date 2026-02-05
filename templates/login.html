@@ -7,13 +7,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <style>
-        /* Date Picker Styling Preserved & Adapted */
+        /* Date Picker specific overrides if needed, mostly handled by md-filled-text-field now */
         .date-picker-label {
             font-size: 14px;
-            color: #666; /* Match typical label color in auth.css */
+            color: var(--m3-on-surface-variant);
             margin-bottom: 8px;
             display: block;
-            pointer-events: none; /* Make it behave like a static label */
         }
 
         .date-picker-container {
@@ -22,43 +21,8 @@
             direction: rtl;
         }
 
-        /*
-           Styling selects to match the look of auth.css inputs
-           The auth.css inputs usually have a bottom border or outlined style.
-           We'll try to match the "form-group input" style from auth.css
-           while keeping the date picker specific layout.
-        */
-        .date-picker-container select {
+        .date-picker-container .md-filled-text-field {
             flex: 1;
-            width: 100%;
-            height: 56px; /* M3 Standard Height */
-            padding: 0 16px;
-            border: none;
-            border-bottom: 1px solid var(--m3-on-surface-variant);
-            border-radius: var(--m3-shape-xs) var(--m3-shape-xs) 0 0;
-            background-color: var(--m3-surface-container-highest);
-            font-family: inherit;
-            font-size: 16px;
-            color: var(--m3-on-surface);
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2349454e'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: left 12px center;
-            background-size: 24px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .date-picker-container select:hover {
-            background-color: #DFD8E3; /* State Layer */
-            border-bottom-color: var(--m3-on-surface);
-        }
-
-        .date-picker-container select:focus {
-            outline: none;
-            background-color: var(--m3-surface-container-highest);
-            border-bottom: 2px solid var(--m3-primary);
         }
 
         /* Tooltip Logic for Serial Number */
@@ -101,10 +65,8 @@
             opacity: 1;
         }
 
-        /* Ensure Date Picker Wrapper matches form-group spacing */
         .date-picker-wrapper {
             margin-bottom: 24px;
-            position: relative;
         }
     </style>
 {% endblock %}
@@ -132,69 +94,76 @@
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <!-- National Code -->
-                <div class="form-group">
+                <div class="md-filled-text-field">
                     <input type="text" id="national_code" name="national_code" maxlength="10" pattern="[0-9]{10}" placeholder=" " required>
-                    <span class="underline"></span>
                     <label for="national_code">کد ملی</label>
                     <div class="form-hint">۱۰ رقم</div>
                 </div>
 
                 <!-- Mobile -->
-                <div class="form-group">
+                <div class="md-filled-text-field">
                     <input type="text" id="mobile" name="mobile" maxlength="11" pattern="09[0-9]{9}" placeholder=" " required>
-                    <span class="underline"></span>
                     <label for="mobile">شماره موبایل</label>
                     <div class="form-hint">فرمت: 09123456789</div>
                 </div>
 
                 <!-- Serial Number -->
-                <div class="form-group">
-                    <!-- Format: 9 numbers + 1 English char -->
+                <div class="md-filled-text-field">
                     <input type="text" id="serial_number" name="serial_number" maxlength="10" placeholder=" " required>
-                    <span class="underline"></span>
                     <label for="serial_number">سریال پشت کارت ملی</label>
-                    <div class="form-hint">
+                    <div class="form-hint" style="display: flex; align-items: center; justify-content: space-between;">
                         <span>مثال: 123456789A</span>
                         <div class="tooltip-container">
                             <span class="material-icons-round tooltip-icon">info</span>
                             <div class="tooltip-text">
-                                سریال کارت ملی هوشمند یک کد ۱۰ کاراکتری (ترکیبی از ۹ عدد و ۱ حرف انگلیسی) است که در پشت کارت، نزدیک تراشه زرد رنگ قرار دارد. در طراحی‌های جدیدتر، این شماره در جلو کارت نیز چاپ شده است.
+                                سریال کارت ملی هوشمند یک کد ۱۰ کاراکتری (ترکیبی از ۹ عدد و ۱ حرف انگلیسی) است که در پشت کارت، نزدیک تراشه زرد رنگ قرار دارد.
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Date Picker (Preserved Style) -->
+                <!-- Date Picker (M3 Filled Style) -->
                 <div class="date-picker-wrapper">
                     <label class="date-picker-label">تاریخ تولد</label>
                     <div class="date-picker-container">
-                        <select id="day" required aria-label="روز">
-                            <option value="" disabled selected>روز</option>
-                            {% for i in range(1, 32) %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                        <select id="month" required aria-label="ماه">
-                            <option value="" disabled selected>ماه</option>
-                            <option value="1">فروردین</option>
-                            <option value="2">اردیبهشت</option>
-                            <option value="3">خرداد</option>
-                            <option value="4">تیر</option>
-                            <option value="5">مرداد</option>
-                            <option value="6">شهریور</option>
-                            <option value="7">مهر</option>
-                            <option value="8">آبان</option>
-                            <option value="9">آذر</option>
-                            <option value="10">دی</option>
-                            <option value="11">بهمن</option>
-                            <option value="12">اسفند</option>
-                        </select>
-                        <select id="year" required aria-label="سال">
-                            <option value="" disabled selected>سال</option>
-                            {% for i in range(1390, 1299, -1) %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
+                        <div class="md-filled-text-field select-wrapper">
+                            <select id="day" required>
+                                <option value="" disabled selected></option>
+                                {% for i in range(1, 32) %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="day">روز</label>
+                        </div>
+
+                        <div class="md-filled-text-field select-wrapper">
+                            <select id="month" required>
+                                <option value="" disabled selected></option>
+                                <option value="1">فروردین</option>
+                                <option value="2">اردیبهشت</option>
+                                <option value="3">خرداد</option>
+                                <option value="4">تیر</option>
+                                <option value="5">مرداد</option>
+                                <option value="6">شهریور</option>
+                                <option value="7">مهر</option>
+                                <option value="8">آبان</option>
+                                <option value="9">آذر</option>
+                                <option value="10">دی</option>
+                                <option value="11">بهمن</option>
+                                <option value="12">اسفند</option>
+                            </select>
+                            <label for="month">ماه</label>
+                        </div>
+
+                        <div class="md-filled-text-field select-wrapper">
+                            <select id="year" required>
+                                <option value="" disabled selected></option>
+                                {% for i in range(1390, 1299, -1) %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="year">سال</label>
+                        </div>
                     </div>
                     <input type="hidden" id="birth_date" name="birth_date">
                 </div>
